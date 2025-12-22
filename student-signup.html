@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Sign Up - SFRS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="student-signup">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" aria-label="Primary">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <span class="brand-title">Varendra University</span><br>
+          <span class="brand-subtitle">CSE Department</span>
+        </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="student-login.html">Student Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="student-signup.html">Student Sign Up</a></li>
+          <li class="nav-item"><a class="nav-link" href="teacher-login.html">Teacher Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="form-shell">
+          <img class="logo-image" src="assets/images/varendra-logo.png" alt="Varendra University logo">
+          <h2 class="section-title">Student Registration</h2>
+          <p class="section-lead">Create your student account to submit feedback for CSE courses.</p>
+          <div id="studentSignupAlert"></div>
+          <form id="studentSignupForm" class="needs-validation" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="studentFullName" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="studentFullName" name="fullName" required>
+                <div class="invalid-feedback">Please enter your name.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="studentId" class="form-label">Student ID</label>
+                <input type="text" class="form-control" id="studentId" name="studentId" required>
+                <div class="invalid-feedback">Please enter your student ID.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="studentEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="studentEmail" name="email" required>
+                <div class="invalid-feedback">Please enter a valid email.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="studentSemester" class="form-label">Semester</label>
+                <select class="form-select" id="studentSemester" name="semester" required>
+                  <option value="">Select semester</option>
+                  <option>1st Semester</option>
+                  <option>2nd Semester</option>
+                  <option>3rd Semester</option>
+                  <option>4th Semester</option>
+                  <option>5th Semester</option>
+                  <option>6th Semester</option>
+                  <option>7th Semester</option>
+                  <option>8th Semester</option>
+                </select>
+                <div class="invalid-feedback">Please select your semester.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="studentSection" class="form-label">Section</label>
+                <input type="text" class="form-control" id="studentSection" name="section" placeholder="Section B" required>
+                <div class="invalid-feedback">Please enter your section.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="studentDepartment" class="form-label">Department</label>
+                <input type="text" class="form-control" id="studentDepartment" name="department" value="Computer Science and Engineering" readonly>
+              </div>
+              <div class="col-md-12">
+                <label for="studentProgram" class="form-label">Program</label>
+                <input type="text" class="form-control" id="studentProgram" name="program" value="B.Sc. in CSE" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="studentPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="studentPassword" name="password" required>
+                <div class="invalid-feedback">Please enter a password.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="studentConfirmPassword" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="studentConfirmPassword" name="confirmPassword" required>
+                <div class="invalid-feedback">Please confirm your password.</div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-4">Create Student Account</button>
+          </form>
+          <div class="mt-3 text-center">
+            <span class="text-muted">Already registered?</span>
+            <a class="link-muted fw-semibold" href="student-login.html">Go to login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-note">SFRS - Student registration. For academic use only.</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/questions.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

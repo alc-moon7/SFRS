@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SFRS Portal - Varendra University CSE</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="home" class="entry-page">
+  <main class="entry-wrapper">
+    <div class="container">
+      <div class="form-shell entry-card">
+        <img class="logo-image" src="assets/images/varendra-logo.png" alt="Varendra University logo">
+        <h1 class="section-title">Student Feedback Review System</h1>
+        <p class="section-lead mx-auto">Secure access for CSE students and faculty. Select your portal to continue.</p>
+
+        <div class="d-grid gap-3 mt-4">
+          <a class="btn btn-success btn-lg" href="student-login.html">Student Login</a>
+          <a class="btn btn-outline-success btn-lg" href="teacher-login.html">Teacher Login</a>
+        </div>
+
+        <div class="mt-4">
+          <span class="text-muted">New user?</span>
+          <button class="btn btn-link signup-toggle p-0 ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#signupOptions" aria-expanded="false" aria-controls="signupOptions">Sign up</button>
+        </div>
+
+        <div class="collapse mt-3" id="signupOptions">
+          <div class="d-grid gap-2">
+            <a class="btn btn-outline-success" href="student-signup.html">Student Sign Up</a>
+            <a class="btn btn-outline-success" href="teacher-signup.html">Teacher Sign Up</a>
+          </div>
+        </div>
+
+        <div class="small text-muted mt-4">You will be redirected to your dashboard after login.</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="row g-3 align-items-center">
+        <div class="col-lg-8">
+          <h6 class="mb-1">Student Feedback Review System (SFRS)</h6>
+          <div class="footer-note">Department of CSE, Varendra University | 2025 | For academic use only</div>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <span class="badge-role">Supabase Auth Enabled</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/questions.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

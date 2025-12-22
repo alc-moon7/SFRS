@@ -1,0 +1,275 @@
+:root {
+  --primary: #0c2a42;
+  --primary-dark: #081e30;
+  --accent: #c44d2d;
+  --accent-hover: #cd201f;
+  --bg: #f8f9fa;
+  --text: #1f2a33;
+  --muted: #5e6b78;
+  --border: #e5e9ef;
+  --card-shadow: 0 12px 28px rgba(12, 42, 66, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  padding-top: 76px;
+}
+
+body.entry-page {
+  padding-top: 0;
+}
+
+.navbar {
+  background: #ffffff;
+  border-bottom: 3px solid var(--accent);
+  box-shadow: 0 6px 18px rgba(12, 42, 66, 0.08);
+}
+
+.navbar .nav-link {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: var(--accent);
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--primary);
+}
+
+.logo-mark {
+  width: 120px;
+  height: 44px;
+  border-radius: 4px;
+  background: #ffffff url("../images/varendra-logo.png") center/contain no-repeat;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.logo-mark::after {
+  content: "";
+}
+
+.brand-text {
+  line-height: 1.1;
+}
+
+.brand-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.hero {
+  background: linear-gradient(120deg, #0c2a42 0%, #134061 60%, #1d567f 100%);
+  color: #ffffff;
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
+  top: -120px;
+  right: -160px;
+}
+
+.hero-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.section-title {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.section-lead {
+  color: var(--muted);
+  max-width: 760px;
+}
+
+.card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+}
+
+.portal-card {
+  border-top: 4px solid var(--accent);
+}
+
+.form-shell {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  border-top: 4px solid var(--accent);
+}
+
+.entry-wrapper {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  padding: 2.5rem 0;
+}
+
+.entry-card {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  border-top: 5px solid var(--accent);
+}
+
+.logo-image {
+  max-width: 260px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+.signup-toggle {
+  font-weight: 600;
+}
+
+.form-section-title {
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.info-card {
+  background: #ffffff;
+  border-left: 5px solid var(--accent);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: var(--card-shadow);
+}
+
+.badge-role {
+  background: rgba(12, 42, 66, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(12, 42, 66, 0.2);
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: var(--card-shadow);
+}
+
+.progress {
+  height: 0.65rem;
+}
+
+.table thead th {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.question-card {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  background: #ffffff;
+}
+
+.question-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+footer {
+  background: var(--primary);
+  color: #ffffff;
+  padding: 2rem 0;
+  margin-top: 3rem;
+}
+
+.footer-note {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.link-muted {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.link-muted:hover,
+.link-muted:focus {
+  color: var(--accent);
+}
+
+.btn-success,
+.btn-success:focus {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: none;
+}
+
+.btn-success:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-outline-success {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:focus {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+@media (max-width: 991px) {
+  body {
+    padding-top: 70px;
+  }
+}
+
+@media (max-width: 575px) {
+  .logo-mark {
+    width: 96px;
+    height: 36px;
+  }
+
+  .brand-text {
+    display: none;
+  }
+}
