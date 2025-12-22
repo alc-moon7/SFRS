@@ -12,7 +12,7 @@ create table if not exists public.profiles (
   role text not null check (role in ('student','teacher')),
   full_name text not null,
   email text not null,
-  student_id text,
+  student text,
   department text,
   program text,
   semester text,
