@@ -19,6 +19,7 @@ body {
   color: var(--text);
   background: var(--bg);
   padding-top: 76px;
+  line-height: 1.6;
 }
 
 body.entry-page {
@@ -261,15 +262,78 @@ footer {
   body {
     padding-top: 70px;
   }
+
+  .entry-wrapper {
+    padding: 2rem 0;
+  }
+
+  .form-shell {
+    padding: 1.75rem;
+  }
+
+  .logo-mark {
+    width: 108px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-top: 64px;
+  }
+
+  .section-title {
+    font-size: 1.45rem;
+  }
+
+  .section-lead {
+    font-size: 0.95rem;
+  }
+
+  .logo-image {
+    max-width: 200px;
+  }
+
+  .question-card {
+    padding: 0.75rem 1rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+
+  .stat-card .display-6 {
+    font-size: 1.75rem;
+  }
 }
 
 @media (max-width: 575px) {
   .logo-mark {
-    width: 96px;
-    height: 36px;
+    width: 88px;
+    height: 32px;
   }
 
   .brand-text {
     display: none;
+  }
+
+  .entry-wrapper {
+    padding: 1.5rem 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .entry-card {
+    max-width: 600px;
+  }
+
+  .form-shell {
+    padding: 2.5rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .entry-card {
+    max-width: 640px;
   }
 }
