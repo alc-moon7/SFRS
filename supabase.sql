@@ -19,24 +19,43 @@ create table if not exists public.profiles (
   section text,
   designation text,
   teacher_directory_id bigint references public.teachers_directory(id),
-  created_at timestamptz default now()
+  created_at timestamptz not null default now(),
+  constraint profiles_full_name_not_blank check (length(trim(full_name)) > 0),
+  constraint profiles_email_not_blank check (length(trim(email)) > 0),
+  constraint profiles_role_fields_check check (
+    (role = 'student' and student_id is not null and length(trim(student_id)) > 0 and teacher_directory_id is null)
+    or (role = 'teacher' and teacher_directory_id is not null and student_id is null)
+  )
 );
 
 create unique index if not exists profiles_email_unique on public.profiles (email);
 create unique index if not exists profiles_student_id_unique on public.profiles (student_id) where student_id is not null;
 create unique index if not exists profiles_teacher_directory_unique on public.profiles (teacher_directory_id) where teacher_directory_id is not null;
-
 create table if not exists public.feedbacks (
   id bigserial primary key,
-  student_id uuid references public.profiles(id) on delete cascade,
-  teacher_directory_id bigint references public.teachers_directory(id),
+  student_id uuid not null references public.profiles(id) on delete cascade,
+  teacher_directory_id bigint not null references public.teachers_directory(id),
   course_code text not null,
   course_title text not null,
   semester text not null,
   section text not null,
   responses jsonb not null,
-  submitted_at timestamptz default now()
+  submitted_at timestamptz not null default now(),
+  constraint feedbacks_course_code_not_blank check (length(trim(course_code)) > 0),
+  constraint feedbacks_course_title_not_blank check (length(trim(course_title)) > 0),
+  constraint feedbacks_semester_not_blank check (length(trim(semester)) > 0),
+  constraint feedbacks_section_not_blank check (length(trim(section)) > 0),
+  constraint feedbacks_responses_array check (
+    case
+      when jsonb_typeof(responses) = 'array' then jsonb_array_length(responses) > 0
+      else false
+    end
+  )
 );
+
+create index if not exists feedbacks_student_id_idx on public.feedbacks (student_id);
+create index if not exists feedbacks_teacher_directory_id_idx on public.feedbacks (teacher_directory_id);
+create index if not exists feedbacks_submitted_at_idx on public.feedbacks (submitted_at);
 
 alter table public.teachers_directory enable row level security;
 alter table public.profiles enable row level security;
@@ -52,7 +71,16 @@ drop policy if exists "Profiles insert own" on public.profiles;
 create policy "Profiles insert own" on public.profiles for insert with check (auth.uid() = id);
 
 drop policy if exists "Profiles update own" on public.profiles;
-create policy "Profiles update own" on public.profiles for update using (auth.uid() = id);
+create policy "Profiles update own" on public.profiles
+  for update
+  using (auth.uid() = id)
+  with check (
+    auth.uid() = id
+    and role = (select p.role from public.profiles p where p.id = auth.uid())
+    and teacher_directory_id is not distinct from (
+      select p.teacher_directory_id from public.profiles p where p.id = auth.uid()
+    )
+  );
 
 drop policy if exists "Feedback insert student" on public.feedbacks;
 create policy "Feedback insert student" on public.feedbacks for insert with check (
@@ -172,16 +200,56 @@ as $$
 declare
   role_value text;
   teacher_id bigint;
+  student_id_value text;
+  designation_value text;
+  email_value text;
 begin
-  role_value := new.raw_user_meta_data->>'role';
+  role_value := lower(coalesce(new.raw_user_meta_data->>'role', ''));
   if role_value not in ('student', 'teacher') then
     role_value := 'student';
   end if;
 
-  if (new.raw_user_meta_data->>'teacher_directory_id') ~ '^[0-9]+$' then
+  email_value := lower(coalesce(nullif(trim(new.email), ''), ''));
+  if email_value = '' then
+    raise exception 'Email is required';
+  end if;
+
+  if role_value = 'teacher' and (new.raw_user_meta_data->>'teacher_directory_id') ~ '^[0-9]+$' then
     teacher_id := (new.raw_user_meta_data->>'teacher_directory_id')::bigint;
   else
     teacher_id := null;
+  end if;
+
+  if role_value = 'teacher' then
+    if teacher_id is null then
+      raise exception 'Teacher directory id is required for teachers';
+    end if;
+
+    if not exists (
+      select 1 from public.teachers_directory t where t.id = teacher_id
+    ) then
+      raise exception 'Teacher directory id % is invalid', teacher_id;
+    end if;
+
+    if exists (
+      select 1
+      from public.teachers_directory t
+      where t.id = teacher_id
+        and nullif(trim(t.email), '') is not null
+        and lower(t.email) <> email_value
+    ) then
+      raise exception 'Teacher email does not match directory for id %', teacher_id;
+    end if;
+
+    student_id_value := null;
+    designation_value := nullif(trim(new.raw_user_meta_data->>'designation'), '');
+  else
+    student_id_value := nullif(trim(new.raw_user_meta_data->>'student_id'), '');
+    if student_id_value is null then
+      raise exception 'Student id is required for students';
+    end if;
+    teacher_id := null;
+    designation_value := null;
   end if;
 
   insert into public.profiles (
@@ -199,14 +267,14 @@ begin
   ) values (
     new.id,
     role_value,
-    coalesce(nullif(new.raw_user_meta_data->>'full_name', ''), new.email),
-    new.email,
-    nullif(new.raw_user_meta_data->>'student_id', ''),
-    nullif(new.raw_user_meta_data->>'department', ''),
-    nullif(new.raw_user_meta_data->>'program', ''),
-    nullif(new.raw_user_meta_data->>'semester', ''),
-    nullif(new.raw_user_meta_data->>'section', ''),
-    nullif(new.raw_user_meta_data->>'designation', ''),
+    coalesce(nullif(trim(new.raw_user_meta_data->>'full_name'), ''), email_value),
+    email_value,
+    student_id_value,
+    case when role_value = 'student' then nullif(trim(new.raw_user_meta_data->>'department'), '') else null end,
+    case when role_value = 'student' then nullif(trim(new.raw_user_meta_data->>'program'), '') else null end,
+    case when role_value = 'student' then nullif(trim(new.raw_user_meta_data->>'semester'), '') else null end,
+    case when role_value = 'student' then nullif(trim(new.raw_user_meta_data->>'section'), '') else null end,
+    designation_value,
     teacher_id
   )
   on conflict (id) do update
@@ -249,13 +317,54 @@ set search_path = public, auth
 as $$
 declare
   v_id uuid;
+  v_role text;
+  v_email text;
+  v_teacher_id bigint;
+  v_student_id text;
+  v_designation text;
 begin
-  select id into v_id from auth.users where email = p_email;
-  if v_id is null then
-    raise exception 'No auth user found for %', p_email;
+  v_email := lower(coalesce(nullif(trim(p_email), ''), ''));
+  if v_email = '' then
+    raise exception 'Email is required';
   end if;
-  if p_role not in ('student', 'teacher') then
+
+  select id into v_id from auth.users where lower(email) = v_email;
+  if v_id is null then
+    raise exception 'No auth user found for %', v_email;
+  end if;
+  v_role := lower(coalesce(p_role, ''));
+  if v_role not in ('student', 'teacher') then
     raise exception 'Invalid role %', p_role;
+  end if;
+
+  if v_role = 'teacher' then
+    v_teacher_id := p_teacher_directory_id;
+    if v_teacher_id is null then
+      raise exception 'Teacher directory id is required for teachers';
+    end if;
+    if not exists (
+      select 1 from public.teachers_directory t where t.id = v_teacher_id
+    ) then
+      raise exception 'Teacher directory id % is invalid', v_teacher_id;
+    end if;
+    if exists (
+      select 1
+      from public.teachers_directory t
+      where t.id = v_teacher_id
+        and nullif(trim(t.email), '') is not null
+        and lower(t.email) <> v_email
+    ) then
+      raise exception 'Teacher email does not match directory for id %', v_teacher_id;
+    end if;
+    v_student_id := null;
+    v_designation := nullif(trim(p_designation), '');
+  else
+    v_student_id := nullif(trim(p_student_id), '');
+    if v_student_id is null then
+      raise exception 'Student id is required for students';
+    end if;
+    v_teacher_id := null;
+    v_designation := null;
   end if;
 
   insert into public.profiles (
@@ -272,16 +381,16 @@ begin
     teacher_directory_id
   ) values (
     v_id,
-    p_role,
-    p_full_name,
-    p_email,
-    p_student_id,
-    p_department,
-    p_program,
-    p_semester,
-    p_section,
-    p_designation,
-    p_teacher_directory_id
+    v_role,
+    coalesce(nullif(trim(p_full_name), ''), v_email),
+    v_email,
+    v_student_id,
+    case when v_role = 'student' then nullif(trim(p_department), '') else null end,
+    case when v_role = 'student' then nullif(trim(p_program), '') else null end,
+    case when v_role = 'student' then nullif(trim(p_semester), '') else null end,
+    case when v_role = 'student' then nullif(trim(p_section), '') else null end,
+    v_designation,
+    v_teacher_id
   )
   on conflict (id) do update
   set
@@ -297,3 +406,28 @@ begin
     teacher_directory_id = excluded.teacher_directory_id;
 end;
 $$;
+
+revoke execute on function public.create_profile_for_email(
+  text,
+  text,
+  text,
+  text,
+  text,
+  text,
+  text,
+  text,
+  text,
+  bigint
+) from public;
+grant execute on function public.create_profile_for_email(
+  text,
+  text,
+  text,
+  text,
+  text,
+  text,
+  text,
+  text,
+  text,
+  bigint
+) to service_role;

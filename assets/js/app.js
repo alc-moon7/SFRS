@@ -1365,17 +1365,22 @@
         return;
       }
 
-      const { error: profileError } = await supabaseClient.from("profiles").insert({
-        id: data.user.id,
-        role: "student",
-        full_name: metadata.full_name,
-        student_id: metadata.student_id,
-        email,
-        department: metadata.department,
-        program: metadata.program,
-        semester: metadata.semester,
-        section: metadata.section
-      });
+      const { error: profileError } = await supabaseClient
+        .from("profiles")
+        .upsert(
+          {
+            id: data.user.id,
+            role: "student",
+            full_name: metadata.full_name,
+            student_id: metadata.student_id,
+            email,
+            department: metadata.department,
+            program: metadata.program,
+            semester: metadata.semester,
+            section: metadata.section
+          },
+          { onConflict: "id" }
+        );
 
       if (profileError) {
         showAlert(alertBox, "danger", "Unable to create student profile. Please try again.");
@@ -1480,14 +1485,19 @@
         return;
       }
 
-      const { error: profileError } = await supabaseClient.from("profiles").insert({
-        id: data.user.id,
-        role: "teacher",
-        full_name: metadata.full_name,
-        email,
-        designation: metadata.designation,
-        teacher_directory_id: metadata.teacher_directory_id
-      });
+      const { error: profileError } = await supabaseClient
+        .from("profiles")
+        .upsert(
+          {
+            id: data.user.id,
+            role: "teacher",
+            full_name: metadata.full_name,
+            email,
+            designation: metadata.designation,
+            teacher_directory_id: metadata.teacher_directory_id
+          },
+          { onConflict: "id" }
+        );
 
       if (profileError) {
         showAlert(alertBox, "danger", "Unable to create teacher profile. Please try again.");
