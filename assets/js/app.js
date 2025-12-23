@@ -644,6 +644,65 @@
     }
     return cleaned;
   };
+  const normalizeEmail = (value) => (value || "").trim().toLowerCase();
+  const safeNumber = (value) => {
+    const numberValue = Number(value);
+    return Number.isFinite(numberValue) ? numberValue : null;
+  };
+  const buildProfilePayload = (session) => {
+    if (!session || !session.user) {
+      return null;
+    }
+    const metadata = session.user.user_metadata || {};
+    const role = metadata.role;
+    if (!role) {
+      return null;
+    }
+    const email = normalizeEmail(session.user.email || metadata.email || "");
+    if (!email) {
+      return null;
+    }
+    const payload = {
+      id: session.user.id,
+      role,
+      full_name: (metadata.full_name || email).trim(),
+      email,
+      student_id: metadata.student_id || null,
+      department: metadata.department || null,
+      program: metadata.program || null,
+      semester: metadata.semester || null,
+      section: metadata.section || null,
+      designation: metadata.designation || null,
+      teacher_directory_id: safeNumber(metadata.teacher_directory_id)
+    };
+    return payload;
+  };
+  const createProfileFromMetadata = async (session) => {
+    const payload = buildProfilePayload(session);
+    if (!payload) {
+      return null;
+    }
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .insert(payload)
+      .select("*")
+      .single();
+    if (error) {
+      if (error.code === "23505") {
+        const { data: existing, error: fetchError } = await supabaseClient
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+        if (fetchError) {
+          throw fetchError;
+        }
+        return existing;
+      }
+      throw error;
+    }
+    return data;
+  };
   const isEmail = (value) => /.+@.+\..+/.test(value);
   const isDemoCredential = (identifier, password) =>
     normalizeIdentifier(identifier) === DEMO_CREDENTIALS.username &&
@@ -963,17 +1022,23 @@
       return null;
     }
 
+    const session = sessionData.session;
     const { data, error } = await supabaseClient
       .from("profiles")
       .select("*")
-      .eq("id", sessionData.session.user.id)
-      .single();
+      .eq("id", session.user.id)
+      .maybeSingle();
 
     if (error) {
       throw error;
     }
 
-    return { session: sessionData.session, profile: data };
+    if (!data) {
+      const createdProfile = await createProfileFromMetadata(session);
+      return { session, profile: createdProfile };
+    }
+
+    return { session, profile: data };
   };
 
   const requireRole = async (role, redirectTo) => {
@@ -1063,7 +1128,12 @@
 
       try {
         const result = await getProfile();
-        if (!result || result.profile.role !== "student") {
+        if (!result || !result.profile) {
+          await supabaseClient.auth.signOut();
+          showAlert(alertBox, "warning", "Profile not found. Please sign up again.");
+          return;
+        }
+        if (result.profile.role !== "student") {
           await supabaseClient.auth.signOut();
           showAlert(alertBox, "warning", "This account is not registered as a student.");
           return;
@@ -1114,7 +1184,12 @@
 
       try {
         const result = await getProfile();
-        if (!result || result.profile.role !== "teacher") {
+        if (!result || !result.profile) {
+          await supabaseClient.auth.signOut();
+          showAlert(alertBox, "warning", "Profile not found. Please sign up again.");
+          return;
+        }
+        if (result.profile.role !== "teacher") {
           await supabaseClient.auth.signOut();
           showAlert(alertBox, "warning", "This account is not registered as a teacher.");
           return;
@@ -1178,7 +1253,7 @@
           return;
         }
 
-        const email = requestForm.email.value.trim().toLowerCase();
+        const email = normalizeEmail(requestForm.email.value);
         if (!isEmail(email)) {
           showAlert(requestAlert, "warning", "Please enter a valid email address.");
           return;
@@ -1262,10 +1337,24 @@
         return;
       }
 
-      const email = form.email.value.trim().toLowerCase();
+      const email = normalizeEmail(form.email.value);
       const password = form.password.value;
+      const metadata = {
+        role: "student",
+        full_name: form.fullName.value.trim(),
+        student_id: form.studentId.value.trim(),
+        email,
+        department: form.department.value,
+        program: form.program.value,
+        semester: form.semester.value,
+        section: form.section.value.trim()
+      };
 
-      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: { data: metadata }
+      });
       if (error) {
         showAlert(alertBox, "danger", error.message);
         return;
@@ -1279,13 +1368,13 @@
       const { error: profileError } = await supabaseClient.from("profiles").insert({
         id: data.user.id,
         role: "student",
-        full_name: form.fullName.value.trim(),
-        student_id: form.studentId.value.trim(),
+        full_name: metadata.full_name,
+        student_id: metadata.student_id,
         email,
-        department: form.department.value,
-        program: form.program.value,
-        semester: form.semester.value,
-        section: form.section.value.trim()
+        department: metadata.department,
+        program: metadata.program,
+        semester: metadata.semester,
+        section: metadata.section
       });
 
       if (profileError) {
@@ -1361,15 +1450,24 @@
         return;
       }
 
-      const email = emailEl.value.trim().toLowerCase();
+      const email = normalizeEmail(emailEl.value);
       if (teacher.email && email !== teacher.email.toLowerCase()) {
         showAlert(alertBox, "warning", "Use the official email listed for this teacher.");
         return;
       }
 
+      const metadata = {
+        role: "teacher",
+        full_name: teacher.name,
+        email,
+        designation: normalizeDesignation(teacher.designation),
+        teacher_directory_id: teacher.id
+      };
+
       const { data, error } = await supabaseClient.auth.signUp({
         email,
-        password: form.password.value
+        password: form.password.value,
+        options: { data: metadata }
       });
 
       if (error) {
@@ -1385,10 +1483,10 @@
       const { error: profileError } = await supabaseClient.from("profiles").insert({
         id: data.user.id,
         role: "teacher",
-        full_name: teacher.name,
+        full_name: metadata.full_name,
         email,
-        designation: normalizeDesignation(teacher.designation),
-        teacher_directory_id: teacher.id
+        designation: metadata.designation,
+        teacher_directory_id: metadata.teacher_directory_id
       });
 
       if (profileError) {
