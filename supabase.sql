@@ -162,3 +162,138 @@ insert into public.teachers_directory (name, designation, email) values
   ('Mst. Somapti Akter', NULL, NULL),
   ('Sanjida Sultana Rika', NULL, NULL),
   ('Emamul Haque', NULL, NULL);
+
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  role_value text;
+  teacher_id bigint;
+begin
+  role_value := new.raw_user_meta_data->>'role';
+  if role_value not in ('student', 'teacher') then
+    role_value := 'student';
+  end if;
+
+  if (new.raw_user_meta_data->>'teacher_directory_id') ~ '^[0-9]+$' then
+    teacher_id := (new.raw_user_meta_data->>'teacher_directory_id')::bigint;
+  else
+    teacher_id := null;
+  end if;
+
+  insert into public.profiles (
+    id,
+    role,
+    full_name,
+    email,
+    student_id,
+    department,
+    program,
+    semester,
+    section,
+    designation,
+    teacher_directory_id
+  ) values (
+    new.id,
+    role_value,
+    coalesce(nullif(new.raw_user_meta_data->>'full_name', ''), new.email),
+    new.email,
+    nullif(new.raw_user_meta_data->>'student_id', ''),
+    nullif(new.raw_user_meta_data->>'department', ''),
+    nullif(new.raw_user_meta_data->>'program', ''),
+    nullif(new.raw_user_meta_data->>'semester', ''),
+    nullif(new.raw_user_meta_data->>'section', ''),
+    nullif(new.raw_user_meta_data->>'designation', ''),
+    teacher_id
+  )
+  on conflict (id) do update
+  set
+    role = excluded.role,
+    full_name = excluded.full_name,
+    email = excluded.email,
+    student_id = excluded.student_id,
+    department = excluded.department,
+    program = excluded.program,
+    semester = excluded.semester,
+    section = excluded.section,
+    designation = excluded.designation,
+    teacher_directory_id = excluded.teacher_directory_id;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute procedure public.handle_new_user();
+
+create or replace function public.create_profile_for_email(
+  p_email text,
+  p_role text,
+  p_full_name text,
+  p_student_id text default null,
+  p_department text default null,
+  p_program text default null,
+  p_semester text default null,
+  p_section text default null,
+  p_designation text default null,
+  p_teacher_directory_id bigint default null
+) returns void
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  v_id uuid;
+begin
+  select id into v_id from auth.users where email = p_email;
+  if v_id is null then
+    raise exception 'No auth user found for %', p_email;
+  end if;
+  if p_role not in ('student', 'teacher') then
+    raise exception 'Invalid role %', p_role;
+  end if;
+
+  insert into public.profiles (
+    id,
+    role,
+    full_name,
+    email,
+    student_id,
+    department,
+    program,
+    semester,
+    section,
+    designation,
+    teacher_directory_id
+  ) values (
+    v_id,
+    p_role,
+    p_full_name,
+    p_email,
+    p_student_id,
+    p_department,
+    p_program,
+    p_semester,
+    p_section,
+    p_designation,
+    p_teacher_directory_id
+  )
+  on conflict (id) do update
+  set
+    role = excluded.role,
+    full_name = excluded.full_name,
+    email = excluded.email,
+    student_id = excluded.student_id,
+    department = excluded.department,
+    program = excluded.program,
+    semester = excluded.semester,
+    section = excluded.section,
+    designation = excluded.designation,
+    teacher_directory_id = excluded.teacher_directory_id;
+end;
+$$;
