@@ -30,26 +30,620 @@
   };
   const DEMO_TEACHERS = [
     {
-      id: 1,
-      name: "A.S.M. Delwar Hossain",
-      designation: "Lecturer",
-      email: "delwar@vu.edu.bd"
+      "id": 1,
+      "name": "Shamim Ahmad",
+      "designation": "Head",
+      "email": "head.cse@vu.edu.bd"
     },
     {
-      id: 2,
-      name: "Sabina Yasmin",
-      designation: "Coordinator",
-      email: "sabina@vu.edu.bd"
+      "id": 2,
+      "name": "Sabina Yasmin",
+      "designation": "Coordinator",
+      "email": "sabina@vu.edu.bd"
     },
     {
-      id: 3,
-      name: "Prof. Dr. Bimal Kumar Pramanik",
-      designation: "Professor",
-      email: ""
+      "id": 3,
+      "name": "Prof. A.H.M. Rahmatullah Imon, Ph.D.",
+      "designation": "Professor",
+      "email": "cc@vu.edu.bd"
+    },
+    {
+      "id": 4,
+      "name": "Dr. Ahammad Hossain",
+      "designation": "Associate Professor",
+      "email": "ahammad@vu.edu.bd"
+    },
+    {
+      "id": 5,
+      "name": "Md. Mizanur Rahman",
+      "designation": "Assistant Professor",
+      "email": "mizanur@vu.edu.bd"
+    },
+    {
+      "id": 6,
+      "name": "Umme Rumman",
+      "designation": "Assistant Professor",
+      "email": "chaiti@vu.edu.bd"
+    },
+    {
+      "id": 7,
+      "name": "Mst. Jannatul Ferdous",
+      "designation": "Assistant Professor",
+      "email": "jannat@vu.edu.bd"
+    },
+    {
+      "id": 8,
+      "name": "Monika Kabir",
+      "designation": "Assistant Professor",
+      "email": "monika@vu.edu.bd"
+    },
+    {
+      "id": 9,
+      "name": "Mohammad Kasedullah",
+      "designation": "Lecturer",
+      "email": "kasedullah@vu.edu.bd"
+    },
+    {
+      "id": 10,
+      "name": "Sumaia Rahman",
+      "designation": "Assistant Professor",
+      "email": "sumaia@vu.edu.bd"
+    },
+    {
+      "id": 11,
+      "name": "A.S.M. Delwar Hossain",
+      "designation": "Lecturer",
+      "email": "delwar@vu.edu.bd"
+    },
+    {
+      "id": 12,
+      "name": "Md. Toufikul Islam",
+      "designation": "Lecturer",
+      "email": "toufikul@vu.edu.bd"
+    },
+    {
+      "id": 13,
+      "name": "Md. Nour Noby",
+      "designation": "Lecturer",
+      "email": "nournoby@vu.edu.bd"
+    },
+    {
+      "id": 14,
+      "name": "Ayesha Akter Lima",
+      "designation": "Lecturer",
+      "email": "lima@vu.edu.bd"
+    },
+    {
+      "id": 15,
+      "name": "Salma Akter Lima",
+      "designation": "Lecturer",
+      "email": "salma.cse@vu.edu.bd"
+    },
+    {
+      "id": 16,
+      "name": "Ipshita Tasnim Raha",
+      "designation": "Lecturer",
+      "email": "ipshita@vu.edu.bd"
+    },
+    {
+      "id": 17,
+      "name": "Sumaiya Tasnim",
+      "designation": "Lecturer",
+      "email": "sumaiya@vu.edu.bd"
+    },
+    {
+      "id": 18,
+      "name": "Shamim Reza",
+      "designation": "Lecturer",
+      "email": "s.reza@vu.edu.bd"
+    },
+    {
+      "id": 19,
+      "name": "Samira Tareque",
+      "designation": "Lecturer",
+      "email": "samira@vu.edu.bd"
+    },
+    {
+      "id": 20,
+      "name": "Al Muktadir Munam",
+      "designation": "Lecturer",
+      "email": "munam@vu.edu.bd"
+    },
+    {
+      "id": 21,
+      "name": "Akib Ikbal",
+      "designation": "Lecturer",
+      "email": "akib@vu.edu.bd"
+    },
+    {
+      "id": 22,
+      "name": "Mohammad Faisal Al-Naser",
+      "designation": "Lecturer",
+      "email": "faisal@vu.edu.bd"
+    },
+    {
+      "id": 23,
+      "name": "Md. Muktar Hossain",
+      "designation": "Lecturer",
+      "email": "muktar@vu.edu.bd"
+    },
+    {
+      "id": 24,
+      "name": "Ahmed-Al-Azmain",
+      "designation": "Lecturer",
+      "email": "azmain@vu.edu.bd"
+    },
+    {
+      "id": 25,
+      "name": "Tanver Ahmed",
+      "designation": "Lecturer",
+      "email": "tanver@vu.edu.bd"
+    },
+    {
+      "id": 26,
+      "name": "Md. Musfiqur Rahman Mridha",
+      "designation": "Lecturer",
+      "email": "mridha@vu.edu.bd"
+    },
+    {
+      "id": 27,
+      "name": "Md. Jamil Chaudhary",
+      "designation": "Lecturer",
+      "email": "jamil@vu.edu.bd"
+    },
+    {
+      "id": 28,
+      "name": "Md. Shahid Ahammed Shakil",
+      "designation": "Lecturer",
+      "email": "shakil@vu.edu.bd"
+    },
+    {
+      "id": 29,
+      "name": "Md. Fatin Ilham",
+      "designation": "Lecturer",
+      "email": "ilham@vu.edu.bd"
+    },
+    {
+      "id": 30,
+      "name": "Zannatul Mifta",
+      "designation": "Lecturer",
+      "email": "mifta@vu.edu.bd"
+    },
+    {
+      "id": 31,
+      "name": "Arun Kumar Sikder",
+      "designation": "Lecturer",
+      "email": "arun@vu.edu.bd"
+    },
+    {
+      "id": 32,
+      "name": "Sushmit Jahan Rose",
+      "designation": "Lecturer",
+      "email": "sushmit@vu.edu.bd"
+    },
+    {
+      "id": 33,
+      "name": "Md. Ruhul Amin",
+      "designation": "Lecturer",
+      "email": "ruhul@vu.edu.bd"
+    },
+    {
+      "id": 34,
+      "name": "Md. Mahfujur Rahman",
+      "designation": "Lecturer",
+      "email": "mahfujur@vu.edu.bd"
+    },
+    {
+      "id": 35,
+      "name": "D.M. Asadujjaman",
+      "designation": "Lecturer",
+      "email": "asadujjaman@vu.edu.bd"
+    },
+    {
+      "id": 36,
+      "name": "Israt Jahan Rinky",
+      "designation": "Lecturer",
+      "email": "rinky@vu.edu.bd"
+    },
+    {
+      "id": 37,
+      "name": "Protik Chakroborty",
+      "designation": "Lecturer",
+      "email": "protik@vu.edu.bd"
+    },
+    {
+      "id": 38,
+      "name": "Tanzim Nawshin Reza",
+      "designation": "Lecturer",
+      "email": "tanzim@vu.edu.bd"
+    },
+    {
+      "id": 39,
+      "name": "Md. Taufiq Khan",
+      "designation": "Lecturer",
+      "email": "taufiq@vu.edu.bd"
+    },
+    {
+      "id": 40,
+      "name": "Arshad Wasif",
+      "designation": "Lecturer",
+      "email": "arshad@vu.edu.bd"
+    },
+    {
+      "id": 41,
+      "name": "Shorav Paul",
+      "designation": "Lecturer",
+      "email": "shorav@vu.edu.bd"
+    },
+    {
+      "id": 42,
+      "name": "Mst. Nafia Islam Shishir",
+      "designation": "Lecturer",
+      "email": "nafia@vu.edu.bd"
+    },
+    {
+      "id": 43,
+      "name": "Sumaya Hannan Shova",
+      "designation": "Lecturer",
+      "email": "shova@vu.edu.bd"
+    },
+    {
+      "id": 44,
+      "name": "Iffat Farhana",
+      "designation": "Lecturer",
+      "email": "iffat@vu.edu.bd"
+    },
+    {
+      "id": 45,
+      "name": "Md. Fayzul Islam",
+      "designation": "Lecturer",
+      "email": "fayzul@vu.edu.bd"
+    },
+    {
+      "id": 46,
+      "name": "Mst. Mazeda Noor Tasnim",
+      "designation": "Lecturer",
+      "email": "mazeda@vu.edu.bd"
+    },
+    {
+      "id": 47,
+      "name": "Md. Adnan Sami",
+      "designation": "Lecturer",
+      "email": "adnan@vu.edu.bd"
+    },
+    {
+      "id": 48,
+      "name": "Md. Rakibul Islam",
+      "designation": "Lecturer",
+      "email": "rakibul@vu.edu.bd"
+    },
+    {
+      "id": 49,
+      "name": "Adrita Alam",
+      "designation": "Lecturer",
+      "email": "adrita@vu.edu.bd"
+    },
+    {
+      "id": 50,
+      "name": "Rokaiya Tasnim",
+      "designation": "Lecturer",
+      "email": "rokaiya@vu.edu.bd"
+    },
+    {
+      "id": 51,
+      "name": "Shahara Laila",
+      "designation": "Lecturer (Contractual)",
+      "email": "shahara@vu.edu.bd"
+    },
+    {
+      "id": 52,
+      "name": "Afroza Islam",
+      "designation": "Lecturer",
+      "email": "afroza.islam@vu.edu.bd"
+    },
+    {
+      "id": 53,
+      "name": "Md. Farhan Tanvir Nasim",
+      "designation": "Lecturer (Contractual)",
+      "email": "farhan@vu.edu.bd"
+    },
+    {
+      "id": 54,
+      "name": "Humayra Tasnim",
+      "designation": "Lecturer",
+      "email": "humayra@vu.edu.bd"
+    },
+    {
+      "id": 55,
+      "name": "Asim Moin Saad",
+      "designation": "Lecturer",
+      "email": "asim@vu.edu.bd"
+    },
+    {
+      "id": 56,
+      "name": "Zuairia Raisa Bintay Makin",
+      "designation": "Lecturer",
+      "email": "makin@vu.edu.bd"
+    },
+    {
+      "id": 57,
+      "name": "Afifa Tasneem Quanita",
+      "designation": "Lecturer (Contractual)",
+      "email": "quanita@vu.edu.bd"
+    },
+    {
+      "id": 58,
+      "name": "Md. Khalid Sakib",
+      "designation": "Lecturer (Contractual)",
+      "email": "khalid@vu.edu.bd"
+    },
+    {
+      "id": 59,
+      "name": "Md. Alamin Hossain Pappu",
+      "designation": "Lecturer (Contractual)",
+      "email": "alamin@vu.edu.bd"
+    },
+    {
+      "id": 60,
+      "name": "Anupoma Barman Shetu",
+      "designation": "Lecturer (Contractual)",
+      "email": "anupoma@vu.edu.bd"
+    },
+    {
+      "id": 61,
+      "name": "Mohsiul Mumit Alik",
+      "designation": "Lecturer (Contractual)",
+      "email": "alik@vu.edu.bd"
+    },
+    {
+      "id": 62,
+      "name": "Md. Arifour Rahman",
+      "designation": "Associate Professor",
+      "email": ""
+    },
+    {
+      "id": 63,
+      "name": "Prof. Dr. Md. Ali Hossain",
+      "designation": "Professor",
+      "email": ""
+    },
+    {
+      "id": 64,
+      "name": "Dr.Md. Ekramul Hamid",
+      "designation": "Professor",
+      "email": ""
+    },
+    {
+      "id": 65,
+      "name": "Dr.Md. Johirul Islam",
+      "designation": "Assistant Professor",
+      "email": ""
+    },
+    {
+      "id": 66,
+      "name": "Sanjoy Kumar Chakravarty",
+      "designation": "Associate Professor",
+      "email": ""
+    },
+    {
+      "id": 67,
+      "name": "Md. Omar Faruqe",
+      "designation": "Associate Professor",
+      "email": ""
+    },
+    {
+      "id": 68,
+      "name": "Prof. Dr. Bimal Kumar Pramanik",
+      "designation": "Professor",
+      "email": ""
+    },
+    {
+      "id": 69,
+      "name": "Md. Akramul Alim",
+      "designation": "Assistant Professor",
+      "email": ""
+    },
+    {
+      "id": 70,
+      "name": "Dr. Md. Nazrul Islam Mondal",
+      "designation": "Professor",
+      "email": ""
+    },
+    {
+      "id": 71,
+      "name": "Prof.Dr. Boshir Ahmed",
+      "designation": "Professor",
+      "email": ""
+    },
+    {
+      "id": 72,
+      "name": "Nafia Islam",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 73,
+      "name": "Susmita Paul",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 74,
+      "name": "Md. Faruk Hossain, Ph.D.",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 75,
+      "name": "Md. Faisal Rahman Badal",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 76,
+      "name": "Dr.Md. Mayeedul Islam",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 77,
+      "name": "Dr.Jewel Hossen",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 78,
+      "name": "Dr.Md. Iqbal Aziz Khan",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 79,
+      "name": "Dr.Jaker Hossain",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 80,
+      "name": "Dr.Md. Ariful Islam Nahid",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 81,
+      "name": "Dr.Md. Golam Rashed",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 82,
+      "name": "Dr.Md. Hamidul Islam",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 83,
+      "name": "Dr.Md. Abu Bakar PK.",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 84,
+      "name": "Dr.Md. Sherezzaman",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 85,
+      "name": "Md. Sanaul Haque",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 86,
+      "name": "Mst. Somapti Akter",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 87,
+      "name": "Sanjida Sultana Rika",
+      "designation": "",
+      "email": ""
+    },
+    {
+      "id": 88,
+      "name": "Emamul Haque",
+      "designation": "",
+      "email": ""
     }
   ];
 
+  const COURSE_CATALOG = [
+    { code: "CSE 1101", title: "Structured Programming Language" },
+    { code: "CSE 1102", title: "Structured Programming Language Lab" },
+    { code: "EEE 1131", title: "Basic Electrical Circuits" },
+    { code: "EEE 1132", title: "Basic Electrical Circuits Lab" },
+    { code: "MAT 1141", title: "Differential and Integral Calculus" },
+    { code: "PHY 1151", title: "Basic Physics" },
+    { code: "PHY 1152", title: "Basic Physics Lab" },
+    { code: "ENG 0002", title: "English Fundamentals" },
+    { code: "CSE 1201", title: "Object Oriented Programming" },
+    { code: "CSE 1202", title: "Object Oriented Programming Lab" },
+    { code: "CSE 1203", title: "Discrete Mathematics" },
+    { code: "EEE 1231", title: "Electronic Devices and Circuits" },
+    { code: "EEE 1232", title: "Electronic Devices and Circuits Lab" },
+    { code: "MAT 1241", title: "Coordinate Geometry and Vector Analysis" },
+    { code: "CHE 1261", title: "Chemistry" },
+    { code: "CHE 1262", title: "Chemistry Lab" },
+    { code: "CSE 2101", title: "Object Oriented Design and Design Patterns" },
+    { code: "CSE 2102", title: "Object Oriented Design and Design Patterns Lab" },
+    { code: "CSE 2103", title: "Data Structures" },
+    { code: "CSE 2104", title: "Data Structures Lab" },
+    { code: "CSE 2105", title: "Digital System Design" },
+    { code: "CSE 2106", title: "Digital System Design Lab" },
+    { code: "MAT 2141", title: "Differential Equations" },
+    { code: "BAN 0001", title: "History of the Emergence of Bangladesh" },
+    { code: "CSE 2201", title: "Software Engineering and System Analysis" },
+    { code: "CSE 2203", title: "Computer Algorithms" },
+    { code: "CSE 2204", title: "Computer Algorithms Lab" },
+    { code: "CSE 2205", title: "Numerical Methods" },
+    { code: "CSE 2206", title: "Numerical Methods Lab" },
+    { code: "CSE 2207", title: "Computer Networks" },
+    { code: "CSE 2208", title: "Computer Networks Lab" },
+    { code: "MAT 2241", title: "Linear Algebra and Complex Variables" },
+    { code: "CSE 3101", title: "Computer Graphics" },
+    { code: "CSE 3102", title: "Computer Graphics Lab" },
+    { code: "CSE 3103", title: "Database Management System" },
+    { code: "CSE 3104", title: "Database Management System Lab" },
+    { code: "CSE 3105", title: "Computer Architecture" },
+    { code: "CSE 3106", title: "Computer Architecture Lab" },
+    { code: "CSE 3107", title: "Communication Engineering" },
+    { code: "MAT 3141", title: "Applied Statistics and Probability" },
+    { code: "CSE 3201", title: "Theory of Computation and Compiler Design" },
+    { code: "CSE 3203", title: "Operating System and System Programming" },
+    { code: "CSE 3204", title: "Operating System and System Programming Lab" },
+    { code: "CSE 3205", title: "Microprocessor and Assembly Language" },
+    { code: "CSE 3206", title: "Microprocessor and Assembly Language Lab" },
+    { code: "CSE 3207", title: "Digital Signal Processing" },
+    { code: "CSE 3208", title: "Digital Signal Processing Lab" },
+    { code: "CSE 3209", title: "E-commerce and Web Programming" },
+    { code: "CSE 3210", title: "E-commerce and Web Programming Project Lab" },
+    { code: "ECO 3271", title: "Engineering Economics" },
+    { code: "CSE 4101", title: "Artificial Intelligence" },
+    { code: "CSE 4102", title: "Artificial Intelligence Lab" },
+    { code: "CSE 4103", title: "Digital Image Processing" },
+    { code: "CSE 4104", title: "Digital Image Processing Lab" },
+    { code: "CSE 4105", title: "Engineering Ethics and Environmental Protection" },
+    { code: "CSE 4107", title: "Microcontroller, Computer Peripherals and Interfacing" },
+    { code: "CSE 4108", title: "Microcontroller, Computer Peripherals and Interfacing Lab" },
+    { code: "ACC 4171", title: "Industrial Management and Accountancy" },
+    { code: "CSE 4100", title: "Project or Thesis with Seminar Part I" },
+    { code: "CSE 4120", title: "Industrial Attachment" },
+    { code: "CSE 4122", title: "Technical Report Writing" },
+    { code: "CSE 4201", title: "Parallel Processing and Distributed System" },
+    { code: "CSE 4202", title: "Parallel Processing and Distributed System Lab" },
+    { code: "CSE 4203", title: "Cryptography and Network Security" },
+    { code: "CSE 4204", title: "Cryptography and Network Security Lab" },
+    { code: "CSE 4205", title: "Robotics and Automation" },
+    { code: "CSE 4206", title: "Robotics and Automation Lab" },
+    { code: "CSE 4207", title: "Big Data Analysis" },
+    { code: "CSE 4208", title: "Big Data Analysis Lab" },
+    { code: "CSE 4209", title: "Cloud Computing and IOT" },
+    { code: "CSE 4210", title: "Cloud Computing and IOT Lab" },
+    { code: "CSE 4211", title: "Machine Learning" },
+    { code: "CSE 4212", title: "Machine Learning Lab" },
+    { code: "CSE 4200", title: "Project or Thesis with Seminar Part II" }
+  ];
+
   const normalizeIdentifier = (value) => (value || "").trim().toLowerCase();
+  const normalizeDesignation = (designation) => {
+    const cleaned = (designation || "").trim();
+    if (!cleaned || cleaned.toLowerCase() === "cse") {
+      return "Lecturer";
+    }
+    return cleaned;
+  };
   const isEmail = (value) => /.+@.+\..+/.test(value);
   const isDemoCredential = (identifier, password) =>
     normalizeIdentifier(identifier) === DEMO_CREDENTIALS.username &&
@@ -142,10 +736,11 @@
     selectEl.innerHTML = "<option value=\"\">Select a teacher</option>";
     teachers.forEach((teacher) => {
       const option = document.createElement("option");
+      const designation = normalizeDesignation(teacher.designation);
       option.value = teacher.id;
-      option.textContent = `${teacher.name} - ${teacher.designation || "CSE"}`;
+      option.textContent = `${teacher.name} - ${designation}`;
       option.dataset.email = teacher.email || "";
-      option.dataset.designation = teacher.designation || "";
+      option.dataset.designation = designation;
       selectEl.appendChild(option);
     });
   };
@@ -160,12 +755,56 @@
       infoEl.innerHTML = "<div class=\"text-muted\">Select a teacher to see details.</div>";
       return;
     }
+    const designation = normalizeDesignation(teacher.designation);
     const email = teacher.email || "Not listed";
     infoEl.innerHTML = `
       <div class=\"fw-semibold\">${teacher.name}</div>
-      <div class=\"text-muted\">${teacher.designation || ""}</div>
+      <div class=\"text-muted\">${designation}</div>
       <div class=\"small text-muted\">Email: ${email}</div>
     `;
+  };
+
+  const renderCourseOptions = (selectEl, courses) => {
+    if (!selectEl) {
+      return;
+    }
+    selectEl.innerHTML = "<option value=\"\">Select a course</option>";
+    courses.forEach((course) => {
+      const option = document.createElement("option");
+      option.value = course.code;
+      option.textContent = `${course.code} - ${course.title}`;
+      option.dataset.title = course.title;
+      selectEl.appendChild(option);
+    });
+  };
+
+  const getCourseTitle = (option) => {
+    if (!option) {
+      return "";
+    }
+    if (option.dataset && option.dataset.title) {
+      return option.dataset.title;
+    }
+    const text = option.textContent || "";
+    const splitIndex = text.indexOf(" - ");
+    if (splitIndex === -1) {
+      return "";
+    }
+    return text.slice(splitIndex + 3).trim();
+  };
+
+  const getSelectedCourse = (selectEl) => {
+    if (!selectEl) {
+      return null;
+    }
+    const option = selectEl.options[selectEl.selectedIndex];
+    if (!option || !option.value) {
+      return null;
+    }
+    return {
+      code: option.value,
+      title: getCourseTitle(option)
+    };
   };
 
   const renderQuestions = (container) => {
@@ -487,6 +1126,120 @@
     });
   };
 
+  const initPasswordReset = () => {
+    const requestSection = document.getElementById("resetRequestSection");
+    const updateSection = document.getElementById("resetUpdateSection");
+    const requestForm = document.getElementById("resetRequestForm");
+    const updateForm = document.getElementById("resetUpdateForm");
+    const requestAlert = document.getElementById("resetRequestAlert");
+    const updateAlert = document.getElementById("resetUpdateAlert");
+
+    if (!requestSection && !updateSection) {
+      return;
+    }
+
+    const showRequestSection = () => {
+      if (requestSection) {
+        requestSection.classList.remove("d-none");
+      }
+      if (updateSection) {
+        updateSection.classList.add("d-none");
+      }
+    };
+
+    const showUpdateSection = () => {
+      if (requestSection) {
+        requestSection.classList.add("d-none");
+      }
+      if (updateSection) {
+        updateSection.classList.remove("d-none");
+      }
+    };
+
+    const isRecovery = window.location.hash.includes("type=recovery");
+    if (isRecovery) {
+      showUpdateSection();
+    } else {
+      showRequestSection();
+    }
+
+    supabaseClient.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        showUpdateSection();
+      }
+    });
+
+    if (requestForm) {
+      requestForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearAlert(requestAlert);
+        if (!requestForm.checkValidity()) {
+          requestForm.classList.add("was-validated");
+          return;
+        }
+
+        const email = requestForm.email.value.trim().toLowerCase();
+        if (!isEmail(email)) {
+          showAlert(requestAlert, "warning", "Please enter a valid email address.");
+          return;
+        }
+
+        clearDemoSession();
+
+        const redirectTo = window.location.href.split("#")[0];
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
+        if (error) {
+          showAlert(requestAlert, "danger", error.message);
+          return;
+        }
+
+        requestForm.reset();
+        showAlert(requestAlert, "success", "Check your email for the password reset link.");
+      });
+    }
+
+    if (updateForm) {
+      updateForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearAlert(updateAlert);
+        if (!updateForm.checkValidity()) {
+          updateForm.classList.add("was-validated");
+          return;
+        }
+
+        const password = updateForm.password.value;
+        const confirm = updateForm.confirmPassword.value;
+        if (password !== confirm) {
+          showAlert(updateAlert, "warning", "Passwords do not match.");
+          return;
+        }
+
+        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+        if (sessionError || !sessionData.session) {
+          showAlert(updateAlert, "warning", "Reset link is invalid or expired. Request a new one.");
+          showRequestSection();
+          return;
+        }
+
+        const { error } = await supabaseClient.auth.updateUser({ password });
+        if (error) {
+          showAlert(updateAlert, "danger", error.message);
+          return;
+        }
+
+        showAlert(updateAlert, "success", "Password updated. Please log in.");
+        try {
+          await supabaseClient.auth.signOut();
+        } catch (error) {
+          // Ignore sign-out errors after reset.
+        }
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1200);
+      });
+    }
+  };
+
   const initStudentSignup = () => {
     const form = document.getElementById("studentSignupForm");
     if (!form) {
@@ -573,7 +1326,7 @@
         emailEl.readOnly = false;
         return;
       }
-      designationEl.value = teacher.designation || "";
+      designationEl.value = normalizeDesignation(teacher.designation);
       if (teacher.email) {
         emailEl.value = teacher.email;
         emailEl.readOnly = true;
@@ -634,7 +1387,7 @@
         role: "teacher",
         full_name: teacher.name,
         email,
-        designation: teacher.designation,
+        designation: normalizeDesignation(teacher.designation),
         teacher_directory_id: teacher.id
       });
 
@@ -673,6 +1426,7 @@
     const alertBox = document.getElementById("reviewAlert");
     const teacherSelectEl = document.getElementById("reviewTeacherSelect");
     const teacherInfoEl = document.getElementById("reviewTeacherInfo");
+    const courseSelectEl = document.getElementById("courseSelect");
     const questionContainer = document.getElementById("questionContainer");
     const reviewsTbody = document.getElementById("studentReviewsBody");
 
@@ -685,12 +1439,12 @@
 
     renderTeacherOptions(teacherSelectEl, teachers);
     updateTeacherInfo(teacherSelectEl, teacherInfoEl, teachers);
+    renderCourseOptions(courseSelectEl, COURSE_CATALOG);
     renderQuestions(questionContainer);
 
     teacherSelectEl.addEventListener("change", () => {
       updateTeacherInfo(teacherSelectEl, teacherInfoEl, teachers);
     });
-
     const loadReviews = async () => {
       if (useDemo) {
         const feedbacks = getDemoFeedbacks().filter(
@@ -789,6 +1543,11 @@
         showAlert(alertBox, "warning", "Please select a teacher.");
         return;
       }
+      const selectedCourse = getSelectedCourse(courseSelectEl);
+      if (!selectedCourse) {
+        showAlert(alertBox, "warning", "Please select a course.");
+        return;
+      }
 
       const { responses, missing } = collectResponses(form);
       if (missing) {
@@ -799,8 +1558,8 @@
       const payload = {
         student_id: profile.id,
         teacher_directory_id: teacher.id,
-        course_code: form.courseCode.value.trim(),
-        course_title: form.courseTitle.value.trim(),
+        course_code: selectedCourse.code,
+        course_title: selectedCourse.title,
         semester: form.courseSemester.value.trim(),
         section: form.courseSection.value.trim(),
         responses
@@ -959,6 +1718,9 @@
         break;
       case "teacher-login":
         initTeacherLogin();
+        break;
+      case "password-reset":
+        initPasswordReset();
         break;
       case "student-signup":
         initStudentSignup();

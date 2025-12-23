@@ -14,12 +14,18 @@
   box-sizing: border-box;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: var(--text);
   background: var(--bg);
   padding-top: 76px;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 body.entry-page {
@@ -132,6 +138,7 @@ body.entry-page {
 
 .entry-wrapper {
   min-height: calc(100vh - 120px);
+  min-height: calc(100svh - 120px);
   display: flex;
   align-items: center;
   padding: 2.5rem 0;
@@ -212,6 +219,12 @@ body.entry-page {
   margin-bottom: 0.75rem;
 }
 
+input,
+select,
+textarea {
+  font-size: 1rem;
+}
+
 footer {
   background: var(--primary);
   color: #ffffff;
@@ -264,6 +277,7 @@ footer {
   }
 
   .entry-wrapper {
+    min-height: calc(100svh - 110px);
     padding: 2rem 0;
   }
 
@@ -274,6 +288,15 @@ footer {
   .logo-mark {
     width: 108px;
     height: 40px;
+  }
+
+  .navbar-collapse {
+    background: #ffffff;
+    padding: 0.75rem 0;
+  }
+
+  .hero {
+    padding: 3.5rem 0;
   }
 }
 
@@ -298,6 +321,10 @@ footer {
     padding: 0.75rem 1rem;
   }
 
+  .hero-card {
+    padding: 1.25rem;
+  }
+
   .table {
     font-size: 0.9rem;
   }
@@ -313,12 +340,73 @@ footer {
     height: 32px;
   }
 
+  .navbar-brand {
+    gap: 0.5rem;
+  }
+
   .brand-text {
     display: none;
   }
 
   .entry-wrapper {
     padding: 1.5rem 0;
+  }
+
+  .form-shell {
+    padding: 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .info-card,
+  .stat-card,
+  .card {
+    border-radius: 0.9rem;
+  }
+
+  .info-card {
+    padding: 1rem;
+  }
+
+  .question-card {
+    padding: 0.75rem 0.9rem;
+  }
+
+  .question-card .d-flex {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .question-card .form-check {
+    margin-right: 0;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .table td,
+  .table th {
+    padding: 0.5rem;
+  }
+
+  .hero {
+    padding: 3rem 0;
+  }
+
+  .hero::after {
+    width: 260px;
+    height: 260px;
+    top: -90px;
+    right: -120px;
+  }
+
+  footer {
+    padding: 1.5rem 0;
+  }
+
+  footer .badge-role {
+    display: inline-block;
+    margin-top: 0.5rem;
   }
 }
 
