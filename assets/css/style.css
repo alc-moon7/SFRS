@@ -1,13 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap");
+
 :root {
   --primary: #0c2a42;
   --primary-dark: #081e30;
   --accent: #c44d2d;
   --accent-hover: #cd201f;
-  --bg: #f8f9fa;
+  --bg: #f4f6fb;
   --text: #1f2a33;
   --muted: #5e6b78;
-  --border: #e5e9ef;
-  --card-shadow: 0 12px 28px rgba(12, 42, 66, 0.12);
+  --border: #e1e6ef;
+  --card-shadow: 0 10px 24px rgba(12, 42, 66, 0.12);
+  --primary-color: var(--primary);
+  --secondary-color: var(--accent);
+  --secondary-hover-color: var(--accent-hover);
+  --text-color-dark: var(--text);
+  --text-color-gray: var(--muted);
+  --text-color-light: #ffffff;
 }
 
 * {
@@ -20,12 +28,21 @@ img {
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Poppins", sans-serif;
   color: var(--text);
-  background: var(--bg);
-  padding-top: 76px;
+  background: linear-gradient(180deg, #f4f6fb 0%, #ffffff 55%, #f4f6fb 100%);
+  padding-top: 92px;
   line-height: 1.6;
   overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
 }
 
 body.entry-page {
@@ -34,18 +51,31 @@ body.entry-page {
 
 .navbar {
   background: #ffffff;
-  border-bottom: 3px solid var(--accent);
-  box-shadow: 0 6px 18px rgba(12, 42, 66, 0.08);
+  border-bottom: 1px solid rgba(12, 42, 66, 0.12);
+  box-shadow: 0 10px 24px rgba(12, 42, 66, 0.08);
+  padding: 0.35rem 0;
+  min-height: 84px;
 }
 
 .navbar .nav-link {
   color: var(--primary);
-  font-weight: 500;
+  font-weight: 600;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  border-bottom: 3px solid transparent;
+  padding: 0 0.75rem;
 }
 
 .navbar .nav-link:hover,
 .navbar .nav-link:focus {
   color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.navbar .nav-link.active {
+  border-bottom-color: var(--primary);
+  color: var(--primary);
 }
 
 .navbar-brand {
@@ -56,9 +86,9 @@ body.entry-page {
 }
 
 .logo-mark {
-  width: 120px;
-  height: 44px;
-  border-radius: 4px;
+  width: 130px;
+  height: 48px;
+  border-radius: 6px;
   background: #ffffff url("../images/varendra-logo.png") center/contain no-repeat;
   border: 1px solid var(--border);
   position: relative;
@@ -133,6 +163,7 @@ body.entry-page {
   border-radius: 1.25rem;
   padding: 2rem;
   box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
   border-top: 4px solid var(--accent);
 }
 
@@ -170,7 +201,7 @@ body.entry-page {
 
 .info-card {
   background: #ffffff;
-  border-left: 5px solid var(--accent);
+  border-left: 4px solid var(--accent);
   border-radius: 1rem;
   padding: 1.25rem;
   box-shadow: var(--card-shadow);
@@ -214,6 +245,14 @@ body.entry-page {
   background: #ffffff;
 }
 
+.question-placeholder {
+  border: 1px dashed rgba(12, 42, 66, 0.2);
+  border-radius: 0.9rem;
+  padding: 1.25rem;
+  color: var(--muted);
+  background: #ffffff;
+}
+
 .question-title {
   font-weight: 600;
   margin-bottom: 0.75rem;
@@ -249,6 +288,14 @@ body.entry-page {
 .chat-message.assistant {
   background: #f1f5f9;
   color: var(--text);
+}
+
+.toast-container {
+  z-index: 1090;
+}
+
+.toast {
+  box-shadow: var(--card-shadow);
 }
 
 input,
@@ -305,7 +352,7 @@ footer {
 
 @media (max-width: 991px) {
   body {
-    padding-top: 70px;
+    padding-top: 76px;
   }
 
   .entry-wrapper {
@@ -318,13 +365,23 @@ footer {
   }
 
   .logo-mark {
-    width: 108px;
+    width: 110px;
     height: 40px;
   }
 
   .navbar-collapse {
     background: #ffffff;
     padding: 0.75rem 0;
+  }
+
+  .navbar {
+    min-height: 72px;
+  }
+
+  .navbar .nav-link {
+    height: auto;
+    padding: 0.4rem 1rem;
+    border-bottom: none;
   }
 
   .hero {
@@ -334,7 +391,7 @@ footer {
 
 @media (max-width: 767px) {
   body {
-    padding-top: 64px;
+    padding-top: 70px;
   }
 
   .section-title {
@@ -367,6 +424,17 @@ footer {
 }
 
 @media (max-width: 575px) {
+  .toast-container {
+    left: 0;
+    right: 0;
+    padding: 0.75rem;
+  }
+
+  .toast {
+    width: 100%;
+    max-width: none;
+  }
+
   .logo-mark {
     width: 88px;
     height: 32px;

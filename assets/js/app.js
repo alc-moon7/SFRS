@@ -7,6 +7,10 @@
   const DEMO_CREDENTIALS = { username: "admin", password: "admin" };
   const DEMO_SESSION_KEY = "sfrs_demo_session";
   const DEMO_FEEDBACK_KEY = "sfrs_demo_feedbacks";
+  const DASHBOARD_ROUTES = {
+    student: "student-dashboard.html",
+    teacher: "teacher-dashboard.html"
+  };
   const DEMO_PROFILES = {
     student: {
       id: "demo-student-001",
@@ -753,12 +757,87 @@
     localStorage.setItem(DEMO_FEEDBACK_KEY, JSON.stringify(feedbacks));
   };
 
+  const TOAST_TYPE_CLASSES = {
+    success: "text-bg-success",
+    info: "text-bg-info",
+    warning: "text-bg-warning",
+    danger: "text-bg-danger"
+  };
+
+  const TOAST_DARK_TYPES = new Set(["success", "danger"]);
+
+  const getToastContainer = () => {
+    let container = document.getElementById("toastContainer");
+    if (container) {
+      return container;
+    }
+    container = document.createElement("div");
+    container.id = "toastContainer";
+    container.className = "toast-container position-fixed top-0 end-0 p-3";
+    container.setAttribute("aria-live", "polite");
+    container.setAttribute("aria-atomic", "true");
+    document.body.appendChild(container);
+    return container;
+  };
+
+  const showToast = (type, message) => {
+    if (!message) {
+      return;
+    }
+    const container = getToastContainer();
+    const toast = document.createElement("div");
+    const variant = TOAST_TYPE_CLASSES[type] || TOAST_TYPE_CLASSES.info;
+    const isDark = TOAST_DARK_TYPES.has(type);
+
+    toast.className = `toast align-items-center ${variant} border-0`;
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    toast.setAttribute("aria-atomic", "true");
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "d-flex";
+
+    const body = document.createElement("div");
+    body.className = "toast-body";
+    body.textContent = message;
+
+    const closeButton = document.createElement("button");
+    closeButton.type = "button";
+    closeButton.className = `${isDark ? "btn-close btn-close-white" : "btn-close"} me-2 m-auto`;
+    closeButton.setAttribute("data-bs-dismiss", "toast");
+    closeButton.setAttribute("aria-label", "Close");
+
+    wrapper.append(body, closeButton);
+    toast.appendChild(wrapper);
+
+    const maxToasts = 3;
+    while (container.children.length >= maxToasts) {
+      container.removeChild(container.firstElementChild);
+    }
+    container.appendChild(toast);
+
+    if (window.bootstrap && window.bootstrap.Toast) {
+      const toastInstance = new window.bootstrap.Toast(toast, {
+        delay: 4500,
+        autohide: true
+      });
+      toast.addEventListener("hidden.bs.toast", () => toast.remove());
+      toastInstance.show();
+    } else {
+      toast.classList.add("show");
+      setTimeout(() => toast.remove(), 4500);
+    }
+  };
+
   const showAlert = (element, type, message) => {
     if (!element) {
       return;
     }
     element.className = `alert alert-${type}`;
     element.textContent = message;
+    if (type === "success" || type === "info") {
+      showToast(type, message);
+    }
   };
 
   const clearAlert = (element) => {
@@ -1144,6 +1223,30 @@
     return { session, profile: data };
   };
 
+  const redirectIfAuthenticated = () => {
+    const demoSession = getDemoSession();
+    if (demoSession && DASHBOARD_ROUTES[demoSession.role]) {
+      window.location.href = DASHBOARD_ROUTES[demoSession.role];
+      return;
+    }
+
+    getProfile()
+      .then((result) => {
+        if (!result || !result.profile) {
+          return;
+        }
+        const role = result.profile.role;
+        const target = DASHBOARD_ROUTES[role];
+        if (!target) {
+          return;
+        }
+        window.location.href = target;
+      })
+      .catch(() => {
+        // Ignore unauthenticated state.
+      });
+  };
+
   const requireRole = async (role, redirectTo) => {
     const demoSession = getDemoSession();
     if (demoSession) {
@@ -1198,6 +1301,7 @@
       return;
     }
     const alertBox = document.getElementById("studentLoginAlert");
+    redirectIfAuthenticated();
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -1254,6 +1358,7 @@
       return;
     }
     const alertBox = document.getElementById("teacherLoginAlert");
+    redirectIfAuthenticated();
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -1465,6 +1570,9 @@
 
       if (!data.session) {
         showAlert(alertBox, "info", "Check your email to confirm your account, then log in.");
+        setTimeout(() => {
+          window.location.href = "student-login.html";
+        }, 1400);
         return;
       }
 
@@ -1490,7 +1598,15 @@
         return;
       }
 
-      window.location.href = "student-dashboard.html";
+      showAlert(alertBox, "success", "Registration complete. Please log in.");
+      try {
+        await supabaseClient.auth.signOut();
+      } catch (error) {
+        // Ignore sign-out errors after registration.
+      }
+      setTimeout(() => {
+        window.location.href = "student-login.html";
+      }, 1200);
     });
   };
 
@@ -1585,6 +1701,9 @@
 
       if (!data.session) {
         showAlert(alertBox, "info", "Check your email to confirm your account, then log in.");
+        setTimeout(() => {
+          window.location.href = "teacher-login.html";
+        }, 1400);
         return;
       }
 
@@ -1607,7 +1726,15 @@
         return;
       }
 
-      window.location.href = "teacher-dashboard.html";
+      showAlert(alertBox, "success", "Registration complete. Please log in.");
+      try {
+        await supabaseClient.auth.signOut();
+      } catch (error) {
+        // Ignore sign-out errors after registration.
+      }
+      setTimeout(() => {
+        window.location.href = "teacher-login.html";
+      }, 1200);
     });
   };
 
@@ -1639,7 +1766,9 @@
     const teacherInfoEl = document.getElementById("reviewTeacherInfo");
     const courseSelectEl = document.getElementById("courseSelect");
     const questionContainer = document.getElementById("questionContainer");
+    const questionPlaceholder = document.getElementById("questionPlaceholder");
     const reviewsTbody = document.getElementById("studentReviewsBody");
+    const submitButton = form ? form.querySelector("button[type=\"submit\"]") : null;
 
     let teachers = [];
     try {
@@ -1651,11 +1780,38 @@
     renderTeacherOptions(teacherSelectEl, teachers);
     updateTeacherInfo(teacherSelectEl, teacherInfoEl, teachers);
     renderCourseOptions(courseSelectEl, COURSE_CATALOG);
-    renderQuestions(questionContainer);
+
+    const updateQuestionSection = () => {
+      if (!questionContainer || !teacherSelectEl || !courseSelectEl) {
+        return;
+      }
+      const ready = Boolean(teacherSelectEl.value && courseSelectEl.value);
+      if (ready) {
+        if (!questionContainer.childElementCount) {
+          renderQuestions(questionContainer);
+        }
+        questionContainer.classList.remove("d-none");
+        if (questionPlaceholder) {
+          questionPlaceholder.classList.add("d-none");
+        }
+      } else {
+        questionContainer.classList.add("d-none");
+        questionContainer.innerHTML = "";
+        if (questionPlaceholder) {
+          questionPlaceholder.classList.remove("d-none");
+        }
+      }
+      if (submitButton) {
+        submitButton.disabled = !ready;
+      }
+    };
 
     teacherSelectEl.addEventListener("change", () => {
       updateTeacherInfo(teacherSelectEl, teacherInfoEl, teachers);
+      updateQuestionSection();
     });
+    courseSelectEl.addEventListener("change", updateQuestionSection);
+    updateQuestionSection();
     const loadReviews = async () => {
       if (useDemo) {
         const feedbacks = getDemoFeedbacks().filter(
@@ -1849,7 +2005,9 @@
       }
 
       form.reset();
+      form.classList.remove("was-validated");
       updateTeacherInfo(teacherSelectEl, teacherInfoEl, teachers);
+      updateQuestionSection();
       showAlert(alertBox, "success", "Feedback submitted successfully.");
       await loadReviews();
     });

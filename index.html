@@ -2,16 +2,134 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=VU/index.html">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Redirecting to Varendra University</title>
-  <script>
-    window.location.replace("VU/index.html");
-  </script>
+  <title>SFRS - Student Feedback Review System</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-  <p>Redirecting to the Varendra University website...</p>
-  <p>If you are not redirected, <a href="VU/index.html">click here</a>.</p>
-  <p>Student Feedback portal: <a href="student-login.html">Student Login</a> | <a href="teacher-login.html">Teacher Login</a></p>
+<body data-page="home">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" aria-label="Primary">
+    <div class="container">
+      <a class="navbar-brand" href="https://sfrs.moonx.dev">
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <span class="brand-title">Varendra University</span><br>
+          <span class="brand-subtitle">CSE Department</span>
+        </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="https://sfrs.moonx.dev">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="student-login.html">Student Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="student-signup.html">Student Sign Up</a></li>
+          <li class="nav-item"><a class="nav-link" href="teacher-login.html">Teacher Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="teacher-signup.html">Teacher Sign Up</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <span class="badge bg-light text-dark mb-3">CSE Department</span>
+          <h1 class="display-5 fw-bold">Student Feedback Review System</h1>
+          <p class="lead mb-4">Submit course-wise feedback and help instructors improve learning outcomes.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-light btn-lg" href="student-login.html">Student Login</a>
+            <a class="btn btn-outline-light btn-lg" href="teacher-login.html">Teacher Login</a>
+          </div>
+          <div class="mt-3">
+            <a class="link-light fw-semibold me-3" href="student-signup.html">Student Sign Up</a>
+            <a class="link-light fw-semibold" href="teacher-signup.html">Teacher Sign Up</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-card">
+            <h5 class="fw-semibold">Fast feedback loop</h5>
+            <ul class="mb-0">
+              <li>Anonymous, course-wise feedback submission.</li>
+              <li>Teacher dashboards with trend summaries.</li>
+              <li>AI assistant for quick insight snapshots.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="py-5">
+      <div class="container">
+        <div class="row g-4 align-items-stretch">
+          <div class="col-lg-4">
+            <div class="info-card h-100">
+              <span class="badge-role mb-2 d-inline-block">Step 1</span>
+              <h5 class="form-section-title">Login with your role</h5>
+              <p class="text-muted mb-0">Students and teachers use separate portals with secure sign-in.</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="info-card h-100">
+              <span class="badge-role mb-2 d-inline-block">Step 2</span>
+              <h5 class="form-section-title">Submit or review</h5>
+              <p class="text-muted mb-0">Students complete the official questionnaire for each course.</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="info-card h-100">
+              <span class="badge-role mb-2 d-inline-block">Step 3</span>
+              <h5 class="form-section-title">Act on insights</h5>
+              <p class="text-muted mb-0">Teachers get summaries and AI-assisted highlights.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-5">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card portal-card h-100">
+              <div class="card-body">
+                <h4 class="card-title">Student Portal</h4>
+                <p class="text-muted">Submit feedback for each course, semester, and section.</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="btn btn-success" href="student-login.html">Submit Feedback</a>
+                  <a class="btn btn-outline-success" href="student-signup.html">Create Account</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card portal-card h-100">
+              <div class="card-body">
+                <h4 class="card-title">Teacher Portal</h4>
+                <p class="text-muted">Review feedback summaries, trends, and AI insights.</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="btn btn-success" href="teacher-login.html">View Dashboard</a>
+                  <a class="btn btn-outline-success" href="teacher-signup.html">Register</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-note">SFRS - Student Feedback Review System. For academic use only.</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
