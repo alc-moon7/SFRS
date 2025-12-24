@@ -219,6 +219,38 @@ body.entry-page {
   margin-bottom: 0.75rem;
 }
 
+.ai-output {
+  white-space: pre-wrap;
+}
+
+.chat-window {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  padding: 1rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.chat-message {
+  border-radius: 0.75rem;
+  padding: 0.6rem 0.85rem;
+  margin-bottom: 0.65rem;
+  max-width: 90%;
+  white-space: pre-wrap;
+}
+
+.chat-message.user {
+  margin-left: auto;
+  background: rgba(12, 42, 66, 0.08);
+  color: var(--primary);
+}
+
+.chat-message.assistant {
+  background: #f1f5f9;
+  color: var(--text);
+}
+
 input,
 select,
 textarea {

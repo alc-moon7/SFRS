@@ -998,6 +998,109 @@
     });
   };
 
+  const buildQuestionStats = (reviews) => {
+    const statsMap = new Map();
+    QUESTIONS.forEach((section) => {
+      section.items.forEach((question) => {
+        statsMap.set(question, {
+          section: section.title,
+          question,
+          counts: { Excellent: 0, Good: 0, Average: 0 }
+        });
+      });
+    });
+
+    reviews.forEach((review) => {
+      (review.responses || []).forEach((response) => {
+        const entry = statsMap.get(response.question);
+        if (!entry) {
+          return;
+        }
+        if (entry.counts[response.value] !== undefined) {
+          entry.counts[response.value] += 1;
+        }
+      });
+    });
+
+    return Array.from(statsMap.values()).map((entry) => {
+      const total =
+        entry.counts.Excellent + entry.counts.Good + entry.counts.Average;
+      const average = total
+        ? (
+          (entry.counts.Excellent * 3 + entry.counts.Good * 2 + entry.counts.Average) /
+            total
+        ).toFixed(2)
+        : "0.00";
+      return { ...entry, total, average };
+    });
+  };
+
+  const buildCourseStats = (reviews) => {
+    const map = new Map();
+    reviews.forEach((review) => {
+      if (!review.course_code || !review.course_title) {
+        return;
+      }
+      const key = `${review.course_code} - ${review.course_title}`;
+      if (!map.has(key)) {
+        map.set(key, {
+          course_code: review.course_code,
+          course_title: review.course_title,
+          count: 0
+        });
+      }
+      map.get(key).count += 1;
+    });
+    return Array.from(map.values())
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+  };
+
+  const setButtonLoading = (button, isLoading, loadingLabel) => {
+    if (!button) {
+      return;
+    }
+    if (!button.dataset.defaultLabel) {
+      button.dataset.defaultLabel = button.textContent || "";
+    }
+    button.disabled = isLoading;
+    button.textContent = isLoading ? loadingLabel : button.dataset.defaultLabel;
+  };
+
+  const invokeAiAssistant = async (payload) => {
+    const { data, error } = await supabaseClient.functions.invoke("ai-assistant", {
+      body: payload
+    });
+    if (error) {
+      throw new Error(error.message || "AI request failed.");
+    }
+    if (!data) {
+      throw new Error("AI request failed.");
+    }
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    return data.result || "";
+  };
+
+  const appendChatMessage = (container, role, text) => {
+    if (!container) {
+      return;
+    }
+    const message = document.createElement("div");
+    message.className = `chat-message ${role}`;
+    message.textContent = text;
+    container.appendChild(message);
+    container.scrollTop = container.scrollHeight;
+  };
+
+  const clampChatHistory = (history, limit) => {
+    if (history.length <= limit) {
+      return history;
+    }
+    return history.slice(history.length - limit);
+  };
+
   const loadTeacherDirectory = async (options = {}) => {
     if (options.useDemo) {
       return [...DEMO_TEACHERS];
@@ -1632,6 +1735,61 @@
 
     await loadReviews();
 
+    const chatWindow = document.getElementById("aiChatWindow");
+    const chatForm = document.getElementById("aiChatForm");
+    const chatInput = document.getElementById("aiChatInput");
+    const chatSend = document.getElementById("aiChatSend");
+    const chatAlert = document.getElementById("aiChatAlert");
+    const chatHistory = [];
+
+    if (chatWindow && chatForm && chatInput) {
+      appendChatMessage(chatWindow, "assistant", "Hi! I can help you with SFRS portal questions.");
+      chatForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearAlert(chatAlert);
+
+        const message = chatInput.value.trim();
+        if (!message) {
+          return;
+        }
+
+        appendChatMessage(chatWindow, "user", message);
+        chatHistory.push({ role: "user", content: message });
+        chatInput.value = "";
+        if (chatSend) {
+          chatSend.disabled = true;
+        }
+        chatInput.disabled = true;
+
+        if (useDemo) {
+          appendChatMessage(
+            chatWindow,
+            "assistant",
+            "AI assistant is disabled in demo mode. Please log in with a real account."
+          );
+        } else {
+          try {
+            const historyForAi = clampChatHistory(chatHistory.slice(0, -1), 8);
+            const reply = await invokeAiAssistant({
+              type: "chat",
+              message,
+              history: historyForAi
+            });
+            appendChatMessage(chatWindow, "assistant", reply || "I could not generate a reply.");
+            chatHistory.push({ role: "assistant", content: reply || "" });
+          } catch (error) {
+            showAlert(chatAlert, "danger", error.message || "Unable to reach the AI assistant.");
+          }
+        }
+
+        chatInput.disabled = false;
+        if (chatSend) {
+          chatSend.disabled = false;
+        }
+        chatInput.focus();
+      });
+    }
+
     if (!form) {
       return;
     }
@@ -1815,6 +1973,66 @@
     }
 
     bindReviewModal(reviewsTbody, reviews, true);
+
+    const aiSummaryBtn = document.getElementById("aiSummaryBtn");
+    const aiSummaryResult = document.getElementById("aiSummaryResult");
+    const aiSummaryAlert = document.getElementById("aiSummaryAlert");
+    const questionStats = buildQuestionStats(reviews);
+    const courseStats = buildCourseStats(reviews);
+
+    if (aiSummaryResult && !reviews.length) {
+      aiSummaryResult.textContent = "No feedback available yet.";
+    }
+
+    if (aiSummaryBtn) {
+      if (!reviews.length) {
+        aiSummaryBtn.disabled = true;
+      }
+      aiSummaryBtn.addEventListener("click", async () => {
+        clearAlert(aiSummaryAlert);
+        if (!reviews.length) {
+          if (aiSummaryResult) {
+            aiSummaryResult.textContent = "No feedback available yet.";
+          }
+          return;
+        }
+        if (useDemo) {
+          showAlert(aiSummaryAlert, "warning", "AI summary is disabled in demo mode. Please log in.");
+          return;
+        }
+
+        setButtonLoading(aiSummaryBtn, true, "Generating...");
+        if (aiSummaryResult) {
+          aiSummaryResult.textContent = "Generating summary...";
+        }
+
+        try {
+          const result = await invokeAiAssistant({
+            type: "summary",
+            payload: {
+              teacher_name: profile.full_name,
+              review_count: reviews.length,
+              overall_question: overallQuestion,
+              overall_counts: counts,
+              overall_average: averageScore,
+              question_stats: questionStats,
+              course_stats: courseStats,
+              scale: { Excellent: 3, Good: 2, Average: 1 }
+            }
+          });
+          if (aiSummaryResult) {
+            aiSummaryResult.textContent = result || "No summary returned.";
+          }
+        } catch (error) {
+          showAlert(aiSummaryAlert, "danger", error.message || "Unable to generate AI summary.");
+          if (aiSummaryResult) {
+            aiSummaryResult.textContent = "Unable to generate summary.";
+          }
+        } finally {
+          setButtonLoading(aiSummaryBtn, false, "Generating...");
+        }
+      });
+    }
   };
 
   const initPage = () => {

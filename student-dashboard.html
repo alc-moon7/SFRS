@@ -90,6 +90,24 @@
           </form>
         </div>
 
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <h5 class="card-title mb-0">SFRS Assistant (GPT)</h5>
+              <span class="badge bg-light text-dark">AI Help</span>
+            </div>
+            <p class="text-muted small mb-2">Ask questions about using the portal or the feedback process.</p>
+            <div id="aiChatAlert"></div>
+            <div id="aiChatWindow" class="chat-window" aria-live="polite"></div>
+            <form id="aiChatForm" class="mt-3" autocomplete="off">
+              <div class="input-group">
+                <input type="text" class="form-control" id="aiChatInput" placeholder="Type your question..." required>
+                <button class="btn btn-success" type="submit" id="aiChatSend">Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">My Submitted Feedback</h5>
