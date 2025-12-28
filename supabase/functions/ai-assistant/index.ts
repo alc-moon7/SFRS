@@ -24,17 +24,18 @@ serve(async (req) => {
     return jsonResponse(400, { error: "Invalid JSON payload." });
   }
 
-  const openaiKey = Deno.env.get("OPENAI_API_KEY");
-  if (!openaiKey) {
-    return jsonResponse(500, { error: "OPENAI_API_KEY is not set." });
+  const geminiKey = Deno.env.get("GEMINI_API_KEY");
+  if (!geminiKey) {
+    return jsonResponse(500, { error: "GEMINI_API_KEY is not set." });
   }
 
   const baseUrl =
-    (Deno.env.get("OPENAI_BASE_URL") || "https://api.openai.com/v1").replace(/\/+$/, "");
-  const defaultModel = Deno.env.get("OPENAI_MODEL") || "gpt-4o-mini";
-  const summaryModel = Deno.env.get("OPENAI_SUMMARY_MODEL") || defaultModel;
-  const chatModel = Deno.env.get("OPENAI_CHAT_MODEL") || defaultModel;
-  const timeoutMs = Number(Deno.env.get("OPENAI_TIMEOUT_MS") || 15000);
+    (Deno.env.get("GEMINI_BASE_URL") || "https://generativelanguage.googleapis.com/v1beta")
+      .replace(/\/+$/, "");
+  const defaultModel = Deno.env.get("GEMINI_MODEL") || "gemini-1.5-flash";
+  const summaryModel = Deno.env.get("GEMINI_SUMMARY_MODEL") || defaultModel;
+  const chatModel = Deno.env.get("GEMINI_CHAT_MODEL") || defaultModel;
+  const timeoutMs = Number(Deno.env.get("GEMINI_TIMEOUT_MS") || 15000);
   const type = body.type;
 
   let temperature = 0.3;
@@ -94,55 +95,67 @@ serve(async (req) => {
     return jsonResponse(400, { error: "Invalid request type." });
   }
 
-  const headers: Record<string, string> = {
-    Authorization: `Bearer ${openaiKey}`,
-    "Content-Type": "application/json"
-  };
-  const openaiOrg = Deno.env.get("OPENAI_ORG");
-  const openaiProject = Deno.env.get("OPENAI_PROJECT");
-  if (openaiOrg) {
-    headers["OpenAI-Organization"] = openaiOrg;
-  }
-  if (openaiProject) {
-    headers["OpenAI-Project"] = openaiProject;
-  }
-
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-  let openaiResponse: Response;
+  const systemMessage = messages.find((item) => item.role === "system");
+  const contents = messages
+    .filter((item) => item.role !== "system")
+    .map((item) => ({
+      role: item.role === "assistant" ? "model" : "user",
+      parts: [{ text: item.content }]
+    }));
+  const requestBody: Record<string, unknown> = {
+    contents,
+    generationConfig: {
+      temperature,
+      maxOutputTokens: maxTokens
+    }
+  };
+  if (systemMessage?.content) {
+    requestBody.systemInstruction = {
+      role: "system",
+      parts: [{ text: systemMessage.content }]
+    };
+  }
+
+  let geminiResponse: Response;
   try {
-    openaiResponse = await fetch(`${baseUrl}/chat/completions`, {
+    geminiResponse = await fetch(
+      `${baseUrl}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(geminiKey)}`,
+      {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model,
-        messages,
-        temperature,
-        max_tokens: maxTokens
+        ...requestBody
       }),
       signal: controller.signal
-    });
+    }
+    );
   } catch (error) {
     clearTimeout(timeoutId);
     return jsonResponse(500, {
-      error: "OpenAI request failed.",
+      error: "Gemini request failed.",
       details: error instanceof Error ? error.message : "Unknown error."
     });
   } finally {
     clearTimeout(timeoutId);
   }
 
-  if (!openaiResponse.ok) {
-    const errorText = await openaiResponse.text();
-    return jsonResponse(openaiResponse.status, {
-      error: "OpenAI request failed.",
+  if (!geminiResponse.ok) {
+    const errorText = await geminiResponse.text();
+    return jsonResponse(geminiResponse.status, {
+      error: "Gemini request failed.",
       details: errorText.slice(0, 300)
     });
   }
 
-  const data = await openaiResponse.json();
-  const result = data?.choices?.[0]?.message?.content?.trim();
+  const data = await geminiResponse.json();
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  const result = parts
+    .map((part: { text?: string }) => part.text || "")
+    .join("")
+    .trim();
   if (!result) {
     return jsonResponse(500, { error: "No response from AI." });
   }
