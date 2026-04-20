@@ -35,9 +35,9 @@ immutable
 as $$
   select case
     when lower(coalesce(value, '')) like '%general%' then 'General'
-    when lower(coalesce(value, '')) ~ 'a\\s*$' then 'A'
-    when lower(coalesce(value, '')) ~ 'b\\s*$' then 'B'
-    when lower(coalesce(value, '')) ~ 'c\\s*$' then 'C'
+    when lower(coalesce(value, '')) ~ 'a[[:space:]]*$' then 'A'
+    when lower(coalesce(value, '')) ~ 'b[[:space:]]*$' then 'B'
+    when lower(coalesce(value, '')) ~ 'c[[:space:]]*$' then 'C'
     else nullif(trim(value), '')
   end;
 $$;
@@ -202,7 +202,7 @@ alter table if exists public.feedbacks
   add constraint feedbacks_responses_object
   check (
     case
-      when jsonb_typeof(responses) = 'object' then jsonb_object_length(responses) > 0
+      when jsonb_typeof(responses) = 'object' then responses <> '{}'::jsonb
       else false
     end
   );
