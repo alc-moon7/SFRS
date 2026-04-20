@@ -24,7 +24,8 @@
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="https://sfrs.moonx.dev/vu">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="student-dashboard.html">Student Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link active" href="student-dashboard.html">Student Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="teacher-profile.html">Teacher Profiles</a></li>
           <li class="nav-item"><a class="nav-link" href="#" data-logout>Logout</a></li>
         </ul>
       </div>
@@ -32,66 +33,90 @@
   </nav>
 
   <main class="container py-4">
+    <section class="page-shell mb-4">
+      <div class="dashboard-heading">
+        <div>
+          <span class="badge-role mb-2 d-inline-block">Student Workspace</span>
+          <h1 class="page-title mb-1">My Course Teachers</h1>
+          <p class="section-lead mb-0">See only the teachers assigned to your current semester and section, then submit course-wise feedback.</p>
+        </div>
+        <div class="dashboard-badges">
+          <span class="badge-role" data-student-semester-badge>Semester</span>
+          <span class="badge-role" data-student-section-badge>Section</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="row g-3 mb-4">
+      <div class="col-sm-6 col-xl-3">
+        <div class="stat-card h-100">
+          <div class="text-muted">Total Assigned Teachers</div>
+          <div class="display-6 fw-bold" data-stat-total-assigned>0</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="stat-card h-100">
+          <div class="text-muted">Pending Feedback</div>
+          <div class="display-6 fw-bold" data-stat-pending>0</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="stat-card h-100">
+          <div class="text-muted">Submitted Feedback</div>
+          <div class="display-6 fw-bold" data-stat-submitted>0</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="stat-card h-100">
+          <div class="text-muted">Closed Feedback</div>
+          <div class="display-6 fw-bold" data-stat-closed>0</div>
+        </div>
+      </div>
+    </section>
+
     <div class="row g-4">
-      <div class="col-lg-4">
-        <div class="card">
+      <div class="col-xl-4">
+        <div class="card h-100">
           <div class="card-body">
             <h5 class="card-title">Student Profile</h5>
-            <p class="mb-2"><span class="fw-semibold">Name:</span> <span data-user-name></span></p>
-            <p class="mb-2"><span class="fw-semibold">Student ID:</span> <span data-user-id></span></p>
-            <p class="mb-0"><span class="fw-semibold">Program:</span> <span data-user-program></span></p>
+            <div class="profile-meta-list">
+              <div><span class="fw-semibold">Name:</span> <span data-user-name></span></div>
+              <div><span class="fw-semibold">Student ID:</span> <span data-user-id></span></div>
+              <div><span class="fw-semibold">Program:</span> <span data-user-program></span></div>
+            </div>
           </div>
         </div>
         <div class="info-card mt-4">
           <h6 class="fw-semibold">Feedback Notes</h6>
           <ul class="mb-0">
-            <li>Teacher review is anonymous by default.</li>
-            <li>Answer every question using Good, Average, or Excellent.</li>
-            <li>Submit feedback for each course separately.</li>
+            <li>Only your assigned semester and section teachers appear here.</li>
+            <li>One submission is allowed per teacher assignment.</li>
+            <li>Comments stay anonymous if the review setting allows it.</li>
           </ul>
         </div>
       </div>
 
-      <div class="col-lg-8">
-        <div class="form-shell mb-4">
-          <h4 class="section-title">Submit Feedback</h4>
-          <p class="section-lead">Select a teacher and complete the official feedback questionnaire.</p>
-          <div id="reviewAlert"></div>
-          <form id="reviewForm" class="needs-validation" novalidate>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="reviewTeacherSelect" class="form-label">Teacher</label>
-                <select id="reviewTeacherSelect" class="form-select" required></select>
-                <div class="invalid-feedback">Please select a teacher.</div>
+      <div class="col-xl-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="toolbar-row">
+              <div class="toolbar-field flex-grow-1">
+                <label class="form-label" for="teacherSearchInput">Search Teacher or Course</label>
+                <input type="search" class="form-control" id="teacherSearchInput" placeholder="Type a teacher name or course code">
               </div>
-              <div class="col-md-6">
-                <label class="form-label">Teacher Details</label>
-                <div id="reviewTeacherInfo" class="info-card"></div>
-              </div>
-              <div class="col-md-12">
-                <label for="courseSelect" class="form-label">Course</label>
-                <select id="courseSelect" class="form-select" required></select>
-                <div class="invalid-feedback">Please select a course.</div>
-              </div>
-              <div class="col-md-6">
-                <label for="courseSemester" class="form-label">Semester</label>
-                <input type="text" class="form-control" id="courseSemester" name="courseSemester" placeholder="7th Semester" required>
-                <div class="invalid-feedback">Semester is required.</div>
-              </div>
-              <div class="col-md-6">
-                <label for="courseSection" class="form-label">Section</label>
-                <input type="text" class="form-control" id="courseSection" name="courseSection" placeholder="Section B" required>
-                <div class="invalid-feedback">Section is required.</div>
+              <div class="toolbar-field">
+                <label class="form-label" for="courseFilterSelect">Course Filter</label>
+                <select class="form-select" id="courseFilterSelect">
+                  <option value="">All courses</option>
+                </select>
               </div>
             </div>
-
-            <div id="questionPlaceholder" class="question-placeholder mt-4">
-              Select a teacher and course to view the feedback questions.
+            <div id="studentAssignmentsAlert" class="mt-3"></div>
+            <div id="studentAssignmentsGrid" class="teacher-grid mt-4"></div>
+            <div id="studentAssignmentsEmpty" class="empty-state d-none mt-4">
+              No teacher assignments match your current filters.
             </div>
-            <div id="questionContainer" class="mt-4 d-none"></div>
-
-            <button type="submit" class="btn btn-success w-100 mt-3" disabled>Submit Feedback</button>
-          </form>
+          </div>
         </div>
 
         <div class="card mb-4">
@@ -100,7 +125,7 @@
               <h5 class="card-title mb-0">SFRS Assistant (Gemini)</h5>
               <span class="badge bg-light text-dark">AI Help</span>
             </div>
-            <p class="text-muted small mb-2">Ask questions about using the portal or the feedback process.</p>
+            <p class="text-muted small mb-2">Ask questions about the portal, review rules, or your feedback status.</p>
             <div id="aiChatAlert"></div>
             <div id="aiChatWindow" class="chat-window" aria-live="polite"></div>
             <form id="aiChatForm" class="mt-3" autocomplete="off">
@@ -114,14 +139,17 @@
 
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">My Submitted Feedback</h5>
-            <div class="table-responsive">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <h5 class="card-title mb-0">My Submitted Feedback</h5>
+              <span class="text-muted small" data-submission-caption>Latest submissions appear first.</span>
+            </div>
+            <div class="table-responsive mt-3">
               <table class="table table-bordered align-middle">
                 <thead>
                   <tr>
                     <th>Teacher</th>
-                    <th>Course Code</th>
-                    <th>Course Title</th>
+                    <th>Course</th>
+                    <th>Status</th>
                     <th>Submitted At</th>
                     <th>Action</th>
                   </tr>
@@ -137,9 +165,43 @@
 
   <footer>
     <div class="container">
-      <div class="footer-note">SFRS - Student dashboard. Feedback is stored securely in Supabase.</div>
+      <div class="footer-note">SFRS - Student dashboard. Feedback visibility is controlled by role-based rules in Supabase.</div>
     </div>
   </footer>
+
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title" id="feedbackModalLabel">Submit Feedback</h5>
+            <p class="text-muted small mb-0" data-feedback-modal-subtitle>Select category ratings and an optional comment.</p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="assignment-summary-card mb-4" data-feedback-assignment-summary></div>
+          <div id="feedbackFormAlert"></div>
+          <form id="feedbackForm" class="needs-validation" novalidate>
+            <input type="hidden" id="feedbackAssignmentId" name="assignmentId">
+            <div id="feedbackRatingsContainer" class="rating-form-stack"></div>
+            <div class="mt-4">
+              <label for="feedbackComment" class="form-label">Optional Comment</label>
+              <textarea class="form-control" id="feedbackComment" name="comment" rows="4" maxlength="700" placeholder="Share a short, constructive comment if you want."></textarea>
+            </div>
+            <div class="form-check form-switch mt-3" data-anonymous-wrapper>
+              <input class="form-check-input" type="checkbox" role="switch" id="feedbackAnonymous" checked>
+              <label class="form-check-label" for="feedbackAnonymous">Submit as anonymous review</label>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-success" id="feedbackSubmitBtn">Submit Feedback</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -163,6 +225,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/supabase-config.js"></script>
   <script src="assets/js/questions.js"></script>
+  <script src="assets/js/review-data.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>

@@ -1,761 +1,531 @@
 (() => {
   "use strict";
 
-  const QUESTIONS = window.SFRS_QUESTIONS || [];
-  const OPTIONS = window.SFRS_OPTIONS || ["Good", "Average", "Excellent"];
-  const SCORE_MAP = { Excellent: 3, Good: 2, Average: 1 };
+  const DEFAULT_DEPARTMENT = "Computer Science and Engineering";
+  const DEFAULT_PROGRAM = "B.Sc. in CSE";
+  const DEFAULT_TERM = "Spring 2026";
   const DEMO_CREDENTIALS = { username: "admin", password: "admin" };
   const DEMO_SESSION_KEY = "sfrs_demo_session";
   const DEMO_FEEDBACK_KEY = "sfrs_demo_feedbacks";
+  const DEMO_ASSIGNMENT_KEY = "sfrs_demo_assignments";
+  const DEMO_TEACHER_KEY = "sfrs_demo_teachers";
+  const DEMO_SETTINGS_KEY = "sfrs_demo_settings";
+  const FALLBACK_SETUP_MESSAGE =
+    "Run `supabase/feedback-review-feature.sql` and `supabase/feedback-review-seed.sql` in Supabase, then reload this page.";
   const DASHBOARD_ROUTES = {
     student: "student-dashboard.html",
-    teacher: "teacher-dashboard.html"
+    teacher: "teacher-dashboard.html",
+    admin: "admin-dashboard.html"
   };
-  const DEMO_PROFILES = {
+  const REVIEW_CATEGORIES = window.SFRS_REVIEW_CATEGORIES || [
+    { key: "teaching_quality", label: "Teaching Quality" },
+    { key: "communication", label: "Communication" },
+    { key: "course_organization", label: "Course Organization" },
+    { key: "supportiveness", label: "Helpfulness / Supportiveness" },
+    { key: "punctuality", label: "Punctuality / Regularity" },
+    { key: "overall_satisfaction", label: "Overall Satisfaction" }
+  ];
+  const REVIEW_SEMESTERS = window.SFRS_REVIEW_SEMESTERS || [
+    "1st Semester",
+    "2nd Semester",
+    "3rd Semester",
+    "4th Semester",
+    "5th Semester",
+    "6th Semester",
+    "7th Semester",
+    "8th Semester",
+    "9th Semester"
+  ];
+  const REVIEW_SECTIONS = window.SFRS_REVIEW_SECTIONS || ["A", "B", "C", "General"];
+  const ASSIGNMENT_SEED = window.SFRS_ASSIGNMENT_SEED || [];
+  const EXTRA_TEACHER_SEEDS = window.SFRS_EXTRA_TEACHER_SEEDS || [];
+  const LEGACY_QUESTIONS = window.SFRS_QUESTIONS || [];
+  const LEGACY_RESPONSE_SCORES = { Average: 2, Good: 4, Excellent: 5 };
+  const DEFAULT_FEEDBACK_SETTINGS = {
+    id: 1,
+    allow_anonymous_feedback: true,
+    review_window_open: true,
+    active_term: DEFAULT_TERM
+  };
+  const DEMO_PROFILE_DEFINITIONS = {
     student: {
       id: "demo-student-001",
       role: "student",
       full_name: "Demo Student",
       student_id: "223311051",
       email: "admin",
-      department: "Computer Science and Engineering",
-      program: "B.Sc. in CSE",
-      semester: "7th Semester",
+      department: DEFAULT_DEPARTMENT,
+      program: DEFAULT_PROGRAM,
+      semester: "8th Semester",
       section: "B"
     },
     teacher: {
       id: "demo-teacher-001",
       role: "teacher",
-      full_name: "Demo Teacher",
-      designation: "Lecturer, CSE",
-      email: "admin",
-      teacher_directory_id: 1
+      full_name: "Md. Fatin Ilham",
+      teacher_name: "Md. Fatin Ilham",
+      designation: "Lecturer",
+      email: "admin"
+    },
+    admin: {
+      id: "demo-admin-001",
+      role: "admin",
+      full_name: "Demo Admin",
+      designation: "System Administrator",
+      email: "admin"
     }
   };
-  const DEMO_TEACHERS = [
-    {
-      "id": 1,
-      "name": "Shamim Ahmad",
-      "designation": "Head",
-      "email": "head.cse@vu.edu.bd"
-    },
-    {
-      "id": 2,
-      "name": "Sabina Yasmin",
-      "designation": "Coordinator",
-      "email": "sabina@vu.edu.bd"
-    },
-    {
-      "id": 3,
-      "name": "Prof. A.H.M. Rahmatullah Imon, Ph.D.",
-      "designation": "Professor",
-      "email": "cc@vu.edu.bd"
-    },
-    {
-      "id": 4,
-      "name": "Dr. Ahammad Hossain",
-      "designation": "Associate Professor",
-      "email": "ahammad@vu.edu.bd"
-    },
-    {
-      "id": 5,
-      "name": "Md. Mizanur Rahman",
-      "designation": "Assistant Professor",
-      "email": "mizanur@vu.edu.bd"
-    },
-    {
-      "id": 6,
-      "name": "Umme Rumman",
-      "designation": "Assistant Professor",
-      "email": "chaiti@vu.edu.bd"
-    },
-    {
-      "id": 7,
-      "name": "Mst. Jannatul Ferdous",
-      "designation": "Assistant Professor",
-      "email": "jannat@vu.edu.bd"
-    },
-    {
-      "id": 8,
-      "name": "Monika Kabir",
-      "designation": "Assistant Professor",
-      "email": "monika@vu.edu.bd"
-    },
-    {
-      "id": 9,
-      "name": "Mohammad Kasedullah",
-      "designation": "Lecturer",
-      "email": "kasedullah@vu.edu.bd"
-    },
-    {
-      "id": 10,
-      "name": "Sumaia Rahman",
-      "designation": "Assistant Professor",
-      "email": "sumaia@vu.edu.bd"
-    },
-    {
-      "id": 11,
-      "name": "A.S.M. Delwar Hossain",
-      "designation": "Lecturer",
-      "email": "delwar@vu.edu.bd"
-    },
-    {
-      "id": 12,
-      "name": "Md. Toufikul Islam",
-      "designation": "Lecturer",
-      "email": "toufikul@vu.edu.bd"
-    },
-    {
-      "id": 13,
-      "name": "Md. Nour Noby",
-      "designation": "Lecturer",
-      "email": "nournoby@vu.edu.bd"
-    },
-    {
-      "id": 14,
-      "name": "Ayesha Akter Lima",
-      "designation": "Lecturer",
-      "email": "lima@vu.edu.bd"
-    },
-    {
-      "id": 15,
-      "name": "Salma Akter Lima",
-      "designation": "Lecturer",
-      "email": "salma.cse@vu.edu.bd"
-    },
-    {
-      "id": 16,
-      "name": "Ipshita Tasnim Raha",
-      "designation": "Lecturer",
-      "email": "ipshita@vu.edu.bd"
-    },
-    {
-      "id": 17,
-      "name": "Sumaiya Tasnim",
-      "designation": "Lecturer",
-      "email": "sumaiya@vu.edu.bd"
-    },
-    {
-      "id": 18,
-      "name": "Shamim Reza",
-      "designation": "Lecturer",
-      "email": "s.reza@vu.edu.bd"
-    },
-    {
-      "id": 19,
-      "name": "Samira Tareque",
-      "designation": "Lecturer",
-      "email": "samira@vu.edu.bd"
-    },
-    {
-      "id": 20,
-      "name": "Al Muktadir Munam",
-      "designation": "Lecturer",
-      "email": "munam@vu.edu.bd"
-    },
-    {
-      "id": 21,
-      "name": "Akib Ikbal",
-      "designation": "Lecturer",
-      "email": "akib@vu.edu.bd"
-    },
-    {
-      "id": 22,
-      "name": "Mohammad Faisal Al-Naser",
-      "designation": "Lecturer",
-      "email": "faisal@vu.edu.bd"
-    },
-    {
-      "id": 23,
-      "name": "Md. Muktar Hossain",
-      "designation": "Lecturer",
-      "email": "muktar@vu.edu.bd"
-    },
-    {
-      "id": 24,
-      "name": "Ahmed-Al-Azmain",
-      "designation": "Lecturer",
-      "email": "azmain@vu.edu.bd"
-    },
-    {
-      "id": 25,
-      "name": "Tanver Ahmed",
-      "designation": "Lecturer",
-      "email": "tanver@vu.edu.bd"
-    },
-    {
-      "id": 26,
-      "name": "Md. Musfiqur Rahman Mridha",
-      "designation": "Lecturer",
-      "email": "mridha@vu.edu.bd"
-    },
-    {
-      "id": 27,
-      "name": "Md. Jamil Chaudhary",
-      "designation": "Lecturer",
-      "email": "jamil@vu.edu.bd"
-    },
-    {
-      "id": 28,
-      "name": "Md. Shahid Ahammed Shakil",
-      "designation": "Lecturer",
-      "email": "shakil@vu.edu.bd"
-    },
-    {
-      "id": 29,
-      "name": "Md. Fatin Ilham",
-      "designation": "Lecturer",
-      "email": "ilham@vu.edu.bd"
-    },
-    {
-      "id": 30,
-      "name": "Zannatul Mifta",
-      "designation": "Lecturer",
-      "email": "mifta@vu.edu.bd"
-    },
-    {
-      "id": 31,
-      "name": "Arun Kumar Sikder",
-      "designation": "Lecturer",
-      "email": "arun@vu.edu.bd"
-    },
-    {
-      "id": 32,
-      "name": "Sushmit Jahan Rose",
-      "designation": "Lecturer",
-      "email": "sushmit@vu.edu.bd"
-    },
-    {
-      "id": 33,
-      "name": "Md. Ruhul Amin",
-      "designation": "Lecturer",
-      "email": "ruhul@vu.edu.bd"
-    },
-    {
-      "id": 34,
-      "name": "Md. Mahfujur Rahman",
-      "designation": "Lecturer",
-      "email": "mahfujur@vu.edu.bd"
-    },
-    {
-      "id": 35,
-      "name": "D.M. Asadujjaman",
-      "designation": "Lecturer",
-      "email": "asadujjaman@vu.edu.bd"
-    },
-    {
-      "id": 36,
-      "name": "Israt Jahan Rinky",
-      "designation": "Lecturer",
-      "email": "rinky@vu.edu.bd"
-    },
-    {
-      "id": 37,
-      "name": "Protik Chakroborty",
-      "designation": "Lecturer",
-      "email": "protik@vu.edu.bd"
-    },
-    {
-      "id": 38,
-      "name": "Tanzim Nawshin Reza",
-      "designation": "Lecturer",
-      "email": "tanzim@vu.edu.bd"
-    },
-    {
-      "id": 39,
-      "name": "Md. Taufiq Khan",
-      "designation": "Lecturer",
-      "email": "taufiq@vu.edu.bd"
-    },
-    {
-      "id": 40,
-      "name": "Arshad Wasif",
-      "designation": "Lecturer",
-      "email": "arshad@vu.edu.bd"
-    },
-    {
-      "id": 41,
-      "name": "Shorav Paul",
-      "designation": "Lecturer",
-      "email": "shorav@vu.edu.bd"
-    },
-    {
-      "id": 42,
-      "name": "Mst. Nafia Islam Shishir",
-      "designation": "Lecturer",
-      "email": "nafia@vu.edu.bd"
-    },
-    {
-      "id": 43,
-      "name": "Sumaya Hannan Shova",
-      "designation": "Lecturer",
-      "email": "shova@vu.edu.bd"
-    },
-    {
-      "id": 44,
-      "name": "Iffat Farhana",
-      "designation": "Lecturer",
-      "email": "iffat@vu.edu.bd"
-    },
-    {
-      "id": 45,
-      "name": "Md. Fayzul Islam",
-      "designation": "Lecturer",
-      "email": "fayzul@vu.edu.bd"
-    },
-    {
-      "id": 46,
-      "name": "Mst. Mazeda Noor Tasnim",
-      "designation": "Lecturer",
-      "email": "mazeda@vu.edu.bd"
-    },
-    {
-      "id": 47,
-      "name": "Md. Adnan Sami",
-      "designation": "Lecturer",
-      "email": "adnan@vu.edu.bd"
-    },
-    {
-      "id": 48,
-      "name": "Md. Rakibul Islam",
-      "designation": "Lecturer",
-      "email": "rakibul@vu.edu.bd"
-    },
-    {
-      "id": 49,
-      "name": "Adrita Alam",
-      "designation": "Lecturer",
-      "email": "adrita@vu.edu.bd"
-    },
-    {
-      "id": 50,
-      "name": "Rokaiya Tasnim",
-      "designation": "Lecturer",
-      "email": "rokaiya@vu.edu.bd"
-    },
-    {
-      "id": 51,
-      "name": "Shahara Laila",
-      "designation": "Lecturer (Contractual)",
-      "email": "shahara@vu.edu.bd"
-    },
-    {
-      "id": 52,
-      "name": "Afroza Islam",
-      "designation": "Lecturer",
-      "email": "afroza.islam@vu.edu.bd"
-    },
-    {
-      "id": 53,
-      "name": "Md. Farhan Tanvir Nasim",
-      "designation": "Lecturer (Contractual)",
-      "email": "farhan@vu.edu.bd"
-    },
-    {
-      "id": 54,
-      "name": "Humayra Tasnim",
-      "designation": "Lecturer",
-      "email": "humayra@vu.edu.bd"
-    },
-    {
-      "id": 55,
-      "name": "Asim Moin Saad",
-      "designation": "Lecturer",
-      "email": "asim@vu.edu.bd"
-    },
-    {
-      "id": 56,
-      "name": "Zuairia Raisa Bintay Makin",
-      "designation": "Lecturer",
-      "email": "makin@vu.edu.bd"
-    },
-    {
-      "id": 57,
-      "name": "Afifa Tasneem Quanita",
-      "designation": "Lecturer (Contractual)",
-      "email": "quanita@vu.edu.bd"
-    },
-    {
-      "id": 58,
-      "name": "Md. Khalid Sakib",
-      "designation": "Lecturer (Contractual)",
-      "email": "khalid@vu.edu.bd"
-    },
-    {
-      "id": 59,
-      "name": "Md. Alamin Hossain Pappu",
-      "designation": "Lecturer (Contractual)",
-      "email": "alamin@vu.edu.bd"
-    },
-    {
-      "id": 60,
-      "name": "Anupoma Barman Shetu",
-      "designation": "Lecturer (Contractual)",
-      "email": "anupoma@vu.edu.bd"
-    },
-    {
-      "id": 61,
-      "name": "Mohsiul Mumit Alik",
-      "designation": "Lecturer (Contractual)",
-      "email": "alik@vu.edu.bd"
-    },
-    {
-      "id": 62,
-      "name": "Md. Arifour Rahman",
-      "designation": "Associate Professor",
-      "email": ""
-    },
-    {
-      "id": 63,
-      "name": "Prof. Dr. Md. Ali Hossain",
-      "designation": "Professor",
-      "email": ""
-    },
-    {
-      "id": 64,
-      "name": "Dr.Md. Ekramul Hamid",
-      "designation": "Professor",
-      "email": ""
-    },
-    {
-      "id": 65,
-      "name": "Dr.Md. Johirul Islam",
-      "designation": "Assistant Professor",
-      "email": ""
-    },
-    {
-      "id": 66,
-      "name": "Sanjoy Kumar Chakravarty",
-      "designation": "Associate Professor",
-      "email": ""
-    },
-    {
-      "id": 67,
-      "name": "Md. Omar Faruqe",
-      "designation": "Associate Professor",
-      "email": ""
-    },
-    {
-      "id": 68,
-      "name": "Prof. Dr. Bimal Kumar Pramanik",
-      "designation": "Professor",
-      "email": ""
-    },
-    {
-      "id": 69,
-      "name": "Md. Akramul Alim",
-      "designation": "Assistant Professor",
-      "email": ""
-    },
-    {
-      "id": 70,
-      "name": "Dr. Md. Nazrul Islam Mondal",
-      "designation": "Professor",
-      "email": ""
-    },
-    {
-      "id": 71,
-      "name": "Prof.Dr. Boshir Ahmed",
-      "designation": "Professor",
-      "email": ""
-    },
-    {
-      "id": 72,
-      "name": "Nafia Islam",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 73,
-      "name": "Susmita Paul",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 74,
-      "name": "Md. Faruk Hossain, Ph.D.",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 75,
-      "name": "Md. Faisal Rahman Badal",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 76,
-      "name": "Dr.Md. Mayeedul Islam",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 77,
-      "name": "Dr.Jewel Hossen",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 78,
-      "name": "Dr.Md. Iqbal Aziz Khan",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 79,
-      "name": "Dr.Jaker Hossain",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 80,
-      "name": "Dr.Md. Ariful Islam Nahid",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 81,
-      "name": "Dr.Md. Golam Rashed",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 82,
-      "name": "Dr.Md. Hamidul Islam",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 83,
-      "name": "Dr.Md. Abu Bakar PK.",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 84,
-      "name": "Dr.Md. Sherezzaman",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 85,
-      "name": "Md. Sanaul Haque",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 86,
-      "name": "Mst. Somapti Akter",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 87,
-      "name": "Sanjida Sultana Rika",
-      "designation": "",
-      "email": ""
-    },
-    {
-      "id": 88,
-      "name": "Emamul Haque",
-      "designation": "",
-      "email": ""
-    }
-  ];
+  const NORMALIZED_TEACHER_ALIASES = Object.entries(window.SFRS_TEACHER_ALIASES || {}).reduce(
+    (accumulator, entry) => {
+      accumulator[normalizeLookup(entry[0])] = entry[1];
+      return accumulator;
+    },
+    {}
+  );
 
-  const COURSE_CATALOG = [
-    { code: "CSE 1101", title: "Structured Programming Language" },
-    { code: "CSE 1102", title: "Structured Programming Language Lab" },
-    { code: "EEE 1131", title: "Basic Electrical Circuits" },
-    { code: "EEE 1132", title: "Basic Electrical Circuits Lab" },
-    { code: "MAT 1141", title: "Differential and Integral Calculus" },
-    { code: "PHY 1151", title: "Basic Physics" },
-    { code: "PHY 1152", title: "Basic Physics Lab" },
-    { code: "ENG 0002", title: "English Fundamentals" },
-    { code: "CSE 1201", title: "Object Oriented Programming" },
-    { code: "CSE 1202", title: "Object Oriented Programming Lab" },
-    { code: "CSE 1203", title: "Discrete Mathematics" },
-    { code: "EEE 1231", title: "Electronic Devices and Circuits" },
-    { code: "EEE 1232", title: "Electronic Devices and Circuits Lab" },
-    { code: "MAT 1241", title: "Coordinate Geometry and Vector Analysis" },
-    { code: "CHE 1261", title: "Chemistry" },
-    { code: "CHE 1262", title: "Chemistry Lab" },
-    { code: "CSE 2101", title: "Object Oriented Design and Design Patterns" },
-    { code: "CSE 2102", title: "Object Oriented Design and Design Patterns Lab" },
-    { code: "CSE 2103", title: "Data Structures" },
-    { code: "CSE 2104", title: "Data Structures Lab" },
-    { code: "CSE 2105", title: "Digital System Design" },
-    { code: "CSE 2106", title: "Digital System Design Lab" },
-    { code: "MAT 2141", title: "Differential Equations" },
-    { code: "BAN 0001", title: "History of the Emergence of Bangladesh" },
-    { code: "CSE 2201", title: "Software Engineering and System Analysis" },
-    { code: "CSE 2203", title: "Computer Algorithms" },
-    { code: "CSE 2204", title: "Computer Algorithms Lab" },
-    { code: "CSE 2205", title: "Numerical Methods" },
-    { code: "CSE 2206", title: "Numerical Methods Lab" },
-    { code: "CSE 2207", title: "Computer Networks" },
-    { code: "CSE 2208", title: "Computer Networks Lab" },
-    { code: "MAT 2241", title: "Linear Algebra and Complex Variables" },
-    { code: "CSE 3101", title: "Computer Graphics" },
-    { code: "CSE 3102", title: "Computer Graphics Lab" },
-    { code: "CSE 3103", title: "Database Management System" },
-    { code: "CSE 3104", title: "Database Management System Lab" },
-    { code: "CSE 3105", title: "Computer Architecture" },
-    { code: "CSE 3106", title: "Computer Architecture Lab" },
-    { code: "CSE 3107", title: "Communication Engineering" },
-    { code: "MAT 3141", title: "Applied Statistics and Probability" },
-    { code: "CSE 3201", title: "Theory of Computation and Compiler Design" },
-    { code: "CSE 3203", title: "Operating System and System Programming" },
-    { code: "CSE 3204", title: "Operating System and System Programming Lab" },
-    { code: "CSE 3205", title: "Microprocessor and Assembly Language" },
-    { code: "CSE 3206", title: "Microprocessor and Assembly Language Lab" },
-    { code: "CSE 3207", title: "Digital Signal Processing" },
-    { code: "CSE 3208", title: "Digital Signal Processing Lab" },
-    { code: "CSE 3209", title: "E-commerce and Web Programming" },
-    { code: "CSE 3210", title: "E-commerce and Web Programming Project Lab" },
-    { code: "ECO 3271", title: "Engineering Economics" },
-    { code: "CSE 4101", title: "Artificial Intelligence" },
-    { code: "CSE 4102", title: "Artificial Intelligence Lab" },
-    { code: "CSE 4103", title: "Digital Image Processing" },
-    { code: "CSE 4104", title: "Digital Image Processing Lab" },
-    { code: "CSE 4105", title: "Engineering Ethics and Environmental Protection" },
-    { code: "CSE 4107", title: "Microcontroller, Computer Peripherals and Interfacing" },
-    { code: "CSE 4108", title: "Microcontroller, Computer Peripherals and Interfacing Lab" },
-    { code: "ACC 4171", title: "Industrial Management and Accountancy" },
-    { code: "CSE 4100", title: "Project or Thesis with Seminar Part I" },
-    { code: "CSE 4120", title: "Industrial Attachment" },
-    { code: "CSE 4122", title: "Technical Report Writing" },
-    { code: "CSE 4201", title: "Parallel Processing and Distributed System" },
-    { code: "CSE 4202", title: "Parallel Processing and Distributed System Lab" },
-    { code: "CSE 4203", title: "Cryptography and Network Security" },
-    { code: "CSE 4204", title: "Cryptography and Network Security Lab" },
-    { code: "CSE 4205", title: "Robotics and Automation" },
-    { code: "CSE 4206", title: "Robotics and Automation Lab" },
-    { code: "CSE 4207", title: "Big Data Analysis" },
-    { code: "CSE 4208", title: "Big Data Analysis Lab" },
-    { code: "CSE 4209", title: "Cloud Computing and IOT" },
-    { code: "CSE 4210", title: "Cloud Computing and IOT Lab" },
-    { code: "CSE 4211", title: "Machine Learning" },
-    { code: "CSE 4212", title: "Machine Learning Lab" },
-    { code: "CSE 4200", title: "Project or Thesis with Seminar Part II" }
-  ];
+  function normalizeLookup(value) {
+    return String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "");
+  }
 
-  const normalizeIdentifier = (value) => (value || "").trim().toLowerCase();
-  const normalizeDesignation = (designation) => {
-    const cleaned = (designation || "").trim();
-    if (!cleaned || cleaned.toLowerCase() === "cse") {
-      return "Lecturer";
+  function normalizeEmail(value) {
+    return String(value || "").trim().toLowerCase();
+  }
+
+  function normalizeSemesterValue(value) {
+    const raw = String(value || "").trim();
+    if (!raw) {
+      return "";
     }
-    return cleaned;
-  };
-  const normalizeEmail = (value) => (value || "").trim().toLowerCase();
-  const safeNumber = (value) => {
+    const exact = REVIEW_SEMESTERS.find((item) => normalizeLookup(item) === normalizeLookup(raw));
+    if (exact) {
+      return exact;
+    }
+    const numberMatch = raw.match(/(\d+)/);
+    if (numberMatch) {
+      const match = REVIEW_SEMESTERS.find((item) => item.startsWith(`${Number(numberMatch[1])}`));
+      if (match) {
+        return match;
+      }
+    }
+    return raw;
+  }
+
+  function normalizeSectionValue(value) {
+    const raw = String(value || "").trim();
+    if (!raw) {
+      return "";
+    }
+    const exact = REVIEW_SECTIONS.find((item) => normalizeLookup(item) === normalizeLookup(raw));
+    if (exact) {
+      return exact;
+    }
+    if (/general/i.test(raw)) {
+      return "General";
+    }
+    const letterMatch = raw.match(/([abc])$/i);
+    if (letterMatch) {
+      return letterMatch[1].toUpperCase();
+    }
+    return raw.toUpperCase();
+  }
+
+  function normalizeTeacherName(value) {
+    const raw = String(value || "").trim();
+    if (!raw) {
+      return "";
+    }
+    return NORMALIZED_TEACHER_ALIASES[normalizeLookup(raw)] || raw;
+  }
+
+  function safeNumber(value) {
     const numberValue = Number(value);
     return Number.isFinite(numberValue) ? numberValue : null;
-  };
-  const buildProfilePayload = (session) => {
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function sanitizeComment(value) {
+    return String(value || "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 700);
+  }
+
+  function slugify(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ".")
+      .replace(/(^\.+|\.+$)/g, "");
+  }
+
+  function formatDate(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return "-";
+    }
+    return date.toLocaleString();
+  }
+
+  function formatAverage(value) {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric.toFixed(2) : "0.00";
+  }
+
+  function getInitials(value) {
+    const tokens = String(value || "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2);
+    if (!tokens.length) {
+      return "T";
+    }
+    return tokens.map((item) => item[0].toUpperCase()).join("");
+  }
+
+  function buildTeacherEmail(name) {
+    const slug = slugify(name).replace(/\.+/g, ".");
+    return slug ? `${slug}@vu.edu.bd` : "";
+  }
+
+  function nextNumericId(records) {
+    return records.reduce((highest, record) => Math.max(highest, Number(record.id) || 0), 0) + 1;
+  }
+
+  function readStorage(key, fallbackValue) {
+    const raw = localStorage.getItem(key);
+    if (!raw) {
+      return fallbackValue;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch (error) {
+      return fallbackValue;
+    }
+  }
+
+  function writeStorage(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function buildProfilePayload(session) {
     if (!session || !session.user) {
       return null;
     }
     const metadata = session.user.user_metadata || {};
-    const role = metadata.role;
-    if (!role) {
-      return null;
-    }
     const email = normalizeEmail(session.user.email || metadata.email || "");
-    if (!email) {
+    const role = String(metadata.role || "").trim().toLowerCase();
+    if (!email || !role) {
       return null;
     }
-    const payload = {
+    return {
       id: session.user.id,
       role,
-      full_name: (metadata.full_name || email).trim(),
+      full_name: String(metadata.full_name || email).trim(),
       email,
       student_id: metadata.student_id || null,
       department: metadata.department || null,
       program: metadata.program || null,
-      semester: metadata.semester || null,
-      section: metadata.section || null,
+      semester: normalizeSemesterValue(metadata.semester || null) || null,
+      section: normalizeSectionValue(metadata.section || null) || null,
       designation: metadata.designation || null,
       teacher_directory_id: safeNumber(metadata.teacher_directory_id)
     };
-    return payload;
-  };
-  const createProfileFromMetadata = async (session) => {
+  }
+
+  async function createProfileFromMetadata(session) {
     const payload = buildProfilePayload(session);
     if (!payload) {
       return null;
     }
-    const { data, error } = await supabaseClient
-      .from("profiles")
-      .insert(payload)
-      .select("*")
-      .single();
+    const { data, error } = await supabaseClient.from("profiles").upsert(payload, {
+      onConflict: "id"
+    }).select("*").single();
     if (error) {
-      if (error.code === "23505") {
-        const { data: existing, error: fetchError } = await supabaseClient
-          .from("profiles")
-          .select("*")
-          .eq("id", session.user.id)
-          .single();
-        if (fetchError) {
-          throw fetchError;
-        }
-        return existing;
-      }
       throw error;
     }
     return data;
-  };
-  const isEmail = (value) => /.+@.+\..+/.test(value);
-  const isDemoCredential = (identifier, password) =>
-    normalizeIdentifier(identifier) === DEMO_CREDENTIALS.username &&
-    password === DEMO_CREDENTIALS.password;
-  const createDemoId = () =>
-    `demo_${Date.now()}_${Math.random().toString(16).slice(2, 6)}`;
+  }
 
-  const getDemoSession = () => {
-    const raw = localStorage.getItem(DEMO_SESSION_KEY);
-    if (!raw) {
+  function isEmail(value) {
+    return /.+@.+\..+/.test(String(value || "").trim());
+  }
+
+  function isDemoCredential(identifier, password) {
+    return normalizeLookup(identifier) === DEMO_CREDENTIALS.username && password === DEMO_CREDENTIALS.password;
+  }
+
+  function createDemoId(prefix) {
+    return `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2, 8)}`;
+  }
+
+  function normalizeTeacherRecord(record) {
+    const id = safeNumber(record.id);
+    return {
+      id,
+      name: String(record.name || "").trim(),
+      designation: String(record.designation || "Lecturer").trim() || "Lecturer",
+      email: normalizeEmail(record.email || ""),
+      short_code: String(record.short_code || record.shortCode || "").trim(),
+      department: String(record.department || DEFAULT_DEPARTMENT).trim() || DEFAULT_DEPARTMENT,
+      phone: String(record.phone || "").trim(),
+      office_room: String(record.office_room || record.officeRoom || "").trim(),
+      bio: String(record.bio || "").trim(),
+      avatar_url: String(record.avatar_url || record.avatarUrl || "").trim(),
+      status: String(record.status || "active").trim().toLowerCase() === "inactive" ? "inactive" : "active",
+      is_email_public: Boolean(record.is_email_public ?? record.isEmailPublic ?? false),
+      created_at: record.created_at || new Date().toISOString(),
+      updated_at: record.updated_at || new Date().toISOString()
+    };
+  }
+
+  function normalizeAssignmentRecord(record) {
+    const teacherRelation = Array.isArray(record.teachers_directory)
+      ? record.teachers_directory[0]
+      : record.teachers_directory;
+    return {
+      id: safeNumber(record.id),
+      teacher_directory_id: safeNumber(record.teacher_directory_id || record.teacherId),
+      course_code: String(record.course_code || record.courseCode || "").trim(),
+      course_title: String(record.course_title || record.courseTitle || "").trim(),
+      semester: normalizeSemesterValue(record.semester || ""),
+      section: normalizeSectionValue(record.section || ""),
+      academic_term: String(record.academic_term || record.academicTerm || "").trim(),
+      is_active: Boolean(record.is_active ?? record.isActive ?? true),
+      created_at: record.created_at || new Date().toISOString(),
+      updated_at: record.updated_at || new Date().toISOString(),
+      teachers_directory: teacherRelation ? normalizeTeacherRecord(teacherRelation) : null
+    };
+  }
+
+  function normalizeFeedbackRecord(record) {
+    const teacherRelation = Array.isArray(record.teachers_directory)
+      ? record.teachers_directory[0]
+      : record.teachers_directory;
+    const normalizedTeacher = teacherRelation ? normalizeTeacherRecord(teacherRelation) : null;
+    return {
+      id: record.id,
+      student_id: record.student_id || null,
+      assignment_id: safeNumber(record.assignment_id),
+      teacher_directory_id: safeNumber(record.teacher_directory_id),
+      course_code: String(record.course_code || "").trim(),
+      course_title: String(record.course_title || "").trim(),
+      semester: normalizeSemesterValue(record.semester || ""),
+      section: normalizeSectionValue(record.section || ""),
+      responses: record.responses || {},
+      comment: sanitizeComment(record.comment || ""),
+      is_anonymous: Boolean(record.is_anonymous ?? true),
+      status: String(record.status || "submitted").trim().toLowerCase() || "submitted",
+      submitted_at: record.submitted_at || record.created_at || new Date().toISOString(),
+      updated_at: record.updated_at || record.submitted_at || new Date().toISOString(),
+      academic_term: String(record.academic_term || "").trim(),
+      teachers_directory: normalizedTeacher,
+      teacher_name: record.teacher_name || (normalizedTeacher ? normalizedTeacher.name : "Teacher")
+    };
+  }
+
+  function normalizeFeedbackSettings(record) {
+    return {
+      id: 1,
+      allow_anonymous_feedback: Boolean(
+        record?.allow_anonymous_feedback ?? DEFAULT_FEEDBACK_SETTINGS.allow_anonymous_feedback
+      ),
+      review_window_open: Boolean(record?.review_window_open ?? DEFAULT_FEEDBACK_SETTINGS.review_window_open),
+      active_term: String(record?.active_term || DEFAULT_FEEDBACK_SETTINGS.active_term).trim() ||
+        DEFAULT_FEEDBACK_SETTINGS.active_term
+    };
+  }
+
+  function buildBaseDemoTeachers() {
+    const nameSet = new Set();
+    ASSIGNMENT_SEED.forEach((item) => {
+      nameSet.add(normalizeTeacherName(item.teacherName));
+    });
+    EXTRA_TEACHER_SEEDS.forEach((item) => {
+      nameSet.add(normalizeTeacherName(item));
+    });
+    nameSet.add(DEMO_PROFILE_DEFINITIONS.teacher.teacher_name);
+
+    return Array.from(nameSet)
+      .filter(Boolean)
+      .sort((left, right) => left.localeCompare(right))
+      .map((name, index) => normalizeTeacherRecord({
+        id: index + 1,
+        name,
+        designation: "Lecturer",
+        email: buildTeacherEmail(name),
+        short_code: `CSE-T-${String(index + 1).padStart(3, "0")}`,
+        department: DEFAULT_DEPARTMENT,
+        bio: "",
+        phone: "",
+        office_room: "",
+        avatar_url: "",
+        status: "active",
+        is_email_public: false
+      }));
+  }
+
+  function buildBaseDemoAssignments(teachers) {
+    const teacherIdMap = new Map(
+      teachers.map((teacher) => [normalizeLookup(teacher.name), teacher.id])
+    );
+
+    return ASSIGNMENT_SEED.map((item, index) => normalizeAssignmentRecord({
+      id: index + 1,
+      teacher_directory_id: teacherIdMap.get(normalizeLookup(normalizeTeacherName(item.teacherName))),
+      course_code: item.courseCode,
+      course_title: item.courseTitle,
+      semester: item.semester,
+      section: item.section,
+      academic_term: DEFAULT_TERM,
+      is_active: true
+    })).filter((item) => item.teacher_directory_id);
+  }
+
+  function ensureDemoState() {
+    let teachers = readStorage(DEMO_TEACHER_KEY, null);
+    if (!Array.isArray(teachers) || !teachers.length) {
+      teachers = buildBaseDemoTeachers();
+      writeStorage(DEMO_TEACHER_KEY, teachers);
+    }
+
+    let assignments = readStorage(DEMO_ASSIGNMENT_KEY, null);
+    if (!Array.isArray(assignments) || !assignments.length) {
+      assignments = buildBaseDemoAssignments(teachers);
+      writeStorage(DEMO_ASSIGNMENT_KEY, assignments);
+    }
+
+    const settings = normalizeFeedbackSettings(readStorage(DEMO_SETTINGS_KEY, null));
+    writeStorage(DEMO_SETTINGS_KEY, settings);
+
+    const feedbacks = readStorage(DEMO_FEEDBACK_KEY, []);
+    if (!Array.isArray(feedbacks)) {
+      writeStorage(DEMO_FEEDBACK_KEY, []);
+    }
+  }
+
+  function getDemoTeachers() {
+    ensureDemoState();
+    return readStorage(DEMO_TEACHER_KEY, []).map(normalizeTeacherRecord);
+  }
+
+  function setDemoTeachers(records) {
+    writeStorage(DEMO_TEACHER_KEY, records.map(normalizeTeacherRecord));
+  }
+
+  function getDemoAssignments() {
+    ensureDemoState();
+    const teachers = getDemoTeachers();
+    const teacherMap = new Map(teachers.map((teacher) => [teacher.id, teacher]));
+    return readStorage(DEMO_ASSIGNMENT_KEY, []).map((record) => {
+      const assignment = normalizeAssignmentRecord(record);
+      assignment.teachers_directory = teacherMap.get(assignment.teacher_directory_id) || null;
+      return assignment;
+    });
+  }
+
+  function setDemoAssignments(records) {
+    writeStorage(DEMO_ASSIGNMENT_KEY, records.map((record) => ({
+      id: record.id,
+      teacher_directory_id: record.teacher_directory_id,
+      course_code: record.course_code,
+      course_title: record.course_title,
+      semester: record.semester,
+      section: record.section,
+      academic_term: record.academic_term,
+      is_active: record.is_active,
+      created_at: record.created_at,
+      updated_at: record.updated_at
+    })));
+  }
+
+  function getDemoFeedbacks() {
+    ensureDemoState();
+    const teacherMap = new Map(getDemoTeachers().map((teacher) => [teacher.id, teacher]));
+    return readStorage(DEMO_FEEDBACK_KEY, []).map((record) => {
+      const feedback = normalizeFeedbackRecord(record);
+      feedback.teachers_directory = teacherMap.get(feedback.teacher_directory_id) || null;
+      feedback.teacher_name = feedback.teachers_directory?.name || feedback.teacher_name;
+      return feedback;
+    });
+  }
+
+  function setDemoFeedbacks(records) {
+    writeStorage(DEMO_FEEDBACK_KEY, records.map((record) => ({
+      id: record.id,
+      student_id: record.student_id,
+      assignment_id: record.assignment_id,
+      teacher_directory_id: record.teacher_directory_id,
+      course_code: record.course_code,
+      course_title: record.course_title,
+      semester: record.semester,
+      section: record.section,
+      responses: record.responses,
+      comment: record.comment,
+      is_anonymous: record.is_anonymous,
+      status: record.status,
+      submitted_at: record.submitted_at,
+      updated_at: record.updated_at,
+      academic_term: record.academic_term
+    })));
+  }
+
+  function getDemoSettings() {
+    ensureDemoState();
+    return normalizeFeedbackSettings(readStorage(DEMO_SETTINGS_KEY, DEFAULT_FEEDBACK_SETTINGS));
+  }
+
+  function setDemoSettings(settings) {
+    writeStorage(DEMO_SETTINGS_KEY, normalizeFeedbackSettings(settings));
+  }
+
+  function getDemoSession() {
+    return readStorage(DEMO_SESSION_KEY, null);
+  }
+
+  function resolveDemoProfile(role) {
+    const base = DEMO_PROFILE_DEFINITIONS[role];
+    if (!base) {
       return null;
     }
-    try {
-      return JSON.parse(raw);
-    } catch (error) {
-      return null;
+    if (role !== "teacher") {
+      return { ...base };
     }
-  };
+    const teacher = getDemoTeachers().find(
+      (item) => normalizeLookup(item.name) === normalizeLookup(base.teacher_name)
+    );
+    return {
+      ...base,
+      full_name: teacher?.name || base.full_name,
+      designation: teacher?.designation || base.designation,
+      email: teacher?.email || base.email,
+      department: teacher?.department || DEFAULT_DEPARTMENT,
+      teacher_directory_id: teacher?.id || null
+    };
+  }
 
-  const setDemoSession = (role) => {
-    const profile = DEMO_PROFILES[role];
+  function setDemoSession(role) {
+    const profile = resolveDemoProfile(role);
     if (!profile) {
       return;
     }
-    localStorage.setItem(
-      DEMO_SESSION_KEY,
-      JSON.stringify({ role, profile })
-    );
-  };
+    writeStorage(DEMO_SESSION_KEY, { role, profile });
+  }
 
-  const clearDemoSession = () => {
+  function clearDemoSession() {
     localStorage.removeItem(DEMO_SESSION_KEY);
-  };
-
-  const getDemoFeedbacks = () => {
-    const raw = localStorage.getItem(DEMO_FEEDBACK_KEY);
-    if (!raw) {
-      return [];
-    }
-    try {
-      return JSON.parse(raw);
-    } catch (error) {
-      return [];
-    }
-  };
-
-  const setDemoFeedbacks = (feedbacks) => {
-    localStorage.setItem(DEMO_FEEDBACK_KEY, JSON.stringify(feedbacks));
-  };
+  }
 
   const TOAST_TYPE_CLASSES = {
     success: "text-bg-success",
@@ -763,10 +533,9 @@
     warning: "text-bg-warning",
     danger: "text-bg-danger"
   };
-
   const TOAST_DARK_TYPES = new Set(["success", "danger"]);
 
-  const getToastContainer = () => {
+  function getToastContainer() {
     let container = document.getElementById("toastContainer");
     if (container) {
       return container;
@@ -778,9 +547,9 @@
     container.setAttribute("aria-atomic", "true");
     document.body.appendChild(container);
     return container;
-  };
+  }
 
-  const showToast = (type, message) => {
+  function showToast(type, message) {
     if (!message) {
       return;
     }
@@ -810,13 +579,12 @@
     wrapper.append(body, closeButton);
     toast.appendChild(wrapper);
 
-    const maxToasts = 3;
-    while (container.children.length >= maxToasts) {
+    while (container.children.length >= 3) {
       container.removeChild(container.firstElementChild);
     }
     container.appendChild(toast);
 
-    if (window.bootstrap && window.bootstrap.Toast) {
+    if (window.bootstrap?.Toast) {
       const toastInstance = new window.bootstrap.Toast(toast, {
         delay: 4500,
         autohide: true
@@ -827,9 +595,9 @@
       toast.classList.add("show");
       setTimeout(() => toast.remove(), 4500);
     }
-  };
+  }
 
-  const showAlert = (element, type, message) => {
+  function showAlert(element, type, message) {
     if (!element) {
       return;
     }
@@ -838,304 +606,25 @@
     if (type === "success" || type === "info") {
       showToast(type, message);
     }
-  };
+  }
 
-  const clearAlert = (element) => {
+  function clearAlert(element) {
     if (!element) {
       return;
     }
     element.className = "";
     element.textContent = "";
-  };
+  }
 
-  const formatDate = (value) => {
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) {
-      return "-";
+  function getSetupMessage(error, fallbackMessage) {
+    const baseMessage = error?.message || fallbackMessage || "Unable to load data.";
+    if (/does not exist|permission|violates|column/i.test(baseMessage)) {
+      return `${baseMessage} ${FALLBACK_SETUP_MESSAGE}`;
     }
-    return date.toLocaleString();
-  };
+    return baseMessage;
+  }
 
-  const getOverallQuestion = () => {
-    if (!QUESTIONS.length) {
-      return "";
-    }
-    const lastSection = QUESTIONS[QUESTIONS.length - 1];
-    if (!lastSection.items.length) {
-      return "";
-    }
-    return lastSection.items[lastSection.items.length - 1];
-  };
-
-  const renderTeacherOptions = (selectEl, teachers) => {
-    if (!selectEl) {
-      return;
-    }
-    selectEl.innerHTML = "<option value=\"\">Select a teacher</option>";
-    teachers.forEach((teacher) => {
-      const option = document.createElement("option");
-      const designation = normalizeDesignation(teacher.designation);
-      option.value = teacher.id;
-      option.textContent = `${teacher.name} - ${designation}`;
-      option.dataset.email = teacher.email || "";
-      option.dataset.designation = designation;
-      selectEl.appendChild(option);
-    });
-  };
-
-  const updateTeacherInfo = (selectEl, infoEl, teachers) => {
-    if (!selectEl || !infoEl) {
-      return;
-    }
-    const selectedId = Number(selectEl.value);
-    const teacher = teachers.find((item) => item.id === selectedId);
-    if (!teacher) {
-      infoEl.innerHTML = "<div class=\"text-muted\">Select a teacher to see details.</div>";
-      return;
-    }
-    const designation = normalizeDesignation(teacher.designation);
-    const email = teacher.email || "Not listed";
-    infoEl.innerHTML = `
-      <div class=\"fw-semibold\">${teacher.name}</div>
-      <div class=\"text-muted\">${designation}</div>
-      <div class=\"small text-muted\">Email: ${email}</div>
-    `;
-  };
-
-  const renderCourseOptions = (selectEl, courses) => {
-    if (!selectEl) {
-      return;
-    }
-    selectEl.innerHTML = "<option value=\"\">Select a course</option>";
-    courses.forEach((course) => {
-      const option = document.createElement("option");
-      option.value = course.code;
-      option.textContent = `${course.code} - ${course.title}`;
-      option.dataset.title = course.title;
-      selectEl.appendChild(option);
-    });
-  };
-
-  const getCourseTitle = (option) => {
-    if (!option) {
-      return "";
-    }
-    if (option.dataset && option.dataset.title) {
-      return option.dataset.title;
-    }
-    const text = option.textContent || "";
-    const splitIndex = text.indexOf(" - ");
-    if (splitIndex === -1) {
-      return "";
-    }
-    return text.slice(splitIndex + 3).trim();
-  };
-
-  const getSelectedCourse = (selectEl) => {
-    if (!selectEl) {
-      return null;
-    }
-    const option = selectEl.options[selectEl.selectedIndex];
-    if (!option || !option.value) {
-      return null;
-    }
-    return {
-      code: option.value,
-      title: getCourseTitle(option)
-    };
-  };
-
-  const renderQuestions = (container) => {
-    if (!container) {
-      return;
-    }
-    container.innerHTML = "";
-    QUESTIONS.forEach((section, sectionIndex) => {
-      const heading = document.createElement("h6");
-      heading.className = "form-section-title mt-3";
-      heading.textContent = section.title;
-      container.appendChild(heading);
-
-      section.items.forEach((question, questionIndex) => {
-        const key = `q-${sectionIndex}-${questionIndex}`;
-        const card = document.createElement("div");
-        card.className = "question-card";
-
-        const title = document.createElement("div");
-        title.className = "question-title";
-        title.textContent = question;
-        card.appendChild(title);
-
-        const row = document.createElement("div");
-        row.className = "d-flex flex-wrap gap-3";
-
-        OPTIONS.forEach((option, optionIndex) => {
-          const wrapper = document.createElement("div");
-          wrapper.className = "form-check form-check-inline";
-
-          const input = document.createElement("input");
-          input.type = "radio";
-          input.className = "form-check-input";
-          input.name = key;
-          input.id = `${key}-${option.toLowerCase()}`;
-          input.value = option;
-          if (optionIndex === 0) {
-            input.required = true;
-          }
-
-          const label = document.createElement("label");
-          label.className = "form-check-label";
-          label.setAttribute("for", input.id);
-          label.textContent = option;
-
-          wrapper.appendChild(input);
-          wrapper.appendChild(label);
-          row.appendChild(wrapper);
-        });
-
-        card.appendChild(row);
-        container.appendChild(card);
-      });
-    });
-  };
-
-  const collectResponses = (form) => {
-    const responses = [];
-    let missing = false;
-
-    QUESTIONS.forEach((section, sectionIndex) => {
-      section.items.forEach((question, questionIndex) => {
-        const key = `q-${sectionIndex}-${questionIndex}`;
-        const selected = form.querySelector(`input[name=\"${key}\"]:checked`);
-        if (!selected) {
-          missing = true;
-        }
-        responses.push({
-          section: section.title,
-          question,
-          value: selected ? selected.value : ""
-        });
-      });
-    });
-
-    return { responses, missing };
-  };
-
-  const openReviewModal = (review, hideStudent) => {
-    const modal = document.getElementById("reviewModal");
-    if (!modal || !review) {
-      return;
-    }
-    const title = modal.querySelector("[data-review-title]");
-    const meta = modal.querySelector("[data-review-meta]");
-    const body = modal.querySelector("[data-review-body]");
-
-    if (title) {
-      title.textContent = `Review for ${review.teacher_name || "Teacher"}`;
-    }
-
-    if (meta) {
-      const studentInfo = hideStudent ? "Anonymous" : "You";
-      meta.textContent = `Course: ${review.course_code} - ${review.course_title} | Semester: ${review.semester} | Section: ${review.section} | Student: ${studentInfo}`;
-    }
-
-    if (body) {
-      body.innerHTML = "";
-      (review.responses || []).forEach((response) => {
-        const row = document.createElement("div");
-        row.className = "mb-2";
-
-        const question = document.createElement("div");
-        question.className = "fw-semibold";
-        question.textContent = response.question;
-
-        const answer = document.createElement("div");
-        answer.className = "text-muted";
-        answer.textContent = response.value || "Not answered";
-
-        row.appendChild(question);
-        row.appendChild(answer);
-        body.appendChild(row);
-      });
-    }
-
-    const bootstrapModal = bootstrap.Modal.getOrCreateInstance(modal);
-    bootstrapModal.show();
-  };
-
-  const bindReviewModal = (tableBody, reviews, hideStudent) => {
-    if (!tableBody) {
-      return;
-    }
-    tableBody.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-review-id]");
-      if (!button) {
-        return;
-      }
-      const review = reviews.find((item) => String(item.id) === String(button.dataset.reviewId));
-      openReviewModal(review, hideStudent);
-    });
-  };
-
-  const buildQuestionStats = (reviews) => {
-    const statsMap = new Map();
-    QUESTIONS.forEach((section) => {
-      section.items.forEach((question) => {
-        statsMap.set(question, {
-          section: section.title,
-          question,
-          counts: { Excellent: 0, Good: 0, Average: 0 }
-        });
-      });
-    });
-
-    reviews.forEach((review) => {
-      (review.responses || []).forEach((response) => {
-        const entry = statsMap.get(response.question);
-        if (!entry) {
-          return;
-        }
-        if (entry.counts[response.value] !== undefined) {
-          entry.counts[response.value] += 1;
-        }
-      });
-    });
-
-    return Array.from(statsMap.values()).map((entry) => {
-      const total =
-        entry.counts.Excellent + entry.counts.Good + entry.counts.Average;
-      const average = total
-        ? (
-          (entry.counts.Excellent * 3 + entry.counts.Good * 2 + entry.counts.Average) /
-            total
-        ).toFixed(2)
-        : "0.00";
-      return { ...entry, total, average };
-    });
-  };
-
-  const buildCourseStats = (reviews) => {
-    const map = new Map();
-    reviews.forEach((review) => {
-      if (!review.course_code || !review.course_title) {
-        return;
-      }
-      const key = `${review.course_code} - ${review.course_title}`;
-      if (!map.has(key)) {
-        map.set(key, {
-          course_code: review.course_code,
-          course_title: review.course_title,
-          count: 0
-        });
-      }
-      map.get(key).count += 1;
-    });
-    return Array.from(map.values())
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
-  };
-
-  const setButtonLoading = (button, isLoading, loadingLabel) => {
+  function setButtonLoading(button, isLoading, loadingLabel) {
     if (!button) {
       return;
     }
@@ -1144,9 +633,342 @@
     }
     button.disabled = isLoading;
     button.textContent = isLoading ? loadingLabel : button.dataset.defaultLabel;
-  };
+  }
 
-  const invokeAiAssistant = async (payload) => {
+  function setText(target, value, fallback = "") {
+    const element = typeof target === "string" ? document.querySelector(target) : target;
+    if (!element) {
+      return;
+    }
+    element.textContent = value || fallback;
+  }
+
+  function setAvatar(element, name, avatarUrl) {
+    if (!element) {
+      return;
+    }
+    const normalizedUrl = String(avatarUrl || "").trim();
+    if (normalizedUrl) {
+      element.style.backgroundImage = `url("${normalizedUrl}")`;
+      element.classList.add("has-image");
+      element.textContent = "";
+      return;
+    }
+    element.style.backgroundImage = "";
+    element.classList.remove("has-image");
+    element.textContent = getInitials(name);
+  }
+
+  function populateValueSelect(selectEl, values, placeholder, selectedValue) {
+    if (!selectEl) {
+      return;
+    }
+    const currentValue = selectedValue ?? selectEl.value;
+    selectEl.innerHTML = "";
+    const placeholderOption = document.createElement("option");
+    placeholderOption.value = "";
+    placeholderOption.textContent = placeholder;
+    selectEl.appendChild(placeholderOption);
+    values.forEach((value) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = value;
+      if (String(value) === String(currentValue)) {
+        option.selected = true;
+      }
+      selectEl.appendChild(option);
+    });
+  }
+
+  function populateTeacherSelect(selectEl, teachers, placeholder, selectedValue) {
+    if (!selectEl) {
+      return;
+    }
+    const currentValue = selectedValue ?? selectEl.value;
+    selectEl.innerHTML = "";
+    const placeholderOption = document.createElement("option");
+    placeholderOption.value = "";
+    placeholderOption.textContent = placeholder;
+    selectEl.appendChild(placeholderOption);
+    teachers.forEach((teacher) => {
+      const option = document.createElement("option");
+      option.value = teacher.id;
+      option.textContent = `${teacher.name} (${teacher.designation})`;
+      if (String(teacher.id) === String(currentValue)) {
+        option.selected = true;
+      }
+      selectEl.appendChild(option);
+    });
+  }
+
+  function buildAssignmentSignature(record) {
+    return [
+      record.teacher_directory_id || "",
+      normalizeLookup(record.course_code),
+      normalizeLookup(record.semester),
+      normalizeLookup(record.section)
+    ].join("|");
+  }
+
+  function buildFeedbackLookup(feedbacks) {
+    const map = new Map();
+    feedbacks.forEach((feedback) => {
+      if (feedback.assignment_id) {
+        map.set(`assignment:${feedback.assignment_id}`, feedback);
+      }
+      map.set(`legacy:${buildAssignmentSignature(feedback)}`, feedback);
+    });
+    return map;
+  }
+
+  function findFeedbackForAssignment(lookup, assignment) {
+    return lookup.get(`assignment:${assignment.id}`) || lookup.get(`legacy:${buildAssignmentSignature(assignment)}`) || null;
+  }
+
+  function normalizeResponses(responses) {
+    if (Array.isArray(responses)) {
+      return responses;
+    }
+    if (responses && typeof responses === "object") {
+      return REVIEW_CATEGORIES.map((category) => ({
+        question: category.label,
+        key: category.key,
+        value: Number(responses[category.key]) || 0
+      }));
+    }
+    return [];
+  }
+
+  function averageFromResponses(responses) {
+    if (Array.isArray(responses)) {
+      const scores = responses
+        .map((item) => LEGACY_RESPONSE_SCORES[String(item.value || "")] || null)
+        .filter((item) => Number.isFinite(item));
+      if (!scores.length) {
+        return 0;
+      }
+      return scores.reduce((total, item) => total + item, 0) / scores.length;
+    }
+    const scores = REVIEW_CATEGORIES
+      .map((category) => Number(responses?.[category.key]) || 0)
+      .filter((item) => item > 0);
+    if (!scores.length) {
+      return 0;
+    }
+    return scores.reduce((total, item) => total + item, 0) / scores.length;
+  }
+
+  function overallCategoryValue(responses) {
+    if (Array.isArray(responses)) {
+      const last = responses[responses.length - 1];
+      return LEGACY_RESPONSE_SCORES[String(last?.value || "")] || averageFromResponses(responses);
+    }
+    return Number(responses?.overall_satisfaction) || averageFromResponses(responses);
+  }
+
+  function buildCategoryBreakdown(feedbacks) {
+    return REVIEW_CATEGORIES.map((category) => {
+      const values = feedbacks
+        .map((feedback) => {
+          if (Array.isArray(feedback.responses)) {
+            return averageFromResponses(feedback.responses);
+          }
+          return Number(feedback.responses?.[category.key]) || 0;
+        })
+        .filter((value) => value > 0);
+      const average = values.length
+        ? values.reduce((total, value) => total + value, 0) / values.length
+        : 0;
+      return {
+        key: category.key,
+        label: category.label,
+        average,
+        count: values.length
+      };
+    });
+  }
+
+  function buildCourseStats(feedbacks) {
+    const map = new Map();
+    feedbacks.forEach((feedback) => {
+      const key = `${feedback.course_code}||${feedback.course_title}`;
+      if (!map.has(key)) {
+        map.set(key, {
+          course_code: feedback.course_code,
+          course_title: feedback.course_title,
+          count: 0,
+          average: 0
+        });
+      }
+      const entry = map.get(key);
+      entry.count += 1;
+      entry.average += averageFromResponses(feedback.responses);
+    });
+    return Array.from(map.values())
+      .map((entry) => ({
+        ...entry,
+        average: entry.count ? Number((entry.average / entry.count).toFixed(2)) : 0
+      }))
+      .sort((left, right) => right.count - left.count);
+  }
+
+  function buildTeacherStats(feedbacks) {
+    const visibleFeedbacks = feedbacks.filter((item) => item.status !== "hidden");
+    const categoryBreakdown = buildCategoryBreakdown(visibleFeedbacks);
+    const averages = visibleFeedbacks.map((item) => averageFromResponses(item.responses)).filter((item) => item > 0);
+    const averageRating = averages.length
+      ? averages.reduce((total, value) => total + value, 0) / averages.length
+      : 0;
+    const visibleComments = visibleFeedbacks.filter((item) => item.comment);
+    const recentComments = visibleFeedbacks
+      .filter((item) => item.comment)
+      .slice()
+      .sort((left, right) => new Date(right.submitted_at) - new Date(left.submitted_at))
+      .slice(0, 6);
+
+    return {
+      totalReviews: visibleFeedbacks.length,
+      averageRating,
+      visibleCommentCount: visibleComments.length,
+      categoryBreakdown,
+      categoryBreakdownObject: Object.fromEntries(
+        categoryBreakdown.map((item) => [item.key, Number(item.average.toFixed(2))])
+      ),
+      recentComments,
+      courseStats: buildCourseStats(visibleFeedbacks)
+    };
+  }
+
+  function renderCategoryBreakdown(container, breakdown) {
+    if (!container) {
+      return;
+    }
+    container.innerHTML = "";
+    if (!breakdown.length) {
+      container.innerHTML = "<div class=\"text-muted\">No rating data available yet.</div>";
+      return;
+    }
+    breakdown.forEach((item) => {
+      const percentage = Math.max(0, Math.min(100, (item.average / 5) * 100));
+      const row = document.createElement("div");
+      row.className = "rating-breakdown-row";
+      row.innerHTML = `
+        <div class="d-flex align-items-center justify-content-between gap-3">
+          <span>${escapeHtml(item.label)}</span>
+          <strong>${formatAverage(item.average)}</strong>
+        </div>
+        <div class="rating-track mt-2">
+          <div class="rating-fill" style="width: ${percentage}%"></div>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  function renderCommentStack(container, comments, emptyMessage) {
+    if (!container) {
+      return;
+    }
+    container.innerHTML = "";
+    if (!comments.length) {
+      container.innerHTML = `<div class="text-muted">${escapeHtml(emptyMessage)}</div>`;
+      return;
+    }
+    comments.forEach((comment) => {
+      const card = document.createElement("article");
+      card.className = "comment-card";
+      card.innerHTML = `
+        <div class="comment-meta">${escapeHtml(comment.course_code)} | ${escapeHtml(comment.semester)} / ${escapeHtml(comment.section)} | ${escapeHtml(formatDate(comment.submitted_at))}</div>
+        <p class="mb-0">${escapeHtml(comment.comment)}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function statusBadgeMarkup(status, label) {
+    const normalized = String(status || "").toLowerCase();
+    const className = normalized === "hidden"
+      ? "status-badge hidden"
+      : normalized === "inactive"
+        ? "status-badge inactive"
+        : normalized === "submitted"
+          ? "status-badge submitted"
+          : normalized === "closed"
+            ? "status-badge inactive"
+            : "status-badge active";
+    return `<span class="${className}">${escapeHtml(label || normalized || "active")}</span>`;
+  }
+
+  function openReviewModal(review, hideStudent) {
+    const modal = document.getElementById("reviewModal");
+    if (!modal || !review) {
+      return;
+    }
+    const titleEl = modal.querySelector("[data-review-title]");
+    const metaEl = modal.querySelector("[data-review-meta]");
+    const bodyEl = modal.querySelector("[data-review-body]");
+
+    setText(titleEl, `${review.teacher_name || "Teacher"} | ${review.course_code}`);
+
+    const metaParts = [
+      `Course: ${review.course_code}${review.course_title ? ` - ${review.course_title}` : ""}`,
+      `Semester: ${review.semester}`,
+      `Section: ${review.section}`,
+      `Status: ${review.status || "submitted"}`,
+      `Submitted: ${formatDate(review.submitted_at)}`
+    ];
+    if (review.academic_term) {
+      metaParts.splice(3, 0, `Term: ${review.academic_term}`);
+    }
+    if (!hideStudent && review.is_anonymous) {
+      metaParts.push("Anonymous review");
+    }
+    setText(metaEl, metaParts.join(" | "));
+
+    bodyEl.innerHTML = "";
+    const list = document.createElement("div");
+    list.className = "rating-breakdown-list";
+
+    if (Array.isArray(review.responses)) {
+      review.responses.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "question-card";
+        row.innerHTML = `
+          <div class="fw-semibold mb-1">${escapeHtml(item.question || "Question")}</div>
+          <div class="text-muted small">${escapeHtml(item.section || "Feedback")}</div>
+          <div class="mt-2">${escapeHtml(item.value || "-")}</div>
+        `;
+        list.appendChild(row);
+      });
+    } else {
+      REVIEW_CATEGORIES.forEach((category) => {
+        const row = document.createElement("div");
+        row.className = "rating-breakdown-row";
+        row.innerHTML = `
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <span>${escapeHtml(category.label)}</span>
+            <strong>${escapeHtml(String(Number(review.responses?.[category.key]) || 0))}/5</strong>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    bodyEl.appendChild(list);
+    if (review.comment) {
+      const commentCard = document.createElement("div");
+      commentCard.className = "comment-card mt-3";
+      commentCard.innerHTML = `
+        <div class="comment-meta">Comment</div>
+        <p class="mb-0">${escapeHtml(review.comment)}</p>
+      `;
+      bodyEl.appendChild(commentCard);
+    }
+
+    window.bootstrap?.Modal.getOrCreateInstance(modal).show();
+  }
+
+  async function invokeAiAssistant(payload) {
     const { data, error } = await supabaseClient.functions.invoke("ai-assistant", {
       body: payload
     });
@@ -1160,9 +982,9 @@
       throw new Error(data.error);
     }
     return data.result || "";
-  };
+  }
 
-  const appendChatMessage = (container, role, text) => {
+  function appendChatMessage(container, role, text) {
     if (!container) {
       return;
     }
@@ -1171,31 +993,16 @@
     message.textContent = text;
     container.appendChild(message);
     container.scrollTop = container.scrollHeight;
-  };
+  }
 
-  const clampChatHistory = (history, limit) => {
+  function clampChatHistory(history, limit) {
     if (history.length <= limit) {
       return history;
     }
     return history.slice(history.length - limit);
-  };
+  }
 
-  const loadTeacherDirectory = async (options = {}) => {
-    if (options.useDemo) {
-      return [...DEMO_TEACHERS];
-    }
-    const { data, error } = await supabaseClient
-      .from("teachers_directory")
-      .select("id, name, designation, email")
-      .order("name", { ascending: true });
-
-    if (error) {
-      throw error;
-    }
-    return data || [];
-  };
-
-  const getProfile = async () => {
+  async function getProfile() {
     const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
     if (sessionError) {
       throw sessionError;
@@ -1203,54 +1010,47 @@
     if (!sessionData.session) {
       return null;
     }
-
     const session = sessionData.session;
-    const { data, error } = await supabaseClient
-      .from("profiles")
-      .select("*")
-      .eq("id", session.user.id)
-      .maybeSingle();
-
+    const { data, error } = await supabaseClient.from("profiles").select("*").eq("id", session.user.id).maybeSingle();
     if (error) {
       throw error;
     }
-
     if (!data) {
       const createdProfile = await createProfileFromMetadata(session);
       return { session, profile: createdProfile };
     }
+    return {
+      session,
+      profile: {
+        ...data,
+        semester: normalizeSemesterValue(data.semester || ""),
+        section: normalizeSectionValue(data.section || "")
+      }
+    };
+  }
 
-    return { session, profile: data };
-  };
-
-  const redirectIfAuthenticated = () => {
+  function redirectIfAuthenticated() {
     const demoSession = getDemoSession();
-    if (demoSession && DASHBOARD_ROUTES[demoSession.role]) {
+    if (demoSession?.role && DASHBOARD_ROUTES[demoSession.role]) {
       window.location.href = DASHBOARD_ROUTES[demoSession.role];
       return;
     }
-
     getProfile()
       .then((result) => {
-        if (!result || !result.profile) {
-          return;
+        const role = result?.profile?.role;
+        if (role && DASHBOARD_ROUTES[role]) {
+          window.location.href = DASHBOARD_ROUTES[role];
         }
-        const role = result.profile.role;
-        const target = DASHBOARD_ROUTES[role];
-        if (!target) {
-          return;
-        }
-        window.location.href = target;
       })
       .catch(() => {
-        // Ignore unauthenticated state.
+        // Ignore unauthenticated state on entry pages.
       });
-  };
+  }
 
-  const requireRole = async (role, redirectTo) => {
+  async function requireAnyRole(roles, redirectTo) {
     const demoSession = getDemoSession();
     if (demoSession) {
-      if (demoSession.role !== role) {
+      if (!roles.includes(demoSession.role)) {
         clearDemoSession();
         window.location.href = redirectTo;
         return null;
@@ -1264,23 +1064,25 @@
 
     try {
       const result = await getProfile();
-      if (!result || !result.profile) {
+      if (!result?.profile || !roles.includes(result.profile.role)) {
+        if (result?.session) {
+          await supabaseClient.auth.signOut();
+        }
         window.location.href = redirectTo;
         return null;
       }
-      if (result.profile.role !== role) {
-        await supabaseClient.auth.signOut();
-        window.location.href = redirectTo;
-        return null;
-      }
-      return result;
+      return { ...result, demo: false };
     } catch (error) {
       window.location.href = redirectTo;
       return null;
     }
-  };
+  }
 
-  const initLogout = () => {
+  async function requireRole(role, redirectTo) {
+    return requireAnyRole([role], redirectTo);
+  }
+
+  function initLogout() {
     document.querySelectorAll("[data-logout]").forEach((button) => {
       button.addEventListener("click", async (event) => {
         event.preventDefault();
@@ -1288,19 +1090,657 @@
         try {
           await supabaseClient.auth.signOut();
         } catch (error) {
-          // Ignore sign-out errors in demo mode.
+          // Ignore sign-out errors after clearing local demo state.
         }
         window.location.href = "index.html";
       });
     });
-  };
+  }
 
-  const initStudentLogin = () => {
-    const form = document.getElementById("studentLoginForm");
+  async function loadTeacherDirectory(options = {}) {
+    if (options.useDemo) {
+      return getDemoTeachers();
+    }
+    const { data, error } = await supabaseClient.from("teachers_directory").select("*").order("name", {
+      ascending: true
+    });
+    if (error) {
+      throw error;
+    }
+    return (data || []).map(normalizeTeacherRecord);
+  }
+
+  async function loadAssignments(options = {}) {
+    if (options.useDemo) {
+      let assignments = getDemoAssignments();
+      if (options.filters?.semester) {
+        assignments = assignments.filter((item) => normalizeLookup(item.semester) === normalizeLookup(options.filters.semester));
+      }
+      if (options.filters?.section) {
+        assignments = assignments.filter((item) => normalizeLookup(item.section) === normalizeLookup(options.filters.section));
+      }
+      if (options.filters?.teacher_directory_id) {
+        assignments = assignments.filter((item) => item.teacher_directory_id === Number(options.filters.teacher_directory_id));
+      }
+      if (options.filters?.is_active !== undefined) {
+        assignments = assignments.filter((item) => item.is_active === Boolean(options.filters.is_active));
+      }
+      return assignments;
+    }
+
+    let query = supabaseClient.from("teacher_assignments").select("*, teachers_directory(*)");
+    if (options.filters?.semester) {
+      query = query.eq("semester", options.filters.semester);
+    }
+    if (options.filters?.section) {
+      query = query.eq("section", options.filters.section);
+    }
+    if (options.filters?.teacher_directory_id) {
+      query = query.eq("teacher_directory_id", options.filters.teacher_directory_id);
+    }
+    if (options.filters?.is_active !== undefined) {
+      query = query.eq("is_active", options.filters.is_active);
+    }
+    const { data, error } = await query
+      .order("semester", { ascending: true })
+      .order("section", { ascending: true })
+      .order("course_code", { ascending: true });
+    if (error) {
+      throw error;
+    }
+    return (data || []).map(normalizeAssignmentRecord);
+  }
+
+  async function loadFeedbackSettings(options = {}) {
+    if (options.useDemo) {
+      return getDemoSettings();
+    }
+    const { data, error } = await supabaseClient.from("feedback_settings").select("*").eq("id", 1).maybeSingle();
+    if (error) {
+      throw error;
+    }
+    return normalizeFeedbackSettings(data || DEFAULT_FEEDBACK_SETTINGS);
+  }
+
+  async function saveFeedbackSettings(options = {}) {
+    const payload = normalizeFeedbackSettings(options.payload || DEFAULT_FEEDBACK_SETTINGS);
+    if (options.useDemo) {
+      setDemoSettings(payload);
+      return payload;
+    }
+    const { data, error } = await supabaseClient.from("feedback_settings").upsert(payload, {
+      onConflict: "id"
+    }).select("*").single();
+    if (error) {
+      throw error;
+    }
+    return normalizeFeedbackSettings(data);
+  }
+
+  async function loadFeedbacks(options = {}) {
+    if (options.useDemo) {
+      let feedbacks = getDemoFeedbacks();
+      if (options.filters?.student_id) {
+        feedbacks = feedbacks.filter((item) => item.student_id === options.filters.student_id);
+      }
+      if (options.filters?.teacher_directory_id) {
+        feedbacks = feedbacks.filter((item) => item.teacher_directory_id === Number(options.filters.teacher_directory_id));
+      }
+      if (options.filters?.status) {
+        feedbacks = feedbacks.filter((item) => item.status === options.filters.status);
+      }
+      return feedbacks.sort((left, right) => new Date(right.submitted_at) - new Date(left.submitted_at));
+    }
+
+    let query = supabaseClient
+      .from("feedbacks")
+      .select("id, student_id, assignment_id, teacher_directory_id, course_code, course_title, semester, section, responses, comment, is_anonymous, status, submitted_at, updated_at, academic_term, teachers_directory(*)")
+      .order("submitted_at", { ascending: false });
+
+    if (options.filters?.student_id) {
+      query = query.eq("student_id", options.filters.student_id);
+    }
+    if (options.filters?.teacher_directory_id) {
+      query = query.eq("teacher_directory_id", options.filters.teacher_directory_id);
+    }
+    if (options.filters?.status) {
+      query = query.eq("status", options.filters.status);
+    }
+    if (options.filters?.exclude_hidden) {
+      query = query.neq("status", "hidden");
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      throw error;
+    }
+    return (data || []).map(normalizeFeedbackRecord);
+  }
+
+  async function saveTeacherRecord(options = {}) {
+    const payload = normalizeTeacherRecord({
+      ...options.payload,
+      updated_at: new Date().toISOString()
+    });
+    if (options.useDemo) {
+      const teachers = getDemoTeachers();
+      if (payload.id) {
+        const nextTeachers = teachers.map((teacher) => (teacher.id === payload.id ? payload : teacher));
+        setDemoTeachers(nextTeachers);
+        return payload;
+      }
+      const nextTeacher = {
+        ...payload,
+        id: nextNumericId(teachers),
+        created_at: new Date().toISOString()
+      };
+      setDemoTeachers([...teachers, nextTeacher]);
+      return nextTeacher;
+    }
+
+    const dbPayload = {
+      name: payload.name,
+      designation: payload.designation || null,
+      email: payload.email || null,
+      short_code: payload.short_code || null,
+      department: payload.department || DEFAULT_DEPARTMENT,
+      phone: payload.phone || null,
+      office_room: payload.office_room || null,
+      bio: payload.bio || null,
+      avatar_url: payload.avatar_url || null,
+      status: payload.status,
+      is_email_public: payload.is_email_public
+    };
+
+    let query = supabaseClient.from("teachers_directory");
+    query = payload.id
+      ? query.update(dbPayload).eq("id", payload.id)
+      : query.insert(dbPayload);
+    const { data, error } = await query.select("*").single();
+    if (error) {
+      throw error;
+    }
+    return normalizeTeacherRecord(data);
+  }
+
+  async function saveAssignmentRecord(options = {}) {
+    const payload = normalizeAssignmentRecord({
+      ...options.payload,
+      updated_at: new Date().toISOString()
+    });
+    if (!payload.teacher_directory_id) {
+      throw new Error("Teacher is required.");
+    }
+    if (options.useDemo) {
+      const assignments = getDemoAssignments();
+      if (payload.id) {
+        const nextAssignments = assignments.map((assignment) => (
+          assignment.id === payload.id ? { ...payload, teachers_directory: assignment.teachers_directory } : assignment
+        ));
+        setDemoAssignments(nextAssignments);
+        return payload;
+      }
+      const nextAssignment = {
+        ...payload,
+        id: nextNumericId(assignments),
+        created_at: new Date().toISOString()
+      };
+      setDemoAssignments([...assignments, nextAssignment]);
+      return nextAssignment;
+    }
+
+    const dbPayload = {
+      teacher_directory_id: payload.teacher_directory_id,
+      course_code: payload.course_code,
+      course_title: payload.course_title,
+      semester: payload.semester,
+      section: payload.section,
+      academic_term: payload.academic_term || "",
+      is_active: payload.is_active
+    };
+
+    let query = supabaseClient.from("teacher_assignments");
+    query = payload.id
+      ? query.update(dbPayload).eq("id", payload.id)
+      : query.insert(dbPayload);
+    const { data, error } = await query.select("*, teachers_directory(*)").single();
+    if (error) {
+      throw error;
+    }
+    return normalizeAssignmentRecord(data);
+  }
+
+  async function toggleTeacherStatus(options = {}) {
+    const teachers = await loadTeacherDirectory({ useDemo: options.useDemo });
+    const teacher = teachers.find((item) => item.id === Number(options.teacherId));
+    if (!teacher) {
+      throw new Error("Teacher not found.");
+    }
+    return saveTeacherRecord({
+      useDemo: options.useDemo,
+      payload: {
+        ...teacher,
+        status: teacher.status === "active" ? "inactive" : "active"
+      }
+    });
+  }
+
+  async function toggleAssignmentStatus(options = {}) {
+    const assignments = await loadAssignments({ useDemo: options.useDemo });
+    const assignment = assignments.find((item) => item.id === Number(options.assignmentId));
+    if (!assignment) {
+      throw new Error("Assignment not found.");
+    }
+    return saveAssignmentRecord({
+      useDemo: options.useDemo,
+      payload: {
+        ...assignment,
+        is_active: !assignment.is_active
+      }
+    });
+  }
+
+  async function saveFeedbackStatus(options = {}) {
+    const nextStatus = options.status === "hidden" ? "hidden" : "submitted";
+    if (options.useDemo) {
+      const feedbacks = getDemoFeedbacks().map((feedback) => (
+        String(feedback.id) === String(options.feedbackId)
+          ? { ...feedback, status: nextStatus, updated_at: new Date().toISOString() }
+          : feedback
+      ));
+      setDemoFeedbacks(feedbacks);
+      return feedbacks.find((item) => String(item.id) === String(options.feedbackId));
+    }
+
+    const { data, error } = await supabaseClient
+      .from("feedbacks")
+      .update({
+        status: nextStatus,
+        moderated_at: new Date().toISOString(),
+        moderated_by: options.profileId || null
+      })
+      .eq("id", options.feedbackId)
+      .select("id, student_id, assignment_id, teacher_directory_id, course_code, course_title, semester, section, responses, comment, is_anonymous, status, submitted_at, updated_at, academic_term, teachers_directory(*)")
+      .single();
+    if (error) {
+      throw error;
+    }
+    return normalizeFeedbackRecord(data);
+  }
+
+  async function submitFeedback(options = {}) {
+    const assignment = options.assignment;
+    if (!assignment) {
+      throw new Error("Assignment is required.");
+    }
+
+    const settings = await loadFeedbackSettings({ useDemo: options.useDemo });
+    const sanitizedComment = sanitizeComment(options.comment || "");
+    const payload = {
+      assignment_id: assignment.id,
+      teacher_directory_id: assignment.teacher_directory_id,
+      student_id: options.profile.id,
+      course_code: assignment.course_code,
+      course_title: assignment.course_title,
+      semester: assignment.semester,
+      section: assignment.section,
+      academic_term: assignment.academic_term || settings.active_term || "",
+      responses: options.responses,
+      comment: sanitizedComment,
+      is_anonymous: settings.allow_anonymous_feedback ? Boolean(options.is_anonymous) : false,
+      status: "submitted",
+      submitted_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    if (options.useDemo) {
+      if (!settings.review_window_open) {
+        throw new Error("Feedback window is closed.");
+      }
+      if (
+        normalizeLookup(options.profile.semester) !== normalizeLookup(assignment.semester) ||
+        normalizeLookup(options.profile.section) !== normalizeLookup(assignment.section)
+      ) {
+        throw new Error("You cannot review teachers outside your semester and section.");
+      }
+      const existing = getDemoFeedbacks().find((feedback) => {
+        if (feedback.assignment_id) {
+          return feedback.student_id === options.profile.id && feedback.assignment_id === assignment.id;
+        }
+        return feedback.student_id === options.profile.id && buildAssignmentSignature(feedback) === buildAssignmentSignature(assignment);
+      });
+      if (existing) {
+        throw new Error("Feedback already submitted for this teacher assignment.");
+      }
+      const feedbacks = getDemoFeedbacks();
+      const nextRecord = normalizeFeedbackRecord({
+        ...payload,
+        id: createDemoId("feedback")
+      });
+      feedbacks.unshift(nextRecord);
+      setDemoFeedbacks(feedbacks);
+      return nextRecord;
+    }
+
+    const { data, error } = await supabaseClient
+      .from("feedbacks")
+      .insert({
+        student_id: payload.student_id,
+        assignment_id: payload.assignment_id,
+        academic_term: payload.academic_term,
+        responses: payload.responses,
+        comment: payload.comment || null,
+        is_anonymous: payload.is_anonymous
+      })
+      .select("id, student_id, assignment_id, teacher_directory_id, course_code, course_title, semester, section, responses, comment, is_anonymous, status, submitted_at, updated_at, academic_term, teachers_directory(*)")
+      .single();
+    if (error) {
+      throw error;
+    }
+    return normalizeFeedbackRecord(data);
+  }
+
+  async function loadTeacherProfilePayload(options = {}) {
+    const teacherId = Number(options.teacherId);
+    if (!teacherId) {
+      throw new Error("Teacher id is required.");
+    }
+    if (options.useDemo) {
+      const viewer = options.viewerProfile;
+      const teacher = getDemoTeachers().find((item) => item.id === teacherId);
+      if (!teacher) {
+        throw new Error("Teacher profile not found.");
+      }
+      const assignments = getDemoAssignments().filter((item) => item.teacher_directory_id === teacherId);
+      const allowed = viewer.role === "admin" ||
+        (viewer.role === "teacher" && viewer.teacher_directory_id === teacherId) ||
+        (viewer.role === "student" && assignments.some((assignment) => (
+          assignment.is_active &&
+          normalizeLookup(assignment.semester) === normalizeLookup(viewer.semester) &&
+          normalizeLookup(assignment.section) === normalizeLookup(viewer.section)
+        )));
+      if (!allowed) {
+        throw new Error("You are not allowed to view this teacher profile.");
+      }
+      const feedbacks = getDemoFeedbacks().filter((item) => item.teacher_directory_id === teacherId && item.status !== "hidden");
+      const stats = buildTeacherStats(feedbacks);
+      return {
+        teacher,
+        assignments: assignments.filter((assignment) => viewer.role === "admin" || assignment.is_active),
+        stats: {
+          total_reviews: stats.totalReviews,
+          average_rating: Number(formatAverage(stats.averageRating)),
+          category_breakdown: stats.categoryBreakdownObject
+        },
+        recent_comments: stats.recentComments
+      };
+    }
+
+    const { data, error } = await supabaseClient.rpc("get_teacher_profile", {
+      p_teacher_id: teacherId
+    });
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
+
+  function renderRatingFields(container, values = {}) {
+    if (!container) {
+      return;
+    }
+    container.innerHTML = "";
+    REVIEW_CATEGORIES.forEach((category) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "rating-field";
+      wrapper.innerHTML = `
+        <label class="form-label fw-semibold" for="rating_${escapeHtml(category.key)}">${escapeHtml(category.label)}</label>
+        <select class="form-select" id="rating_${escapeHtml(category.key)}" name="rating_${escapeHtml(category.key)}" required>
+          <option value="">Select score</option>
+          <option value="1">1 - Very Poor</option>
+          <option value="2">2 - Poor</option>
+          <option value="3">3 - Fair</option>
+          <option value="4">4 - Good</option>
+          <option value="5">5 - Excellent</option>
+        </select>
+        <div class="form-text">Rate this category on a 1 to 5 scale.</div>
+      `;
+      const select = wrapper.querySelector("select");
+      if (values[category.key]) {
+        select.value = String(values[category.key]);
+      }
+      container.appendChild(wrapper);
+    });
+  }
+
+  function collectRatingValues(form) {
+    const ratings = {};
+    let missing = false;
+    REVIEW_CATEGORIES.forEach((category) => {
+      const select = form.querySelector(`[name="rating_${category.key}"]`);
+      const value = Number(select?.value || 0);
+      select?.classList.remove("is-invalid");
+      if (!Number.isInteger(value) || value < 1 || value > 5) {
+        missing = true;
+        select?.classList.add("is-invalid");
+        return;
+      }
+      ratings[category.key] = value;
+    });
+    return { ratings, missing };
+  }
+
+  function buildFeedbackSummaryCard(assignment) {
+    return `
+      <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+        <div>
+          <h6 class="mb-1">${escapeHtml(assignment.teachers_directory?.name || "Teacher")}</h6>
+          <div class="text-muted small">${escapeHtml(assignment.teachers_directory?.designation || "Faculty")} | ${escapeHtml(assignment.course_code)} - ${escapeHtml(assignment.course_title)}</div>
+        </div>
+        <div class="profile-chip-row">
+          <span class="chip">${escapeHtml(assignment.semester)}</span>
+          <span class="chip">${escapeHtml(assignment.section)}</span>
+          ${assignment.academic_term ? `<span class="chip">${escapeHtml(assignment.academic_term)}</span>` : ""}
+        </div>
+      </div>
+    `;
+  }
+
+  function bindStudentAssistant(useDemo) {
+    const chatWindow = document.getElementById("aiChatWindow");
+    const chatForm = document.getElementById("aiChatForm");
+    const chatInput = document.getElementById("aiChatInput");
+    const chatSend = document.getElementById("aiChatSend");
+    const chatAlert = document.getElementById("aiChatAlert");
+
+    if (!chatWindow || !chatForm || !chatInput) {
+      return;
+    }
+
+    const chatHistory = [];
+    appendChatMessage(chatWindow, "assistant", "Hi! I can help with SFRS rules, feedback steps, and portal questions.");
+
+    chatForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearAlert(chatAlert);
+      const message = chatInput.value.trim();
+      if (!message) {
+        return;
+      }
+
+      appendChatMessage(chatWindow, "user", message);
+      chatHistory.push({ role: "user", content: message });
+      chatInput.value = "";
+      chatInput.disabled = true;
+      if (chatSend) {
+        chatSend.disabled = true;
+      }
+
+      if (useDemo) {
+        appendChatMessage(chatWindow, "assistant", "AI assistant is disabled in demo mode. Log in with a real account to use it.");
+      } else {
+        try {
+          const reply = await invokeAiAssistant({
+            type: "chat",
+            message,
+            history: clampChatHistory(chatHistory.slice(0, -1), 8)
+          });
+          appendChatMessage(chatWindow, "assistant", reply || "I could not generate a reply.");
+          chatHistory.push({ role: "assistant", content: reply || "" });
+        } catch (error) {
+          showAlert(chatAlert, "danger", error.message || "Unable to reach the AI assistant.");
+        }
+      }
+
+      chatInput.disabled = false;
+      if (chatSend) {
+        chatSend.disabled = false;
+      }
+      chatInput.focus();
+    });
+  }
+
+  function buildCourseCatalog(assignments) {
+    const map = new Map();
+    assignments.forEach((assignment) => {
+      map.set(assignment.course_code, assignment.course_title);
+    });
+    ASSIGNMENT_SEED.forEach((assignment) => {
+      if (!map.has(assignment.courseCode)) {
+        map.set(assignment.courseCode, assignment.courseTitle);
+      }
+    });
+    return Array.from(map.entries())
+      .map(([code, title]) => ({ code, title }))
+      .sort((left, right) => left.code.localeCompare(right.code));
+  }
+
+  function buildStudentTeacherCards(assignments, feedbackLookup, settings) {
+    return assignments.map((assignment) => {
+      const feedback = findFeedbackForAssignment(feedbackLookup, assignment);
+      const submitted = Boolean(feedback);
+      const closed = !settings.review_window_open && !submitted;
+      const actionLabel = submitted ? "Submitted" : closed ? "Closed" : "Give Feedback";
+      return `
+        <article class="teacher-assignment-card" data-assignment-id="${assignment.id}">
+          <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar-pill small">${escapeHtml(getInitials(assignment.teachers_directory?.name || "Teacher"))}</div>
+              <div>
+                <h5 class="mb-1">${escapeHtml(assignment.teachers_directory?.name || "Teacher")}</h5>
+                <div class="text-muted small">${escapeHtml(assignment.teachers_directory?.designation || "Faculty")}</div>
+              </div>
+            </div>
+            ${statusBadgeMarkup(submitted ? "submitted" : closed ? "closed" : "active", actionLabel)}
+          </div>
+          <div class="assignment-code mt-3">${escapeHtml(assignment.course_code)}</div>
+          <p class="text-muted small mb-3">${escapeHtml(assignment.course_title)}</p>
+          <div class="profile-chip-row mb-3">
+            <span class="chip">${escapeHtml(assignment.semester)}</span>
+            <span class="chip">${escapeHtml(assignment.section)}</span>
+            ${assignment.academic_term ? `<span class="chip">${escapeHtml(assignment.academic_term)}</span>` : ""}
+          </div>
+          <div class="teacher-card-actions">
+            <a class="btn btn-outline-success btn-sm" href="teacher-profile.html?id=${assignment.teacher_directory_id}">View Profile</a>
+            <button class="btn ${submitted ? "btn-outline-secondary" : "btn-success"} btn-sm" data-action="feedback" ${submitted || closed ? "disabled" : ""}>
+              ${escapeHtml(actionLabel)}
+            </button>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  function renderStudentFeedbackTable(tableBody, feedbacks) {
+    if (!tableBody) {
+      return;
+    }
+    tableBody.innerHTML = "";
+    if (!feedbacks.length) {
+      tableBody.innerHTML = "<tr><td colspan=\"5\" class=\"text-center text-muted\">No feedback submitted yet.</td></tr>";
+      return;
+    }
+    feedbacks.forEach((feedback) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${escapeHtml(feedback.teacher_name || "Teacher")}</td>
+        <td>${escapeHtml(feedback.course_code)}<div class="small text-muted">${escapeHtml(feedback.course_title)}</div></td>
+        <td>${statusBadgeMarkup(feedback.status, feedback.status === "hidden" ? "Hidden" : "Submitted")}</td>
+        <td>${escapeHtml(formatDate(feedback.submitted_at))}</td>
+        <td><button class="btn btn-sm btn-outline-primary" data-review-id="${escapeHtml(String(feedback.id))}">View</button></td>
+      `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  function renderTeacherFeedbackTable(tableBody, feedbacks) {
+    if (!tableBody) {
+      return;
+    }
+    tableBody.innerHTML = "";
+    if (!feedbacks.length) {
+      tableBody.innerHTML = "<tr><td colspan=\"5\" class=\"text-center text-muted\">No feedback received yet.</td></tr>";
+      return;
+    }
+    feedbacks.forEach((feedback) => {
+      rowAppend(tableBody, `
+        <td>${escapeHtml(feedback.course_code)}<div class="small text-muted">${escapeHtml(feedback.course_title)}</div></td>
+        <td>${escapeHtml(feedback.semester)} / ${escapeHtml(feedback.section)}</td>
+        <td>${escapeHtml(formatAverage(overallCategoryValue(feedback.responses)))}</td>
+        <td>${escapeHtml(formatDate(feedback.submitted_at))}</td>
+        <td><button class="btn btn-sm btn-outline-primary" data-review-id="${escapeHtml(String(feedback.id))}">View</button></td>
+      `);
+    });
+  }
+
+  function rowAppend(tableBody, html) {
+    const row = document.createElement("tr");
+    row.innerHTML = html;
+    tableBody.appendChild(row);
+  }
+
+  function buildCsvContent(rows) {
+    return rows.map((row) => row.map((value) => {
+      const normalized = String(value ?? "");
+      if (/[",\n]/.test(normalized)) {
+        return `"${normalized.replace(/"/g, "\"\"")}"`;
+      }
+      return normalized;
+    }).join(",")).join("\n");
+  }
+
+  function downloadTextFile(filename, content, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  function wireReviewModal(tableBody, feedbacks, hideStudent) {
+    if (!tableBody) {
+      return;
+    }
+    tableBody.onclick = (event) => {
+      const button = event.target.closest("[data-review-id]");
+      if (!button) {
+        return;
+      }
+      const review = feedbacks.find((item) => String(item.id) === String(button.dataset.reviewId));
+      openReviewModal(review, hideStudent);
+    };
+  }
+
+  async function initRoleLogin(config) {
+    const form = document.getElementById(config.formId);
     if (!form) {
       return;
     }
-    const alertBox = document.getElementById("studentLoginAlert");
+    const alertBox = document.getElementById(config.alertId);
     redirectIfAuthenticated();
 
     form.addEventListener("submit", async (event) => {
@@ -1311,12 +1751,12 @@
         return;
       }
 
-      const identifier = normalizeIdentifier(form.email.value);
-      const password = form.password.value;
+      const identifier = normalizeIdentifier(form.querySelector("[name=\"email\"]")?.value || "");
+      const password = form.querySelector("[name=\"password\"]")?.value || "";
 
       if (isDemoCredential(identifier, password)) {
-        setDemoSession("student");
-        window.location.href = "student-dashboard.html";
+        setDemoSession(config.role);
+        window.location.href = config.target;
         return;
       }
 
@@ -1326,8 +1766,10 @@
       }
 
       clearDemoSession();
-
-      const { error } = await supabaseClient.auth.signInWithPassword({ email: identifier, password });
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: identifier,
+        password
+      });
       if (error) {
         showAlert(alertBox, "danger", error.message);
         return;
@@ -1335,81 +1777,55 @@
 
       try {
         const result = await getProfile();
-        if (!result || !result.profile) {
+        if (!result?.profile) {
           await supabaseClient.auth.signOut();
-          showAlert(alertBox, "warning", "Profile not found. Please sign up again.");
+          showAlert(alertBox, "warning", "Profile not found. Please sign up or provision the profile first.");
           return;
         }
-        if (result.profile.role !== "student") {
+        if (result.profile.role !== config.role) {
           await supabaseClient.auth.signOut();
-          showAlert(alertBox, "warning", "This account is not registered as a student.");
+          showAlert(alertBox, "warning", `This account is not registered as ${config.role}.`);
           return;
         }
-        window.location.href = "student-dashboard.html";
-      } catch (profileError) {
-        showAlert(alertBox, "danger", "Unable to load student profile.");
+        window.location.href = config.target;
+      } catch (error) {
+        showAlert(alertBox, "danger", getSetupMessage(error, "Unable to load profile."));
       }
     });
-  };
+  }
 
-  const initTeacherLogin = () => {
-    const form = document.getElementById("teacherLoginForm");
-    if (!form) {
-      return;
-    }
-    const alertBox = document.getElementById("teacherLoginAlert");
-    redirectIfAuthenticated();
+  function normalizeIdentifier(value) {
+    return String(value || "").trim().toLowerCase();
+  }
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      clearAlert(alertBox);
-      if (!form.checkValidity()) {
-        form.classList.add("was-validated");
-        return;
-      }
-
-      const identifier = normalizeIdentifier(form.email.value);
-      const password = form.password.value;
-
-      if (isDemoCredential(identifier, password)) {
-        setDemoSession("teacher");
-        window.location.href = "teacher-dashboard.html";
-        return;
-      }
-
-      if (!isEmail(identifier)) {
-        showAlert(alertBox, "warning", "Enter a valid email address or use the demo credentials.");
-        return;
-      }
-
-      clearDemoSession();
-
-      const { error } = await supabaseClient.auth.signInWithPassword({ email: identifier, password });
-      if (error) {
-        showAlert(alertBox, "danger", error.message);
-        return;
-      }
-
-      try {
-        const result = await getProfile();
-        if (!result || !result.profile) {
-          await supabaseClient.auth.signOut();
-          showAlert(alertBox, "warning", "Profile not found. Please sign up again.");
-          return;
-        }
-        if (result.profile.role !== "teacher") {
-          await supabaseClient.auth.signOut();
-          showAlert(alertBox, "warning", "This account is not registered as a teacher.");
-          return;
-        }
-        window.location.href = "teacher-dashboard.html";
-      } catch (profileError) {
-        showAlert(alertBox, "danger", "Unable to load teacher profile.");
-      }
+  function initStudentLogin() {
+    return initRoleLogin({
+      formId: "studentLoginForm",
+      alertId: "studentLoginAlert",
+      role: "student",
+      target: "student-dashboard.html"
     });
-  };
+  }
 
-  const initPasswordReset = () => {
+  function initTeacherLogin() {
+    return initRoleLogin({
+      formId: "teacherLoginForm",
+      alertId: "teacherLoginAlert",
+      role: "teacher",
+      target: "teacher-dashboard.html"
+    });
+  }
+
+  function initAdminLogin() {
+    return initRoleLogin({
+      formId: "adminLoginForm",
+      alertId: "adminLoginAlert",
+      role: "admin",
+      target: "admin-dashboard.html"
+    });
+  }
+
+  function initPasswordReset() {
     const requestSection = document.getElementById("resetRequestSection");
     const updateSection = document.getElementById("resetUpdateSection");
     const requestForm = document.getElementById("resetRequestForm");
@@ -1417,30 +1833,20 @@
     const requestAlert = document.getElementById("resetRequestAlert");
     const updateAlert = document.getElementById("resetUpdateAlert");
 
-    if (!requestSection && !updateSection) {
+    if (!requestSection || !updateSection) {
       return;
     }
 
     const showRequestSection = () => {
-      if (requestSection) {
-        requestSection.classList.remove("d-none");
-      }
-      if (updateSection) {
-        updateSection.classList.add("d-none");
-      }
+      requestSection.classList.remove("d-none");
+      updateSection.classList.add("d-none");
     };
-
     const showUpdateSection = () => {
-      if (requestSection) {
-        requestSection.classList.add("d-none");
-      }
-      if (updateSection) {
-        updateSection.classList.remove("d-none");
-      }
+      requestSection.classList.add("d-none");
+      updateSection.classList.remove("d-none");
     };
 
-    const isRecovery = window.location.hash.includes("type=recovery");
-    if (isRecovery) {
+    if (window.location.hash.includes("type=recovery")) {
       showUpdateSection();
     } else {
       showRequestSection();
@@ -1452,83 +1858,76 @@
       }
     });
 
-    if (requestForm) {
-      requestForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        clearAlert(requestAlert);
-        if (!requestForm.checkValidity()) {
-          requestForm.classList.add("was-validated");
-          return;
-        }
-
-        const email = normalizeEmail(requestForm.email.value);
-        if (!isEmail(email)) {
-          showAlert(requestAlert, "warning", "Please enter a valid email address.");
-          return;
-        }
-
-        clearDemoSession();
-
-        const redirectTo = window.location.href.split("#")[0];
-        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
-        if (error) {
-          showAlert(requestAlert, "danger", error.message);
-          return;
-        }
-
-        requestForm.reset();
-        showAlert(requestAlert, "success", "Check your email for the password reset link.");
+    requestForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearAlert(requestAlert);
+      if (!requestForm.checkValidity()) {
+        requestForm.classList.add("was-validated");
+        return;
+      }
+      const email = normalizeEmail(requestForm.email.value);
+      if (!isEmail(email)) {
+        showAlert(requestAlert, "warning", "Please enter a valid email address.");
+        return;
+      }
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.href.split("#")[0]
       });
-    }
+      if (error) {
+        showAlert(requestAlert, "danger", error.message);
+        return;
+      }
+      requestForm.reset();
+      showAlert(requestAlert, "success", "Check your email for the password reset link.");
+    });
 
-    if (updateForm) {
-      updateForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        clearAlert(updateAlert);
-        if (!updateForm.checkValidity()) {
-          updateForm.classList.add("was-validated");
-          return;
-        }
+    updateForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearAlert(updateAlert);
+      if (!updateForm.checkValidity()) {
+        updateForm.classList.add("was-validated");
+        return;
+      }
+      if (updateForm.password.value !== updateForm.confirmPassword.value) {
+        showAlert(updateAlert, "warning", "Passwords do not match.");
+        return;
+      }
+      const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+      if (sessionError || !sessionData.session) {
+        showAlert(updateAlert, "warning", "Reset link is invalid or expired. Request a new one.");
+        showRequestSection();
+        return;
+      }
+      const { error } = await supabaseClient.auth.updateUser({ password: updateForm.password.value });
+      if (error) {
+        showAlert(updateAlert, "danger", error.message);
+        return;
+      }
+      showAlert(updateAlert, "success", "Password updated. Please log in.");
+      await supabaseClient.auth.signOut().catch(() => {});
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1200);
+    });
+  }
 
-        const password = updateForm.password.value;
-        const confirm = updateForm.confirmPassword.value;
-        if (password !== confirm) {
-          showAlert(updateAlert, "warning", "Passwords do not match.");
-          return;
-        }
+  function populateStudentSignupOptions(form) {
+    populateValueSelect(form.querySelector("[name=\"semester\"]"), REVIEW_SEMESTERS, "Select semester");
+    populateValueSelect(form.querySelector("[name=\"section\"]"), REVIEW_SECTIONS, "Select section");
+  }
 
-        const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
-        if (sessionError || !sessionData.session) {
-          showAlert(updateAlert, "warning", "Reset link is invalid or expired. Request a new one.");
-          showRequestSection();
-          return;
-        }
+  function extractStudentSectionField(form) {
+    const field = form.querySelector("[name=\"section\"]");
+    return normalizeSectionValue(field?.value || "");
+  }
 
-        const { error } = await supabaseClient.auth.updateUser({ password });
-        if (error) {
-          showAlert(updateAlert, "danger", error.message);
-          return;
-        }
-
-        showAlert(updateAlert, "success", "Password updated. Please log in.");
-        try {
-          await supabaseClient.auth.signOut();
-        } catch (error) {
-          // Ignore sign-out errors after reset.
-        }
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 1200);
-      });
-    }
-  };
-
-  const initStudentSignup = () => {
+  function initStudentSignup() {
     const form = document.getElementById("studentSignupForm");
     if (!form) {
       return;
     }
     const alertBox = document.getElementById("studentSignupAlert");
+    populateStudentSignupOptions(form);
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -1537,30 +1936,26 @@
         form.classList.add("was-validated");
         return;
       }
-
-      clearDemoSession();
-
       if (form.password.value !== form.confirmPassword.value) {
         showAlert(alertBox, "warning", "Passwords do not match.");
         return;
       }
 
       const email = normalizeEmail(form.email.value);
-      const password = form.password.value;
       const metadata = {
         role: "student",
         full_name: form.fullName.value.trim(),
         student_id: form.studentId.value.trim(),
         email,
-        department: form.department.value,
-        program: form.program.value,
-        semester: form.semester.value,
-        section: form.section.value.trim()
+        department: form.department.value.trim(),
+        program: form.program.value.trim(),
+        semester: normalizeSemesterValue(form.semester.value),
+        section: extractStudentSectionField(form)
       };
 
       const { data, error } = await supabaseClient.auth.signUp({
         email,
-        password,
+        password: form.password.value,
         options: { data: metadata }
       });
       if (error) {
@@ -1576,41 +1971,32 @@
         return;
       }
 
-      const { error: profileError } = await supabaseClient
-        .from("profiles")
-        .upsert(
-          {
-            id: data.user.id,
-            role: "student",
-            full_name: metadata.full_name,
-            student_id: metadata.student_id,
-            email,
-            department: metadata.department,
-            program: metadata.program,
-            semester: metadata.semester,
-            section: metadata.section
-          },
-          { onConflict: "id" }
-        );
-
-      if (profileError) {
-        showAlert(alertBox, "danger", "Unable to create student profile. Please try again.");
+      try {
+        await supabaseClient.from("profiles").upsert({
+          id: data.user.id,
+          role: "student",
+          full_name: metadata.full_name,
+          student_id: metadata.student_id,
+          email,
+          department: metadata.department,
+          program: metadata.program,
+          semester: metadata.semester,
+          section: metadata.section
+        }, { onConflict: "id" });
+      } catch (profileError) {
+        showAlert(alertBox, "danger", getSetupMessage(profileError, "Unable to create student profile."));
         return;
       }
 
       showAlert(alertBox, "success", "Registration complete. Please log in.");
-      try {
-        await supabaseClient.auth.signOut();
-      } catch (error) {
-        // Ignore sign-out errors after registration.
-      }
+      await supabaseClient.auth.signOut().catch(() => {});
       setTimeout(() => {
         window.location.href = "student-login.html";
       }, 1200);
     });
-  };
+  }
 
-  const initTeacherSignup = async () => {
+  async function initTeacherSignup() {
     const form = document.getElementById("teacherSignupForm");
     if (!form) {
       return;
@@ -1624,29 +2010,23 @@
     try {
       teachers = await loadTeacherDirectory();
     } catch (error) {
-      showAlert(alertBox, "danger", "Unable to load teacher list from the database.");
+      showAlert(alertBox, "danger", getSetupMessage(error, "Unable to load teacher directory."));
       return;
     }
 
-    renderTeacherOptions(selectEl, teachers);
+    populateTeacherSelect(selectEl, teachers, "Select a teacher");
 
     const updateFields = () => {
-      const selectedId = Number(selectEl.value);
-      const teacher = teachers.find((item) => item.id === selectedId);
+      const teacher = teachers.find((item) => String(item.id) === String(selectEl.value));
       if (!teacher) {
         designationEl.value = "";
         emailEl.value = "";
         emailEl.readOnly = false;
         return;
       }
-      designationEl.value = normalizeDesignation(teacher.designation);
-      if (teacher.email) {
-        emailEl.value = teacher.email;
-        emailEl.readOnly = true;
-      } else {
-        emailEl.value = "";
-        emailEl.readOnly = false;
-      }
+      designationEl.value = teacher.designation || "Lecturer";
+      emailEl.value = teacher.email || "";
+      emailEl.readOnly = Boolean(teacher.email);
     };
 
     updateFields();
@@ -1659,23 +2039,19 @@
         form.classList.add("was-validated");
         return;
       }
-
-      clearDemoSession();
-
       if (form.password.value !== form.confirmPassword.value) {
         showAlert(alertBox, "warning", "Passwords do not match.");
         return;
       }
 
-      const selectedId = Number(selectEl.value);
-      const teacher = teachers.find((item) => item.id === selectedId);
+      const teacher = teachers.find((item) => String(item.id) === String(selectEl.value));
       if (!teacher) {
-        showAlert(alertBox, "danger", "Please select a teacher from the list.");
+        showAlert(alertBox, "warning", "Please select a teacher from the list.");
         return;
       }
 
       const email = normalizeEmail(emailEl.value);
-      if (teacher.email && email !== teacher.email.toLowerCase()) {
+      if (teacher.email && email !== teacher.email) {
         showAlert(alertBox, "warning", "Use the official email listed for this teacher.");
         return;
       }
@@ -1684,7 +2060,7 @@
         role: "teacher",
         full_name: teacher.name,
         email,
-        designation: normalizeDesignation(teacher.designation),
+        designation: teacher.designation,
         teacher_directory_id: teacher.id
       };
 
@@ -1693,7 +2069,6 @@
         password: form.password.value,
         options: { data: metadata }
       });
-
       if (error) {
         showAlert(alertBox, "danger", error.message);
         return;
@@ -1707,501 +2082,996 @@
         return;
       }
 
-      const { error: profileError } = await supabaseClient
-        .from("profiles")
-        .upsert(
-          {
-            id: data.user.id,
-            role: "teacher",
-            full_name: metadata.full_name,
-            email,
-            designation: metadata.designation,
-            teacher_directory_id: metadata.teacher_directory_id
-          },
-          { onConflict: "id" }
-        );
-
-      if (profileError) {
-        showAlert(alertBox, "danger", "Unable to create teacher profile. Please try again.");
+      try {
+        await supabaseClient.from("profiles").upsert({
+          id: data.user.id,
+          role: "teacher",
+          full_name: teacher.name,
+          email,
+          designation: teacher.designation,
+          teacher_directory_id: teacher.id
+        }, { onConflict: "id" });
+      } catch (profileError) {
+        showAlert(alertBox, "danger", getSetupMessage(profileError, "Unable to create teacher profile."));
         return;
       }
 
       showAlert(alertBox, "success", "Registration complete. Please log in.");
-      try {
-        await supabaseClient.auth.signOut();
-      } catch (error) {
-        // Ignore sign-out errors after registration.
-      }
+      await supabaseClient.auth.signOut().catch(() => {});
       setTimeout(() => {
         window.location.href = "teacher-login.html";
       }, 1200);
     });
-  };
+  }
 
-  const initStudentDashboard = async () => {
+  async function initStudentDashboard() {
     const authData = await requireRole("student", "student-login.html");
     if (!authData) {
       return;
     }
-    const { profile } = authData;
-    const useDemo = authData.demo;
 
-    const nameEl = document.querySelector("[data-user-name]");
-    const idEl = document.querySelector("[data-user-id]");
-    const programEl = document.querySelector("[data-user-program]");
+    const { profile, demo: useDemo } = authData;
+    const alertBox = document.getElementById("studentAssignmentsAlert");
+    const grid = document.getElementById("studentAssignmentsGrid");
+    const emptyState = document.getElementById("studentAssignmentsEmpty");
+    const searchInput = document.getElementById("teacherSearchInput");
+    const courseFilter = document.getElementById("courseFilterSelect");
+    const feedbackModal = document.getElementById("feedbackModal");
+    const feedbackForm = document.getElementById("feedbackForm");
+    const feedbackFormAlert = document.getElementById("feedbackFormAlert");
+    const feedbackSummary = document.querySelector("[data-feedback-assignment-summary]");
+    const feedbackAssignmentId = document.getElementById("feedbackAssignmentId");
+    const feedbackComment = document.getElementById("feedbackComment");
+    const feedbackAnonymous = document.getElementById("feedbackAnonymous");
+    const anonymousWrapper = document.querySelector("[data-anonymous-wrapper]");
+    const feedbackSubmitBtn = document.getElementById("feedbackSubmitBtn");
+    const studentReviewsBody = document.getElementById("studentReviewsBody");
 
-    if (nameEl) {
-      nameEl.textContent = profile.full_name;
-    }
-    if (idEl) {
-      idEl.textContent = profile.student_id;
-    }
-    if (programEl) {
-      programEl.textContent = `${profile.program} | ${profile.semester} | ${profile.section}`;
-    }
+    setText("[data-user-name]", profile.full_name);
+    setText("[data-user-id]", profile.student_id);
+    setText("[data-user-program]", `${profile.program || DEFAULT_PROGRAM} | ${profile.semester} | ${profile.section}`);
+    setText("[data-student-semester-badge]", profile.semester);
+    setText("[data-student-section-badge]", `Section ${profile.section}`);
 
-    const form = document.getElementById("reviewForm");
-    const alertBox = document.getElementById("reviewAlert");
-    const teacherSelectEl = document.getElementById("reviewTeacherSelect");
-    const teacherInfoEl = document.getElementById("reviewTeacherInfo");
-    const courseSelectEl = document.getElementById("courseSelect");
-    const questionContainer = document.getElementById("questionContainer");
-    const questionPlaceholder = document.getElementById("questionPlaceholder");
-    const reviewsTbody = document.getElementById("studentReviewsBody");
-    const submitButton = form ? form.querySelector("button[type=\"submit\"]") : null;
+    bindStudentAssistant(useDemo);
 
-    let teachers = [];
+    let settings;
+    let assignments;
+    let feedbacks;
     try {
-      teachers = await loadTeacherDirectory({ useDemo });
-    } catch (error) {
-      showAlert(alertBox, "danger", "Unable to load teacher directory.");
-    }
-
-    renderTeacherOptions(teacherSelectEl, teachers);
-    updateTeacherInfo(teacherSelectEl, teacherInfoEl, teachers);
-    renderCourseOptions(courseSelectEl, COURSE_CATALOG);
-
-    const updateQuestionSection = () => {
-      if (!questionContainer || !teacherSelectEl || !courseSelectEl) {
-        return;
-      }
-      const ready = Boolean(teacherSelectEl.value && courseSelectEl.value);
-      if (ready) {
-        if (!questionContainer.childElementCount) {
-          renderQuestions(questionContainer);
-        }
-        questionContainer.classList.remove("d-none");
-        if (questionPlaceholder) {
-          questionPlaceholder.classList.add("d-none");
-        }
-      } else {
-        questionContainer.classList.add("d-none");
-        questionContainer.innerHTML = "";
-        if (questionPlaceholder) {
-          questionPlaceholder.classList.remove("d-none");
-        }
-      }
-      if (submitButton) {
-        submitButton.disabled = !ready;
-      }
-    };
-
-    teacherSelectEl.addEventListener("change", () => {
-      updateTeacherInfo(teacherSelectEl, teacherInfoEl, teachers);
-      updateQuestionSection();
-    });
-    courseSelectEl.addEventListener("change", updateQuestionSection);
-    updateQuestionSection();
-    const loadReviews = async () => {
-      if (useDemo) {
-        const feedbacks = getDemoFeedbacks().filter(
-          (item) => item.student_id === profile.id
-        );
-        const sorted = [...feedbacks].sort(
-          (a, b) => new Date(b.submitted_at) - new Date(a.submitted_at)
-        );
-        const reviews = sorted.map((review) => ({
-          ...review,
-          teacher_name:
-            review.teacher_name ||
-            (teachers.find((item) => item.id === review.teacher_directory_id)?.name || "Teacher")
-        }));
-
-        reviewsTbody.innerHTML = "";
-        if (!reviews.length) {
-          const row = document.createElement("tr");
-          row.innerHTML = "<td colspan=\"5\" class=\"text-center text-muted\">No feedback submitted yet.</td>";
-          reviewsTbody.appendChild(row);
-        } else {
-          reviews.forEach((review) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-              <td>${review.teacher_name}</td>
-              <td>${review.course_code}</td>
-              <td>${review.course_title}</td>
-              <td>${formatDate(review.submitted_at)}</td>
-              <td><button class=\"btn btn-sm btn-outline-primary\" data-review-id=\"${review.id}\">View</button></td>
-            `;
-            reviewsTbody.appendChild(row);
-          });
-        }
-
-        bindReviewModal(reviewsTbody, reviews, false);
-        return reviews;
-      }
-
-      const { data, error } = await supabaseClient
-        .from("feedbacks")
-        .select("id, course_code, course_title, semester, section, submitted_at, responses, teachers_directory(name, designation)")
-        .eq("student_id", profile.id)
-        .order("submitted_at", { ascending: false });
-
-      if (error) {
-        showAlert(alertBox, "danger", "Unable to load your submitted feedback.");
-        return [];
-      }
-
-      const reviews = (data || []).map((review) => ({
-        ...review,
-        teacher_name: review.teachers_directory?.name || "Teacher"
-      }));
-
-      reviewsTbody.innerHTML = "";
-      if (!reviews.length) {
-        const row = document.createElement("tr");
-        row.innerHTML = "<td colspan=\"5\" class=\"text-center text-muted\">No feedback submitted yet.</td>";
-        reviewsTbody.appendChild(row);
-      } else {
-        reviews.forEach((review) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${review.teacher_name}</td>
-            <td>${review.course_code}</td>
-            <td>${review.course_title}</td>
-            <td>${formatDate(review.submitted_at)}</td>
-            <td><button class=\"btn btn-sm btn-outline-primary\" data-review-id=\"${review.id}\">View</button></td>
-          `;
-          reviewsTbody.appendChild(row);
-        });
-      }
-
-      bindReviewModal(reviewsTbody, reviews, false);
-      return reviews;
-    };
-
-    await loadReviews();
-
-    const chatWindow = document.getElementById("aiChatWindow");
-    const chatForm = document.getElementById("aiChatForm");
-    const chatInput = document.getElementById("aiChatInput");
-    const chatSend = document.getElementById("aiChatSend");
-    const chatAlert = document.getElementById("aiChatAlert");
-    const chatHistory = [];
-
-    if (chatWindow && chatForm && chatInput) {
-      appendChatMessage(chatWindow, "assistant", "Hi! I can help you with SFRS portal questions.");
-      chatForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        clearAlert(chatAlert);
-
-        const message = chatInput.value.trim();
-        if (!message) {
-          return;
-        }
-
-        appendChatMessage(chatWindow, "user", message);
-        chatHistory.push({ role: "user", content: message });
-        chatInput.value = "";
-        if (chatSend) {
-          chatSend.disabled = true;
-        }
-        chatInput.disabled = true;
-
-        if (useDemo) {
-          appendChatMessage(
-            chatWindow,
-            "assistant",
-            "AI assistant is disabled in demo mode. Please log in with a real account."
-          );
-        } else {
-          try {
-            const historyForAi = clampChatHistory(chatHistory.slice(0, -1), 8);
-            const reply = await invokeAiAssistant({
-              type: "chat",
-              message,
-              history: historyForAi
-            });
-            appendChatMessage(chatWindow, "assistant", reply || "I could not generate a reply.");
-            chatHistory.push({ role: "assistant", content: reply || "" });
-          } catch (error) {
-            showAlert(chatAlert, "danger", error.message || "Unable to reach the AI assistant.");
+      [settings, assignments, feedbacks] = await Promise.all([
+        loadFeedbackSettings({ useDemo }),
+        loadAssignments({
+          useDemo,
+          filters: {
+            semester: normalizeSemesterValue(profile.semester),
+            section: normalizeSectionValue(profile.section),
+            is_active: true
           }
-        }
-
-        chatInput.disabled = false;
-        if (chatSend) {
-          chatSend.disabled = false;
-        }
-        chatInput.focus();
-      });
-    }
-
-    if (!form) {
+        }),
+        loadFeedbacks({
+          useDemo,
+          filters: {
+            student_id: profile.id
+          }
+        })
+      ]);
+    } catch (error) {
+      showAlert(alertBox, "danger", getSetupMessage(error, "Unable to load your course teachers."));
       return;
     }
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      clearAlert(alertBox);
-      if (!form.checkValidity()) {
-        form.classList.add("was-validated");
-        showAlert(alertBox, "warning", "Please complete all required fields.");
-        return;
-      }
+    const feedbackLookup = buildFeedbackLookup(feedbacks);
+    const submittedAssignments = assignments.filter((assignment) => Boolean(findFeedbackForAssignment(feedbackLookup, assignment)));
+    const submittedCount = submittedAssignments.length;
+    const totalAssigned = assignments.length;
+    const pendingCount = settings.review_window_open ? Math.max(totalAssigned - submittedCount, 0) : 0;
+    const closedCount = settings.review_window_open ? 0 : Math.max(totalAssigned - submittedCount, 0);
 
-      const selectedId = Number(teacherSelectEl.value);
-      const teacher = teachers.find((item) => item.id === selectedId);
-      if (!teacher) {
-        showAlert(alertBox, "warning", "Please select a teacher.");
-        return;
-      }
-      const selectedCourse = getSelectedCourse(courseSelectEl);
-      if (!selectedCourse) {
-        showAlert(alertBox, "warning", "Please select a course.");
-        return;
-      }
+    setText("[data-stat-total-assigned]", String(totalAssigned));
+    setText("[data-stat-pending]", String(pendingCount));
+    setText("[data-stat-submitted]", String(submittedCount));
+    setText("[data-stat-closed]", String(closedCount));
 
-      const { responses, missing } = collectResponses(form);
-      if (missing) {
-        showAlert(alertBox, "warning", "Please answer every feedback question.");
-        return;
-      }
+    populateValueSelect(
+      courseFilter,
+      Array.from(new Set(assignments.map((item) => item.course_code))).sort(),
+      "All courses"
+    );
 
-      const payload = {
-        student_id: profile.id,
-        teacher_directory_id: teacher.id,
-        course_code: selectedCourse.code,
-        course_title: selectedCourse.title,
-        semester: form.courseSemester.value.trim(),
-        section: form.courseSection.value.trim(),
-        responses
-      };
+    const renderCards = () => {
+      const searchValue = normalizeLookup(searchInput?.value || "");
+      const selectedCourse = courseFilter?.value || "";
+      const filteredAssignments = assignments.filter((assignment) => {
+        if (selectedCourse && assignment.course_code !== selectedCourse) {
+          return false;
+        }
+        if (!searchValue) {
+          return true;
+        }
+        const teacherName = assignment.teachers_directory?.name || "";
+        return [teacherName, assignment.course_code, assignment.course_title]
+          .some((value) => normalizeLookup(value).includes(searchValue));
+      });
 
-      if (useDemo) {
-        const feedbacks = getDemoFeedbacks();
-        feedbacks.unshift({
-          ...payload,
-          id: createDemoId(),
-          submitted_at: new Date().toISOString(),
-          teacher_name: teacher.name
-        });
-        setDemoFeedbacks(feedbacks);
-      } else {
-        const { error } = await supabaseClient.from("feedbacks").insert(payload);
-        if (error) {
-          showAlert(alertBox, "danger", "Unable to submit feedback. Please try again.");
+      grid.innerHTML = buildStudentTeacherCards(filteredAssignments, feedbackLookup, settings);
+      emptyState.classList.toggle("d-none", Boolean(filteredAssignments.length));
+
+      grid.onclick = (event) => {
+        const button = event.target.closest("[data-action=\"feedback\"]");
+        const card = event.target.closest("[data-assignment-id]");
+        if (!card) {
           return;
         }
+        const assignment = assignments.find((item) => String(item.id) === String(card.dataset.assignmentId));
+        if (!assignment) {
+          return;
+        }
+        if (!button) {
+          return;
+        }
+        clearAlert(feedbackFormAlert);
+        feedbackForm.reset();
+        feedbackForm.classList.remove("was-validated");
+        feedbackAssignmentId.value = assignment.id;
+        feedbackSummary.innerHTML = buildFeedbackSummaryCard(assignment);
+        renderRatingFields(document.getElementById("feedbackRatingsContainer"));
+        feedbackComment.value = "";
+        feedbackAnonymous.checked = true;
+        anonymousWrapper?.classList.toggle("d-none", !settings.allow_anonymous_feedback);
+        if (!settings.allow_anonymous_feedback) {
+          feedbackAnonymous.checked = false;
+        }
+        window.bootstrap?.Modal.getOrCreateInstance(feedbackModal).show();
+      };
+    };
+
+    renderCards();
+
+    if (searchInput) {
+      searchInput.addEventListener("input", renderCards);
+    }
+    if (courseFilter) {
+      courseFilter.addEventListener("change", renderCards);
+    }
+
+    renderStudentFeedbackTable(studentReviewsBody, feedbacks);
+    wireReviewModal(studentReviewsBody, feedbacks, true);
+
+    feedbackForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearAlert(feedbackFormAlert);
+      const assignment = assignments.find((item) => String(item.id) === String(feedbackAssignmentId.value));
+      if (!assignment) {
+        showAlert(feedbackFormAlert, "warning", "Please select a valid teacher assignment.");
+        return;
+      }
+      const { ratings, missing } = collectRatingValues(feedbackForm);
+      if (missing) {
+        showAlert(feedbackFormAlert, "warning", "Please rate every category before submitting.");
+        return;
       }
 
-      form.reset();
-      form.classList.remove("was-validated");
-      updateTeacherInfo(teacherSelectEl, teacherInfoEl, teachers);
-      updateQuestionSection();
-      showAlert(alertBox, "success", "Feedback submitted successfully.");
-      await loadReviews();
+      setButtonLoading(feedbackSubmitBtn, true, "Submitting...");
+      try {
+        const newFeedback = await submitFeedback({
+          useDemo,
+          profile,
+          assignment,
+          responses: ratings,
+          comment: feedbackComment.value,
+          is_anonymous: feedbackAnonymous.checked
+        });
+        feedbacks = [newFeedback, ...feedbacks];
+        const nextLookup = buildFeedbackLookup(feedbacks);
+        const nextSubmittedCount = assignments.filter((item) => Boolean(findFeedbackForAssignment(nextLookup, item))).length;
+        setText("[data-stat-pending]", settings.review_window_open ? String(Math.max(totalAssigned - nextSubmittedCount, 0)) : "0");
+        setText("[data-stat-submitted]", String(nextSubmittedCount));
+        feedbackSummary.innerHTML = "";
+        renderStudentFeedbackTable(studentReviewsBody, feedbacks);
+        wireReviewModal(studentReviewsBody, feedbacks, true);
+        window.bootstrap?.Modal.getOrCreateInstance(feedbackModal).hide();
+        showToast("success", "Feedback submitted successfully.");
+        feedbackLookup.clear();
+        nextLookup.forEach((value, key) => feedbackLookup.set(key, value));
+        renderCards();
+      } catch (error) {
+        showAlert(feedbackFormAlert, "danger", getSetupMessage(error, "Unable to submit feedback."));
+      } finally {
+        setButtonLoading(feedbackSubmitBtn, false, "Submitting...");
+      }
     });
-  };
+  }
 
-  const initTeacherDashboard = async () => {
+  async function initTeacherDashboard() {
     const authData = await requireRole("teacher", "teacher-login.html");
     if (!authData) {
       return;
     }
-    const { profile } = authData;
-    const useDemo = authData.demo;
 
-    const nameEl = document.querySelector("[data-user-name]");
-    const roleEl = document.querySelector("[data-user-role]");
-    const emailEl = document.querySelector("[data-user-email]");
+    const { profile, demo: useDemo } = authData;
+    const alertBox = document.getElementById("teacherDashboardAlert");
 
-    if (nameEl) {
-      nameEl.textContent = profile.full_name;
-    }
-    if (roleEl) {
-      roleEl.textContent = profile.designation || "CSE Faculty";
-    }
-    if (emailEl) {
-      emailEl.textContent = profile.email;
+    if (!profile.teacher_directory_id) {
+      showAlert(alertBox, "danger", "Teacher profile is not linked to a directory record yet.");
+      return;
     }
 
-    const reviewsTbody = document.getElementById("teacherReviewsBody");
-    const totalEl = document.getElementById("totalReviews");
-    const averageEl = document.getElementById("averageScore");
-
-    const overallQuestion = getOverallQuestion();
-
-    let reviews = [];
-
-    if (useDemo) {
-      const feedbacks = getDemoFeedbacks().filter(
-        (item) => item.teacher_directory_id === profile.teacher_directory_id
-      );
-      const sorted = [...feedbacks].sort(
-        (a, b) => new Date(b.submitted_at) - new Date(a.submitted_at)
-      );
-      reviews = sorted.map((review) => ({
-        ...review,
-        teacher_name: profile.full_name
-      }));
-    } else {
-      const { data, error } = await supabaseClient
-        .from("feedbacks")
-        .select("id, course_code, course_title, semester, section, submitted_at, responses")
-        .eq("teacher_directory_id", profile.teacher_directory_id)
-        .order("submitted_at", { ascending: false });
-
-      if (error) {
-        if (reviewsTbody) {
-          reviewsTbody.innerHTML = "<tr><td colspan=\"5\" class=\"text-center text-muted\">Unable to load feedback.</td></tr>";
-        }
-        return;
-      }
-
-      reviews = (data || []).map((review) => ({
-        ...review,
-        teacher_name: profile.full_name
-      }));
+    let profilePayload;
+    let feedbacks;
+    try {
+      [profilePayload, feedbacks] = await Promise.all([
+        loadTeacherProfilePayload({
+          useDemo,
+          teacherId: profile.teacher_directory_id,
+          viewerProfile: profile
+        }),
+        loadFeedbacks({
+          useDemo,
+          filters: {
+            teacher_directory_id: profile.teacher_directory_id,
+            exclude_hidden: true
+          }
+        })
+      ]);
+    } catch (error) {
+      showAlert(alertBox, "danger", getSetupMessage(error, "Unable to load teacher dashboard."));
+      return;
     }
 
-    if (totalEl) {
-      totalEl.textContent = reviews.length;
+    const teacher = normalizeTeacherRecord(profilePayload.teacher || {});
+    const assignments = (profilePayload.assignments || []).map(normalizeAssignmentRecord);
+    const stats = buildTeacherStats(feedbacks);
+
+    setAvatar(document.querySelector("[data-user-avatar]"), teacher.name, teacher.avatar_url);
+    setText("[data-user-name]", teacher.name);
+    setText("[data-user-role]", teacher.designation || profile.designation || "Faculty");
+    setText("[data-user-email]", teacher.email || profile.email || "No email listed");
+    setText("[data-user-department]", teacher.department || DEFAULT_DEPARTMENT);
+    setText("[data-user-short-code]", teacher.short_code || "Teacher Profile");
+    setText("[data-profile-average]", formatAverage(stats.averageRating));
+    setText("[data-profile-count]", String(stats.totalReviews));
+    setText("[data-assignment-count]", String(assignments.filter((item) => item.is_active).length));
+    setText("[data-comment-count]", String(stats.visibleCommentCount));
+    setText("[data-user-bio]", teacher.bio || "No teacher bio added yet.");
+    setText("[data-contact-email]", teacher.email || "Not shared");
+    setText("[data-contact-phone]", teacher.phone || "Not listed");
+    setText("[data-contact-office]", teacher.office_room || "Not listed");
+    const statusEl = document.querySelector("[data-teacher-status]");
+    if (statusEl) {
+      statusEl.className = `status-badge ${teacher.status === "inactive" ? "inactive" : "active"}`;
+      statusEl.textContent = teacher.status === "inactive" ? "Inactive" : "Active";
     }
 
-    const counts = { Excellent: 0, Good: 0, Average: 0 };
-    let totalScore = 0;
-
-    reviews.forEach((review) => {
-      const response = (review.responses || []).find((item) => item.question === overallQuestion);
-      if (response && counts[response.value] !== undefined) {
-        counts[response.value] += 1;
-        totalScore += SCORE_MAP[response.value] || 0;
-      }
-    });
-
-    const totalReviews = reviews.length || 1;
-    const averageScore = reviews.length ? (totalScore / reviews.length).toFixed(2) : "0.00";
-
-    if (averageEl) {
-      averageEl.textContent = averageScore;
+    const chipStack = document.querySelector("[data-assignment-chip-stack]");
+    if (chipStack) {
+      chipStack.innerHTML = assignments.length
+        ? assignments.map((assignment) => `
+            <span class="chip">
+              ${escapeHtml(assignment.course_code)} | ${escapeHtml(assignment.semester)} / ${escapeHtml(assignment.section)}
+            </span>
+          `).join("")
+        : "<span class=\"text-muted\">No active assignments found.</span>";
     }
 
-    ["Excellent", "Good", "Average"].forEach((label) => {
-      const percent = Math.round((counts[label] / totalReviews) * 100);
-      const bar = document.querySelector(`[data-overall-bar=\"${label}\"]`);
-      const count = document.querySelector(`[data-overall-count=\"${label}\"]`);
-      if (bar) {
-        bar.style.width = `${percent}%`;
-        bar.textContent = `${percent}%`;
-      }
-      if (count) {
-        count.textContent = counts[label];
-      }
-    });
+    renderCategoryBreakdown(document.querySelector("[data-category-breakdown]"), stats.categoryBreakdown);
+    renderCommentStack(document.querySelector("[data-comment-list]"), stats.recentComments, "No visible comments yet.");
+    setText("#totalReviews", String(stats.totalReviews));
+    setText("#averageScore", formatAverage(stats.averageRating));
 
-    if (reviewsTbody) {
-      reviewsTbody.innerHTML = "";
-      if (!reviews.length) {
-        const row = document.createElement("tr");
-        row.innerHTML = "<td colspan=\"5\" class=\"text-center text-muted\">No feedback received yet.</td>";
-        reviewsTbody.appendChild(row);
-      } else {
-        reviews.forEach((review) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${review.course_code}</td>
-            <td>${review.course_title}</td>
-            <td>${review.semester} / ${review.section}</td>
-            <td>${formatDate(review.submitted_at)}</td>
-            <td><button class=\"btn btn-sm btn-outline-primary\" data-review-id=\"${review.id}\">View</button></td>
-          `;
-          reviewsTbody.appendChild(row);
-        });
-      }
+    const tableBody = document.getElementById("teacherReviewsBody");
+    renderTeacherFeedbackTable(tableBody, feedbacks);
+    wireReviewModal(tableBody, feedbacks, true);
+
+    const profileLink = document.getElementById("teacherProfileLink");
+    if (profileLink) {
+      profileLink.href = `teacher-profile.html?id=${teacher.id}`;
     }
-
-    bindReviewModal(reviewsTbody, reviews, true);
 
     const aiSummaryBtn = document.getElementById("aiSummaryBtn");
     const aiSummaryResult = document.getElementById("aiSummaryResult");
     const aiSummaryAlert = document.getElementById("aiSummaryAlert");
-    const questionStats = buildQuestionStats(reviews);
-    const courseStats = buildCourseStats(reviews);
-
-    if (aiSummaryResult && !reviews.length) {
+    if (aiSummaryResult && !feedbacks.length) {
       aiSummaryResult.textContent = "No feedback available yet.";
     }
-
-    if (aiSummaryBtn) {
-      if (!reviews.length) {
-        aiSummaryBtn.disabled = true;
+    aiSummaryBtn?.addEventListener("click", async () => {
+      clearAlert(aiSummaryAlert);
+      if (!feedbacks.length) {
+        setText(aiSummaryResult, "No feedback available yet.");
+        return;
       }
-      aiSummaryBtn.addEventListener("click", async () => {
-        clearAlert(aiSummaryAlert);
-        if (!reviews.length) {
-          if (aiSummaryResult) {
-            aiSummaryResult.textContent = "No feedback available yet.";
+      if (useDemo) {
+        showAlert(aiSummaryAlert, "warning", "AI summary is disabled in demo mode. Please log in with a real account.");
+        return;
+      }
+      setButtonLoading(aiSummaryBtn, true, "Generating...");
+      setText(aiSummaryResult, "Generating summary...");
+      try {
+        const result = await invokeAiAssistant({
+          type: "summary",
+          payload: {
+            teacher_name: teacher.name,
+            review_count: stats.totalReviews,
+            overall_average: formatAverage(stats.averageRating),
+            category_breakdown: stats.categoryBreakdownObject,
+            course_stats: stats.courseStats.slice(0, 6),
+            recent_comments: stats.recentComments.map((comment) => ({
+              course_code: comment.course_code,
+              comment: comment.comment
+            }))
           }
-          return;
-        }
-        if (useDemo) {
-          showAlert(aiSummaryAlert, "warning", "AI summary is disabled in demo mode. Please log in.");
-          return;
-        }
+        });
+        setText(aiSummaryResult, result || "No summary returned.");
+      } catch (error) {
+        showAlert(aiSummaryAlert, "danger", error.message || "Unable to generate AI summary.");
+        setText(aiSummaryResult, "Unable to generate summary.");
+      } finally {
+        setButtonLoading(aiSummaryBtn, false, "Generating...");
+      }
+    });
+  }
 
-        setButtonLoading(aiSummaryBtn, true, "Generating...");
-        if (aiSummaryResult) {
-          aiSummaryResult.textContent = "Generating summary...";
-        }
+  async function initTeacherProfile() {
+    const authData = await requireAnyRole(["student", "teacher", "admin"], "index.html");
+    if (!authData) {
+      return;
+    }
+    const { profile, demo: useDemo } = authData;
+    const alertBox = document.getElementById("teacherProfileAlert");
+    const backButton = document.querySelector("[data-teacher-profile-back]");
+    const params = new URLSearchParams(window.location.search);
+    const teacherId = Number(params.get("id") || profile.teacher_directory_id || "");
 
+    backButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      const fallback = DASHBOARD_ROUTES[profile.role] || "index.html";
+      if (document.referrer) {
         try {
-          const result = await invokeAiAssistant({
-            type: "summary",
-            payload: {
-              teacher_name: profile.full_name,
-              review_count: reviews.length,
-              overall_question: overallQuestion,
-              overall_counts: counts,
-              overall_average: averageScore,
-              question_stats: questionStats,
-              course_stats: courseStats,
-              scale: { Excellent: 3, Good: 2, Average: 1 }
-            }
-          });
-          if (aiSummaryResult) {
-            aiSummaryResult.textContent = result || "No summary returned.";
+          const referrer = new URL(document.referrer);
+          if (referrer.origin === window.location.origin) {
+            window.history.back();
+            return;
           }
         } catch (error) {
-          showAlert(aiSummaryAlert, "danger", error.message || "Unable to generate AI summary.");
-          if (aiSummaryResult) {
-            aiSummaryResult.textContent = "Unable to generate summary.";
-          }
-        } finally {
-          setButtonLoading(aiSummaryBtn, false, "Generating...");
+          // Ignore malformed referrer and use fallback.
         }
+      }
+      window.location.href = fallback;
+    });
+
+    if (!teacherId) {
+      showAlert(alertBox, "warning", profile.role === "teacher"
+        ? "No teacher directory record is linked to your account."
+        : "Open this page from a teacher card to view a profile.");
+      return;
+    }
+
+    let payload;
+    try {
+      payload = await loadTeacherProfilePayload({
+        useDemo,
+        teacherId,
+        viewerProfile: profile
+      });
+    } catch (error) {
+      showAlert(alertBox, "danger", getSetupMessage(error, "Unable to load the teacher profile."));
+      return;
+    }
+
+    const teacher = normalizeTeacherRecord(payload.teacher || {});
+    const assignments = (payload.assignments || []).map(normalizeAssignmentRecord);
+    const stats = payload.stats || {};
+    const breakdown = REVIEW_CATEGORIES.map((category) => ({
+      key: category.key,
+      label: category.label,
+      average: Number(stats.category_breakdown?.[category.key]) || 0
+    }));
+
+    setAvatar(document.querySelector("[data-profile-avatar]"), teacher.name, teacher.avatar_url);
+    setText("[data-profile-name]", teacher.name);
+    setText("[data-profile-designation]", teacher.designation || "Faculty");
+    setText("[data-profile-department]", teacher.department || DEFAULT_DEPARTMENT);
+    setText("[data-profile-short-code]", teacher.short_code || "Teacher Profile");
+    const statusEl = document.querySelector("[data-profile-status]");
+    if (statusEl) {
+      statusEl.className = `chip ${teacher.status === "inactive" ? "chip-muted" : ""}`;
+      statusEl.textContent = teacher.status === "inactive" ? "Inactive" : "Active";
+    }
+    setText("[data-profile-average]", formatAverage(stats.average_rating));
+    setText("[data-profile-review-count]", String(Number(stats.total_reviews) || 0));
+    setText("[data-profile-bio]", teacher.bio || "No teacher bio added yet.");
+    setText("[data-profile-email]", teacher.email || "Not shared");
+    setText("[data-profile-phone]", teacher.phone || "Not listed");
+    setText("[data-profile-office]", teacher.office_room || "Not listed");
+
+    const assignmentList = document.querySelector("[data-profile-assignment-list]");
+    if (assignmentList) {
+      assignmentList.innerHTML = assignments.length
+        ? assignments.map((assignment) => `
+            <span class="chip">
+              ${escapeHtml(assignment.course_code)} | ${escapeHtml(assignment.semester)} / ${escapeHtml(assignment.section)}
+            </span>
+          `).join("")
+        : "<span class=\"text-muted\">No assignments available.</span>";
+    }
+
+    renderCategoryBreakdown(document.querySelector("[data-profile-rating-breakdown]"), breakdown);
+    renderCommentStack(
+      document.querySelector("[data-profile-comment-list]"),
+      (payload.recent_comments || []).map((item) => ({
+        ...item,
+        comment: sanitizeComment(item.comment || "")
+      })),
+      "No visible comments yet."
+    );
+  }
+
+  async function initAdminDashboard() {
+    const authData = await requireRole("admin", "admin-login.html");
+    if (!authData) {
+      return;
+    }
+
+    const { profile, demo: useDemo } = authData;
+    const dashboardAlert = document.getElementById("adminDashboardAlert");
+    const settingsForm = document.getElementById("feedbackSettingsForm");
+    const teacherSearchFilter = document.getElementById("teacherSearchFilter");
+    const teacherStatusFilter = document.getElementById("teacherStatusFilter");
+    const teacherBody = document.getElementById("adminTeacherBody");
+    const teacherForm = document.getElementById("teacherForm");
+    const teacherFormAlert = document.getElementById("teacherFormAlert");
+    const assignmentBody = document.getElementById("adminAssignmentBody");
+    const assignmentForm = document.getElementById("assignmentForm");
+    const assignmentFormAlert = document.getElementById("assignmentFormAlert");
+    const feedbackBody = document.getElementById("adminFeedbackBody");
+    const exportFeedbackBtn = document.getElementById("exportFeedbackBtn");
+
+    const teacherModal = window.bootstrap?.Modal.getOrCreateInstance(document.getElementById("teacherModal"));
+    const assignmentModal = window.bootstrap?.Modal.getOrCreateInstance(document.getElementById("assignmentModal"));
+
+    const state = {
+      settings: DEFAULT_FEEDBACK_SETTINGS,
+      teachers: [],
+      assignments: [],
+      feedbacks: []
+    };
+    let lastRenderedAnalyticsFeedbacks = [];
+    bindCourseAutoFill(() => buildCourseCatalog(state.assignments));
+
+    function fillStaticOptions() {
+      populateValueSelect(document.getElementById("assignmentSemesterFilter"), REVIEW_SEMESTERS, "All semesters");
+      populateValueSelect(document.getElementById("assignmentSectionFilter"), REVIEW_SECTIONS, "All sections");
+      populateValueSelect(document.getElementById("analyticsSemesterFilter"), REVIEW_SEMESTERS, "All semesters");
+      populateValueSelect(document.getElementById("analyticsSectionFilter"), REVIEW_SECTIONS, "All sections");
+      populateValueSelect(document.getElementById("assignmentSemesterInput"), REVIEW_SEMESTERS, "Select semester");
+      populateValueSelect(document.getElementById("assignmentSectionInput"), REVIEW_SECTIONS, "Select section");
+    }
+
+    function populateTeacherDrivenOptions() {
+      const teachers = state.teachers.slice().sort((left, right) => left.name.localeCompare(right.name));
+      populateTeacherSelect(
+        document.getElementById("assignmentTeacherFilter"),
+        teachers,
+        "All teachers",
+        document.getElementById("assignmentTeacherFilter")?.value || ""
+      );
+      populateTeacherSelect(
+        document.getElementById("analyticsTeacherFilter"),
+        teachers,
+        "All teachers",
+        document.getElementById("analyticsTeacherFilter")?.value || ""
+      );
+      populateTeacherSelect(
+        document.getElementById("assignmentTeacherInput"),
+        teachers,
+        "Select teacher",
+        document.getElementById("assignmentTeacherInput")?.value || ""
+      );
+
+      const courseList = document.getElementById("courseCodeList");
+      if (courseList) {
+        courseList.innerHTML = buildCourseCatalog(state.assignments).map((course) => (
+          `<option value="${escapeHtml(course.code)}">${escapeHtml(course.code)} - ${escapeHtml(course.title)}</option>`
+        )).join("");
+      }
+    }
+
+    function renderSummaryCards() {
+      setText("[data-admin-total-teachers]", String(state.teachers.length));
+      setText("[data-admin-total-assignments]", String(state.assignments.filter((item) => item.is_active).length));
+      setText("[data-admin-total-feedback]", String(state.feedbacks.length));
+      setText("[data-admin-hidden-feedback]", String(state.feedbacks.filter((item) => item.status === "hidden").length));
+      setText("[data-admin-active-term]", state.settings.active_term);
+
+      if (settingsForm) {
+        settingsForm.activeTerm.value = state.settings.active_term;
+        settingsForm.reviewWindow.checked = state.settings.review_window_open;
+        settingsForm.anonymous.checked = state.settings.allow_anonymous_feedback;
+      }
+    }
+
+    function openTeacherEditor(teacher) {
+      clearAlert(teacherFormAlert);
+      teacherForm.reset();
+      teacherForm.classList.remove("was-validated");
+      const record = teacher || {};
+      document.getElementById("teacherRecordId").value = record.id || "";
+      document.getElementById("teacherNameInput").value = record.name || "";
+      document.getElementById("teacherCodeInput").value = record.short_code || "";
+      document.getElementById("teacherDesignationInput").value = record.designation || "Lecturer";
+      document.getElementById("teacherDepartmentInput").value = record.department || DEFAULT_DEPARTMENT;
+      document.getElementById("teacherEmailInput").value = record.email || "";
+      document.getElementById("teacherPhoneInput").value = record.phone || "";
+      document.getElementById("teacherOfficeInput").value = record.office_room || "";
+      document.getElementById("teacherAvatarInput").value = record.avatar_url || "";
+      document.getElementById("teacherStatusInput").value = record.status || "active";
+      document.getElementById("teacherEmailPublicInput").checked = Boolean(record.is_email_public);
+      document.getElementById("teacherBioInput").value = record.bio || "";
+      teacherModal?.show();
+    }
+
+    function openAssignmentEditor(assignment) {
+      clearAlert(assignmentFormAlert);
+      assignmentForm.reset();
+      assignmentForm.classList.remove("was-validated");
+      const record = assignment || {};
+      document.getElementById("assignmentRecordId").value = record.id || "";
+      document.getElementById("assignmentTeacherInput").value = record.teacher_directory_id || "";
+      document.getElementById("assignmentCourseCodeInput").value = record.course_code || "";
+      document.getElementById("assignmentCourseTitleInput").value = record.course_title || "";
+      document.getElementById("assignmentSemesterInput").value = record.semester || "";
+      document.getElementById("assignmentSectionInput").value = record.section || "";
+      document.getElementById("assignmentTermInput").value = record.academic_term || state.settings.active_term || "";
+      document.getElementById("assignmentActiveInput").checked = record.is_active ?? true;
+      assignmentModal?.show();
+    }
+
+    function renderTeacherTable() {
+      const searchValue = normalizeLookup(teacherSearchFilter?.value || "");
+      const statusValue = teacherStatusFilter?.value || "";
+      const assignmentCounts = state.assignments.reduce((accumulator, assignment) => {
+        if (!assignment.is_active) {
+          return accumulator;
+        }
+        accumulator.set(
+          assignment.teacher_directory_id,
+          (accumulator.get(assignment.teacher_directory_id) || 0) + 1
+        );
+        return accumulator;
+      }, new Map());
+
+      const filteredTeachers = state.teachers.filter((teacher) => {
+        if (statusValue && teacher.status !== statusValue) {
+          return false;
+        }
+        if (!searchValue) {
+          return true;
+        }
+        return [teacher.name, teacher.short_code, teacher.email]
+          .some((value) => normalizeLookup(value).includes(searchValue));
+      });
+
+      teacherBody.innerHTML = "";
+      if (!filteredTeachers.length) {
+        teacherBody.innerHTML = "<tr><td colspan=\"5\" class=\"text-center text-muted\">No teacher matches the current filters.</td></tr>";
+        return;
+      }
+      filteredTeachers.forEach((teacher) => {
+        rowAppend(teacherBody, `
+          <td>
+            <div class="fw-semibold">${escapeHtml(teacher.name)}</div>
+            <div class="small text-muted">${escapeHtml(teacher.designation)}</div>
+          </td>
+          <td>
+            <div>${escapeHtml(teacher.email || "No email")}</div>
+            <div class="small text-muted">${escapeHtml(teacher.department)}</div>
+          </td>
+          <td>${statusBadgeMarkup(teacher.status, teacher.status === "inactive" ? "Inactive" : "Active")}</td>
+          <td>${escapeHtml(String(assignmentCounts.get(teacher.id) || 0))}</td>
+          <td class="table-actions">
+            <button class="btn btn-sm btn-outline-primary" data-action="view-profile" data-teacher-id="${teacher.id}">View</button>
+            <button class="btn btn-sm btn-outline-success" data-action="edit-teacher" data-teacher-id="${teacher.id}">Edit</button>
+            <button class="btn btn-sm btn-outline-secondary" data-action="toggle-teacher" data-teacher-id="${teacher.id}">
+              ${teacher.status === "active" ? "Deactivate" : "Activate"}
+            </button>
+          </td>
+        `);
       });
     }
-  };
 
-  const initPage = () => {
+    function renderAssignmentTable() {
+      const semesterFilter = document.getElementById("assignmentSemesterFilter")?.value || "";
+      const sectionFilter = document.getElementById("assignmentSectionFilter")?.value || "";
+      const teacherFilter = document.getElementById("assignmentTeacherFilter")?.value || "";
+      const courseFilter = normalizeLookup(document.getElementById("assignmentCourseFilter")?.value || "");
+
+      const filteredAssignments = state.assignments.filter((assignment) => {
+        if (semesterFilter && assignment.semester !== semesterFilter) {
+          return false;
+        }
+        if (sectionFilter && assignment.section !== sectionFilter) {
+          return false;
+        }
+        if (teacherFilter && String(assignment.teacher_directory_id) !== String(teacherFilter)) {
+          return false;
+        }
+        if (!courseFilter) {
+          return true;
+        }
+        return [assignment.course_code, assignment.course_title]
+          .some((value) => normalizeLookup(value).includes(courseFilter));
+      });
+
+      assignmentBody.innerHTML = "";
+      if (!filteredAssignments.length) {
+        assignmentBody.innerHTML = "<tr><td colspan=\"6\" class=\"text-center text-muted\">No assignment matches the current filters.</td></tr>";
+        return;
+      }
+      filteredAssignments.forEach((assignment) => {
+        rowAppend(assignmentBody, `
+          <td>${escapeHtml(assignment.teachers_directory?.name || "Teacher")}</td>
+          <td>${escapeHtml(assignment.course_code)}<div class="small text-muted">${escapeHtml(assignment.course_title)}</div></td>
+          <td>${escapeHtml(assignment.semester)} / ${escapeHtml(assignment.section)}</td>
+          <td>${escapeHtml(assignment.academic_term || "-")}</td>
+          <td>${statusBadgeMarkup(assignment.is_active ? "active" : "inactive", assignment.is_active ? "Active" : "Inactive")}</td>
+          <td class="table-actions">
+            <button class="btn btn-sm btn-outline-success" data-action="edit-assignment" data-assignment-id="${assignment.id}">Edit</button>
+            <button class="btn btn-sm btn-outline-secondary" data-action="toggle-assignment" data-assignment-id="${assignment.id}">
+              ${assignment.is_active ? "Deactivate" : "Activate"}
+            </button>
+          </td>
+        `);
+      });
+    }
+
+    function filteredAnalyticsFeedbacks() {
+      const teacherFilter = document.getElementById("analyticsTeacherFilter")?.value || "";
+      const semesterFilter = document.getElementById("analyticsSemesterFilter")?.value || "";
+      const sectionFilter = document.getElementById("analyticsSectionFilter")?.value || "";
+      const statusFilter = document.getElementById("analyticsStatusFilter")?.value || "";
+      const courseFilter = normalizeLookup(document.getElementById("analyticsCourseFilter")?.value || "");
+
+      return state.feedbacks.filter((feedback) => {
+        if (teacherFilter && String(feedback.teacher_directory_id) !== String(teacherFilter)) {
+          return false;
+        }
+        if (semesterFilter && feedback.semester !== semesterFilter) {
+          return false;
+        }
+        if (sectionFilter && feedback.section !== sectionFilter) {
+          return false;
+        }
+        if (statusFilter && feedback.status !== statusFilter) {
+          return false;
+        }
+        if (!courseFilter) {
+          return true;
+        }
+        return [feedback.course_code, feedback.course_title]
+          .some((value) => normalizeLookup(value).includes(courseFilter));
+      });
+    }
+
+    function renderFeedbackAnalytics() {
+      const filteredFeedbacks = filteredAnalyticsFeedbacks();
+      lastRenderedAnalyticsFeedbacks = filteredFeedbacks;
+      const visibleComments = filteredFeedbacks.filter((item) => item.comment && item.status !== "hidden");
+      const overallValues = filteredFeedbacks.map((item) => overallCategoryValue(item.responses)).filter((item) => item > 0);
+      const averageOverall = overallValues.length
+        ? overallValues.reduce((total, value) => total + value, 0) / overallValues.length
+        : 0;
+
+      setText("[data-analytics-total]", String(filteredFeedbacks.length));
+      setText("[data-analytics-average]", formatAverage(averageOverall));
+      setText("[data-analytics-comments]", String(visibleComments.length));
+
+      feedbackBody.innerHTML = "";
+      if (!filteredFeedbacks.length) {
+        feedbackBody.innerHTML = "<tr><td colspan=\"8\" class=\"text-center text-muted\">No feedback matches the current filters.</td></tr>";
+        return;
+      }
+
+      filteredFeedbacks.forEach((feedback) => {
+        rowAppend(feedbackBody, `
+          <td>${escapeHtml(feedback.teacher_name || "Teacher")}</td>
+          <td>${escapeHtml(feedback.course_code)}<div class="small text-muted">${escapeHtml(feedback.course_title)}</div></td>
+          <td>${escapeHtml(feedback.semester)} / ${escapeHtml(feedback.section)}</td>
+          <td>${escapeHtml(formatAverage(overallCategoryValue(feedback.responses)))}</td>
+          <td>${feedback.comment ? escapeHtml(feedback.comment) : "<span class=\"text-muted\">No comment</span>"}</td>
+          <td>${escapeHtml(formatDate(feedback.submitted_at))}</td>
+          <td>${statusBadgeMarkup(feedback.status, feedback.status === "hidden" ? "Hidden" : "Visible")}</td>
+          <td class="table-actions">
+            <button class="btn btn-sm btn-outline-primary" data-review-id="${escapeHtml(String(feedback.id))}">View</button>
+            <button class="btn btn-sm btn-outline-secondary" data-action="toggle-feedback-status" data-feedback-id="${escapeHtml(String(feedback.id))}">
+              ${feedback.status === "hidden" ? "Unhide" : "Hide"}
+            </button>
+          </td>
+        `);
+      });
+    }
+
+    async function refreshDashboard() {
+      clearAlert(dashboardAlert);
+      try {
+        const [settings, teachers, assignments, feedbacks] = await Promise.all([
+          loadFeedbackSettings({ useDemo }),
+          loadTeacherDirectory({ useDemo }),
+          loadAssignments({ useDemo }),
+          loadFeedbacks({ useDemo })
+        ]);
+        state.settings = settings;
+        state.teachers = teachers;
+        state.assignments = assignments;
+        state.feedbacks = feedbacks;
+        renderSummaryCards();
+        populateTeacherDrivenOptions();
+        renderTeacherTable();
+        renderAssignmentTable();
+        renderFeedbackAnalytics();
+      } catch (error) {
+        showAlert(dashboardAlert, "danger", getSetupMessage(error, "Unable to load admin dashboard."));
+      }
+    }
+
+    fillStaticOptions();
+    await refreshDashboard();
+
+    document.getElementById("openTeacherModalBtn")?.addEventListener("click", () => {
+      openTeacherEditor(null);
+    });
+    document.getElementById("openAssignmentModalBtn")?.addEventListener("click", () => {
+      openAssignmentEditor(null);
+    });
+
+    [teacherSearchFilter, teacherStatusFilter].forEach((element) => {
+      element?.addEventListener(element.tagName === "INPUT" ? "input" : "change", renderTeacherTable);
+    });
+    [
+      document.getElementById("assignmentSemesterFilter"),
+      document.getElementById("assignmentSectionFilter"),
+      document.getElementById("assignmentTeacherFilter")
+    ].forEach((element) => {
+      element?.addEventListener("change", renderAssignmentTable);
+    });
+    document.getElementById("assignmentCourseFilter")?.addEventListener("input", renderAssignmentTable);
+
+    [
+      document.getElementById("analyticsTeacherFilter"),
+      document.getElementById("analyticsSemesterFilter"),
+      document.getElementById("analyticsSectionFilter"),
+      document.getElementById("analyticsStatusFilter")
+    ].forEach((element) => {
+      element?.addEventListener("change", renderFeedbackAnalytics);
+    });
+    document.getElementById("analyticsCourseFilter")?.addEventListener("input", renderFeedbackAnalytics);
+
+    settingsForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      try {
+        state.settings = await saveFeedbackSettings({
+          useDemo,
+          payload: {
+            id: 1,
+            active_term: settingsForm.activeTerm.value.trim(),
+            review_window_open: settingsForm.reviewWindow.checked,
+            allow_anonymous_feedback: settingsForm.anonymous.checked
+          }
+        });
+        renderSummaryCards();
+        showToast("success", "Feedback settings updated.");
+      } catch (error) {
+        showAlert(dashboardAlert, "danger", getSetupMessage(error, "Unable to save settings."));
+      }
+    });
+
+    teacherBody.onclick = async (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) {
+        return;
+      }
+      const teacherId = Number(button.dataset.teacherId);
+      const teacher = state.teachers.find((item) => item.id === teacherId);
+      if (!teacher) {
+        return;
+      }
+      if (button.dataset.action === "view-profile") {
+        window.location.href = `teacher-profile.html?id=${teacher.id}`;
+        return;
+      }
+      if (button.dataset.action === "edit-teacher") {
+        openTeacherEditor(teacher);
+        return;
+      }
+      if (button.dataset.action === "toggle-teacher") {
+        try {
+          await toggleTeacherStatus({ useDemo, teacherId });
+          await refreshDashboard();
+          showToast("success", "Teacher status updated.");
+        } catch (error) {
+          showAlert(dashboardAlert, "danger", getSetupMessage(error, "Unable to update teacher status."));
+        }
+      }
+    };
+
+    teacherForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearAlert(teacherFormAlert);
+      if (!teacherForm.checkValidity()) {
+        teacherForm.classList.add("was-validated");
+        return;
+      }
+      try {
+        await saveTeacherRecord({
+          useDemo,
+          payload: {
+            id: safeNumber(document.getElementById("teacherRecordId").value),
+            name: document.getElementById("teacherNameInput").value,
+            short_code: document.getElementById("teacherCodeInput").value,
+            designation: document.getElementById("teacherDesignationInput").value,
+            department: document.getElementById("teacherDepartmentInput").value,
+            email: document.getElementById("teacherEmailInput").value,
+            phone: document.getElementById("teacherPhoneInput").value,
+            office_room: document.getElementById("teacherOfficeInput").value,
+            avatar_url: document.getElementById("teacherAvatarInput").value,
+            status: document.getElementById("teacherStatusInput").value,
+            is_email_public: document.getElementById("teacherEmailPublicInput").checked,
+            bio: document.getElementById("teacherBioInput").value
+          }
+        });
+        teacherModal?.hide();
+        await refreshDashboard();
+        showToast("success", "Teacher profile saved.");
+      } catch (error) {
+        showAlert(teacherFormAlert, "danger", getSetupMessage(error, "Unable to save teacher profile."));
+      }
+    });
+
+    assignmentBody.onclick = async (event) => {
+      const button = event.target.closest("[data-action]");
+      if (!button) {
+        return;
+      }
+      const assignmentId = Number(button.dataset.assignmentId);
+      const assignment = state.assignments.find((item) => item.id === assignmentId);
+      if (!assignment) {
+        return;
+      }
+      if (button.dataset.action === "edit-assignment") {
+        openAssignmentEditor(assignment);
+        return;
+      }
+      if (button.dataset.action === "toggle-assignment") {
+        try {
+          await toggleAssignmentStatus({ useDemo, assignmentId });
+          await refreshDashboard();
+          showToast("success", "Assignment status updated.");
+        } catch (error) {
+          showAlert(dashboardAlert, "danger", getSetupMessage(error, "Unable to update assignment status."));
+        }
+      }
+    };
+
+    assignmentForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearAlert(assignmentFormAlert);
+      if (!assignmentForm.checkValidity()) {
+        assignmentForm.classList.add("was-validated");
+        return;
+      }
+      try {
+        await saveAssignmentRecord({
+          useDemo,
+          payload: {
+            id: safeNumber(document.getElementById("assignmentRecordId").value),
+            teacher_directory_id: safeNumber(document.getElementById("assignmentTeacherInput").value),
+            course_code: document.getElementById("assignmentCourseCodeInput").value.trim(),
+            course_title: document.getElementById("assignmentCourseTitleInput").value.trim(),
+            semester: document.getElementById("assignmentSemesterInput").value,
+            section: document.getElementById("assignmentSectionInput").value,
+            academic_term: document.getElementById("assignmentTermInput").value.trim(),
+            is_active: document.getElementById("assignmentActiveInput").checked
+          }
+        });
+        assignmentModal?.hide();
+        await refreshDashboard();
+        showToast("success", "Assignment saved.");
+      } catch (error) {
+        showAlert(assignmentFormAlert, "danger", getSetupMessage(error, "Unable to save assignment."));
+      }
+    });
+
+    feedbackBody.onclick = async (event) => {
+      const reviewButton = event.target.closest("[data-review-id]");
+      if (reviewButton) {
+        const review = lastRenderedAnalyticsFeedbacks.find(
+          (item) => String(item.id) === String(reviewButton.dataset.reviewId)
+        );
+        openReviewModal(review, true);
+        return;
+      }
+
+      const button = event.target.closest("[data-action=\"toggle-feedback-status\"]");
+      if (!button) {
+        return;
+      }
+      const feedbackId = button.dataset.feedbackId;
+      const current = state.feedbacks.find((item) => String(item.id) === String(feedbackId));
+      if (!current) {
+        return;
+      }
+      try {
+        await saveFeedbackStatus({
+          useDemo,
+          feedbackId,
+          status: current.status === "hidden" ? "submitted" : "hidden",
+          profileId: profile.id
+        });
+        await refreshDashboard();
+        showToast("success", "Feedback visibility updated.");
+      } catch (error) {
+        showAlert(dashboardAlert, "danger", getSetupMessage(error, "Unable to update feedback visibility."));
+      }
+    };
+
+    exportFeedbackBtn?.addEventListener("click", () => {
+      const rows = [
+        ["Teacher", "Course Code", "Course Title", "Semester", "Section", "Overall", "Status", "Comment", "Submitted At"]
+      ];
+      filteredAnalyticsFeedbacks().forEach((feedback) => {
+        rows.push([
+          feedback.teacher_name || "Teacher",
+          feedback.course_code,
+          feedback.course_title,
+          feedback.semester,
+          feedback.section,
+          formatAverage(overallCategoryValue(feedback.responses)),
+          feedback.status,
+          feedback.comment,
+          formatDate(feedback.submitted_at)
+        ]);
+      });
+      downloadTextFile(
+        `sfrs-feedback-export-${new Date().toISOString().slice(0, 10)}.csv`,
+        buildCsvContent(rows),
+        "text/csv;charset=utf-8"
+      );
+    });
+  }
+
+  function populateEntryLinks() {
+    // Entry pages already include nav items; this function intentionally stays small.
+  }
+
+  function bindCourseAutoFill(getCourses) {
+    const codeInput = document.getElementById("assignmentCourseCodeInput");
+    const titleInput = document.getElementById("assignmentCourseTitleInput");
+    if (!codeInput || !titleInput) {
+      return;
+    }
+    const setTitleFromCode = () => {
+      const courseCatalog = typeof getCourses === "function" ? getCourses() : [];
+      const match = courseCatalog.find((item) => normalizeLookup(item.code) === normalizeLookup(codeInput.value));
+      if (match && !titleInput.value.trim()) {
+        titleInput.value = match.title;
+      }
+    };
+    codeInput.addEventListener("change", setTitleFromCode);
+    codeInput.addEventListener("blur", setTitleFromCode);
+  }
+
+  function initPage() {
     initLogout();
-    const page = document.body.dataset.page;
-    switch (page) {
+    populateEntryLinks();
+
+    switch (document.body.dataset.page) {
       case "student-login":
         initStudentLogin();
         break;
       case "teacher-login":
         initTeacherLogin();
+        break;
+      case "admin-login":
+        initAdminLogin();
         break;
       case "password-reset":
         initPasswordReset();
@@ -2218,10 +3088,16 @@
       case "teacher-dashboard":
         initTeacherDashboard();
         break;
+      case "teacher-profile":
+        initTeacherProfile();
+        break;
+      case "admin-dashboard":
+        initAdminDashboard();
+        break;
       default:
         break;
     }
-  };
+  }
 
   document.addEventListener("DOMContentLoaded", initPage);
 })();

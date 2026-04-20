@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teacher Profile - SFRS</title>
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="teacher-profile">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" aria-label="Primary">
+    <div class="container">
+      <a class="navbar-brand" href="https://sfrs.moonx.dev">
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <span class="brand-title">Varendra University</span><br>
+          <span class="brand-subtitle">CSE Department</span>
+        </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="https://sfrs.moonx.dev/vu">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="teacher-profile.html">Teacher Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-teacher-profile-back>Back</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-logout>Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <div id="teacherProfileAlert"></div>
+
+    <section class="teacher-profile-shell">
+      <div class="profile-header-card">
+        <div class="profile-identity">
+          <div class="avatar-pill" data-profile-avatar aria-hidden="true"></div>
+          <div>
+            <h1 class="profile-name mb-1" data-profile-name>Teacher Profile</h1>
+            <div class="text-muted mb-2">
+              <span data-profile-designation>Lecturer</span>
+              <span class="mx-2">&middot;</span>
+              <span data-profile-department>Computer Science and Engineering</span>
+            </div>
+            <div class="profile-chip-row">
+              <span class="chip" data-profile-short-code>Teacher Profile</span>
+              <span class="chip" data-profile-status>Active</span>
+            </div>
+          </div>
+        </div>
+        <div class="profile-scoreboard">
+          <div>
+            <div class="score-label">Average Rating</div>
+            <div class="score-value" data-profile-average>0.00</div>
+          </div>
+          <div>
+            <div class="score-label">Total Reviews</div>
+            <div class="score-value" data-profile-review-count>0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">About</h5>
+              <p class="text-muted" data-profile-bio>No teacher bio added yet.</p>
+              <div class="profile-detail-list">
+                <div><span class="fw-semibold">Email:</span> <span data-profile-email>Not shared</span></div>
+                <div><span class="fw-semibold">Phone:</span> <span data-profile-phone>Not listed</span></div>
+                <div><span class="fw-semibold">Office Room:</span> <span data-profile-office>Not listed</span></div>
+              </div>
+              <hr>
+              <h6 class="fw-semibold mb-3">Assigned Courses</h6>
+              <div class="chip-stack" data-profile-assignment-list></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Rating Breakdown</h5>
+              <div data-profile-rating-breakdown class="rating-breakdown-list"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Recent Comments</h5>
+              <div class="comment-stack" data-profile-comment-list></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-note">SFRS - Teacher profile view. Comments and ratings are anonymized and filtered by role access rules.</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/questions.js"></script>
+  <script src="assets/js/review-data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

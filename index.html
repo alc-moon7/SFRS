@@ -29,6 +29,7 @@
           <li class="nav-item"><a class="nav-link" href="student-signup.html">Student Sign Up</a></li>
           <li class="nav-item"><a class="nav-link" href="teacher-login.html">Teacher Login</a></li>
           <li class="nav-item"><a class="nav-link" href="teacher-signup.html">Teacher Sign Up</a></li>
+          <li class="nav-item"><a class="nav-link" href="admin-login.html">Admin Login</a></li>
         </ul>
       </div>
     </div>
@@ -47,16 +48,17 @@
           </div>
           <div class="mt-3">
             <a class="link-light fw-semibold me-3" href="student-signup.html">Student Sign Up</a>
-            <a class="link-light fw-semibold" href="teacher-signup.html">Teacher Sign Up</a>
+            <a class="link-light fw-semibold me-3" href="teacher-signup.html">Teacher Sign Up</a>
+            <a class="link-light fw-semibold" href="admin-login.html">Admin Login</a>
           </div>
         </div>
         <div class="col-lg-6">
           <div class="hero-card">
             <h5 class="fw-semibold">Fast feedback loop</h5>
             <ul class="mb-0">
-              <li>Anonymous, course-wise feedback submission.</li>
-              <li>Teacher dashboards with trend summaries.</li>
-              <li>AI assistant for quick insight snapshots.</li>
+              <li>Semester and section based teacher eligibility.</li>
+              <li>Teacher dashboards with structured review summaries.</li>
+              <li>Admin controls for assignments, moderation, and analytics.</li>
             </ul>
           </div>
         </div>
@@ -96,11 +98,11 @@
     <section class="pb-5">
       <div class="container">
         <div class="row g-4">
-          <div class="col-md-6">
+          <div class="col-lg-4">
             <div class="card portal-card h-100">
               <div class="card-body">
                 <h4 class="card-title">Student Portal</h4>
-                <p class="text-muted">Submit feedback for each course, semester, and section.</p>
+                <p class="text-muted">Submit feedback only for the teachers assigned to your semester and section.</p>
                 <div class="d-flex flex-wrap gap-2">
                   <a class="btn btn-success" href="student-login.html">Submit Feedback</a>
                   <a class="btn btn-outline-success" href="student-signup.html">Create Account</a>
@@ -108,14 +110,25 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-lg-4">
             <div class="card portal-card h-100">
               <div class="card-body">
                 <h4 class="card-title">Teacher Portal</h4>
-                <p class="text-muted">Review feedback summaries, trends, and AI insights.</p>
+                <p class="text-muted">Review anonymized ratings, recent comments, and AI-generated summaries.</p>
                 <div class="d-flex flex-wrap gap-2">
                   <a class="btn btn-success" href="teacher-login.html">View Dashboard</a>
                   <a class="btn btn-outline-success" href="teacher-signup.html">Register</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card portal-card h-100">
+              <div class="card-body">
+                <h4 class="card-title">Admin Portal</h4>
+                <p class="text-muted">Manage teacher profiles, assignment matrices, feedback windows, and moderation.</p>
+                <div class="d-flex flex-wrap gap-2">
+                  <a class="btn btn-success" href="admin-login.html">Open Dashboard</a>
                 </div>
               </div>
             </div>

@@ -1,0 +1,1921 @@
+{
+  "sourceFile": "all semester.txt",
+  "generatedAt": "2026-04-20T16:16:20.747Z",
+  "assumptions": [
+    "9th semester source rows do not include sections, so they are normalized to section General.",
+    "Unknown course titles are left as placeholders for admin review.",
+    "Teacher name aliases are normalized against the existing teachers directory where possible."
+  ],
+  "reviewCategories": [
+    {
+      "key": "teaching_quality",
+      "label": "Teaching Quality"
+    },
+    {
+      "key": "communication",
+      "label": "Communication"
+    },
+    {
+      "key": "course_organization",
+      "label": "Course Organization"
+    },
+    {
+      "key": "supportiveness",
+      "label": "Helpfulness / Supportiveness"
+    },
+    {
+      "key": "punctuality",
+      "label": "Punctuality / Regularity"
+    },
+    {
+      "key": "overall_satisfaction",
+      "label": "Overall Satisfaction"
+    }
+  ],
+  "semesterOptions": [
+    "1st Semester",
+    "2nd Semester",
+    "3rd Semester",
+    "4th Semester",
+    "5th Semester",
+    "6th Semester",
+    "7th Semester",
+    "8th Semester",
+    "9th Semester"
+  ],
+  "sectionOptions": [
+    "A",
+    "B",
+    "C",
+    "General"
+  ],
+  "extraTeachers": [
+    "Arifa Ferdous",
+    "Barisha Chowdhury",
+    "Bebak More",
+    "Dr. Sinthia Shabnam Mou",
+    "ECO New Teacher",
+    "Fahmina Zahan",
+    "Foez Ahmed",
+    "Md. Babul Islam",
+    "Md. Moniruzzaman Kiron",
+    "Mehedi Hasan Shakil",
+    "Most. Afshara Tasnim Ritu",
+    "Sajeeb Kumar Ray",
+    "Shakil Hossan",
+    "Syeda Tamanna Alam Monisha",
+    "Tahrima Sayem Sowa"
+  ],
+  "teacherAliases": {
+    "Md. Nour Nabi": "Md. Nour Noby",
+    "Ahmed Al Azmain": "Ahmed-Al-Azmain",
+    "Ahmed -Al- Azmain": "Ahmed-Al-Azmain",
+    "Akib Iqbal": "Akib Ikbal",
+    "Akib ikbal": "Akib Ikbal",
+    "Dr. Md. Abul Bark PK": "Dr.Md. Abu Bakar PK.",
+    "Dr. Md. Johurul Islam": "Dr.Md. Johirul Islam",
+    "Md. Johurul Islam": "Dr.Md. Johirul Islam",
+    "Ahammad Hossain": "Dr. Ahammad Hossain",
+    "Md. Faruk Hossain": "Md. Faruk Hossain, Ph.D.",
+    "Prof. A.H.M Rahmatullah Imon": "Prof. A.H.M. Rahmatullah Imon, Ph.D.",
+    "Prof. A.H.M Rahmatullah Imon PhD": "Prof. A.H.M. Rahmatullah Imon, Ph.D.",
+    "Prof. Dr. Boshir Ahmed": "Prof.Dr. Boshir Ahmed",
+    "Protik Chakraborty": "Protik Chakroborty",
+    "Rokeya Tasnim": "Rokaiya Tasnim",
+    "Sharovar Paul": "Shorav Paul",
+    "Toufikul Islam": "Md. Toufikul Islam",
+    "Toufiqul Islam": "Md. Toufikul Islam",
+    "Zannatulu Mifta": "Zannatul Mifta",
+    "Zuaira Raisa Bintay Makin": "Zuairia Raisa Bintay Makin",
+    "Mohsiul Mumin Alik": "Mohsiul Mumit Alik",
+    "Ruhul Amin": "Md. Ruhul Amin",
+    "Shamim Ahmed": "Shamim Ahmad",
+    "Md. Arshad Wasif": "Arshad Wasif",
+    "Md. Shahid Ahmed Shakil": "Md. Shahid Ahammed Shakil",
+    "MST. Nafia Islam Shishir": "Mst. Nafia Islam Shishir",
+    "MST. Zannatul Fardous": "Mst. Jannatul Ferdous",
+    "Barisha Chowdhary": "Barisha Chowdhury"
+  },
+  "assignments": [
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "CHE 1161",
+      "courseTitle": "Chemistry",
+      "teacherName": "Shorav Paul"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "CSE 1100",
+      "courseTitle": "Structured Programming Language",
+      "teacherName": "Md. Nour Noby"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "EEE 1131",
+      "courseTitle": "Basic Electrical Circuits",
+      "teacherName": "Dr. Jaker Hossain"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "EEE 1132",
+      "courseTitle": "Basic Electrical Circuits Lab",
+      "teacherName": "Mst. Nafia Islam Shishir"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "EEE 1132",
+      "courseTitle": "Basic Electrical Circuits Lab",
+      "teacherName": "Zannatul Mifta"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "ENG 0002",
+      "courseTitle": "English Fundamentals",
+      "teacherName": "Fahmina Zahan"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "MAT 1141",
+      "courseTitle": "Differential and Integral Calculus",
+      "teacherName": "Dr.Md. Abu Bakar PK."
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "MAT 1141",
+      "courseTitle": "Differential and Integral Calculus",
+      "teacherName": "Md. Mizanur Rahman"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "PHY 1151",
+      "courseTitle": "Basic Physics",
+      "teacherName": "Dr.Md. Johirul Islam"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "A",
+      "courseCode": "PHY 1151",
+      "courseTitle": "Basic Physics",
+      "teacherName": "Md. Ruhul Amin"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "CHE 1161",
+      "courseTitle": "Chemistry",
+      "teacherName": "Shorav Paul"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "EEE 1131",
+      "courseTitle": "Basic Electrical Circuits",
+      "teacherName": "Dr.Md. Abu Bakar PK."
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "EEE 1131",
+      "courseTitle": "Basic Electrical Circuits",
+      "teacherName": "Md. Babul Islam"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "EEE 1132",
+      "courseTitle": "Basic Electrical Circuits Lab",
+      "teacherName": "Zannatul Mifta"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "ENG 0002",
+      "courseTitle": "English Fundamentals",
+      "teacherName": "Fahmina Zahan"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "MAT 1141",
+      "courseTitle": "Differential and Integral Calculus",
+      "teacherName": "Dr.Md. Abu Bakar PK."
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "MAT 1141",
+      "courseTitle": "Differential and Integral Calculus",
+      "teacherName": "Md. Mizanur Rahman"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "PHY 1151",
+      "courseTitle": "Basic Physics",
+      "teacherName": "Dr.Md. Johirul Islam"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "B",
+      "courseCode": "PHY 1151",
+      "courseTitle": "Basic Physics",
+      "teacherName": "Md. Faruk Hossain, Ph.D."
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "CHE 1161",
+      "courseTitle": "Chemistry",
+      "teacherName": "Shorav Paul"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "CSE 1100",
+      "courseTitle": "Structured Programming Language",
+      "teacherName": "Md. Nour Noby"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "EEE 1131",
+      "courseTitle": "Basic Electrical Circuits",
+      "teacherName": "Dr.Md. Abu Bakar PK."
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "EEE 1131",
+      "courseTitle": "Basic Electrical Circuits",
+      "teacherName": "Mst. Nafia Islam Shishir"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "ENG 0002",
+      "courseTitle": "English Fundamentals",
+      "teacherName": "Fahmina Zahan"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "MAT 1141",
+      "courseTitle": "Differential and Integral Calculus",
+      "teacherName": "Md. Mizanur Rahman"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "PHY 1151",
+      "courseTitle": "Basic Physics",
+      "teacherName": "Dr.Md. Johirul Islam"
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "PHY 1151",
+      "courseTitle": "Basic Physics",
+      "teacherName": "Md. Faruk Hossain, Ph.D."
+    },
+    {
+      "semester": "1st Semester",
+      "section": "C",
+      "courseCode": "PHY 1152",
+      "courseTitle": "Basic Physics Lab",
+      "teacherName": "Md. Ruhul Amin"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "A",
+      "courseCode": "CSE 1201",
+      "courseTitle": "Object Oriented Programming",
+      "teacherName": "Md. Muktar Hossain"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "A",
+      "courseCode": "CSE 1202",
+      "courseTitle": "Object Oriented Programming Lab",
+      "teacherName": "A.S.M. Delwar Hossain"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "A",
+      "courseCode": "CSE 1202",
+      "courseTitle": "Object Oriented Programming Lab",
+      "teacherName": "Md. Muktar Hossain"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "A",
+      "courseCode": "CSE 1203",
+      "courseTitle": "Discrete Mathematics",
+      "teacherName": "Sanjoy Kumar Chakravarty"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "A",
+      "courseCode": "EEE 1232",
+      "courseTitle": "Electronic Devices and Circuits Lab",
+      "teacherName": "Ipshita Tasnim Raha"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "A",
+      "courseCode": "EEE 1232",
+      "courseTitle": "Electronic Devices and Circuits Lab",
+      "teacherName": "Mehedi Hasan Shakil"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "A",
+      "courseCode": "MAT 1241",
+      "courseTitle": "Coordinate Geometry and Vector Analysis",
+      "teacherName": "Md. Mizanur Rahman"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "BAN 0001",
+      "courseTitle": "History of the Emergence of Bangladesh",
+      "teacherName": "Most. Afshara Tasnim Ritu"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "CSE 1201",
+      "courseTitle": "Object Oriented Programming",
+      "teacherName": "Md. Muktar Hossain"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "CSE 1202",
+      "courseTitle": "Object Oriented Programming Lab",
+      "teacherName": "Md. Muktar Hossain"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "CSE 1202",
+      "courseTitle": "Object Oriented Programming Lab",
+      "teacherName": "Tanver Ahmed"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "CSE 1203",
+      "courseTitle": "Discrete Mathematics",
+      "teacherName": "Mehedi Hasan Shakil"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "EEE 1231",
+      "courseTitle": "Electronic Devices and Circuits",
+      "teacherName": "Dr. Sinthia Shabnam Mou"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "EEE 1232",
+      "courseTitle": "Electronic Devices and Circuits Lab",
+      "teacherName": "Md. Adnan Sami"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "EEE 1232",
+      "courseTitle": "Electronic Devices and Circuits Lab",
+      "teacherName": "Md. Alamin Hossain Pappu"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "B",
+      "courseCode": "MAT 1241",
+      "courseTitle": "Coordinate Geometry and Vector Analysis",
+      "teacherName": "Md. Mizanur Rahman"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "C",
+      "courseCode": "CSE 1201",
+      "courseTitle": "Object Oriented Programming",
+      "teacherName": "Md. Muktar Hossain"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "C",
+      "courseCode": "CSE 1202",
+      "courseTitle": "Object Oriented Programming Lab",
+      "teacherName": "Md. Muktar Hossain"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "C",
+      "courseCode": "CSE 1202",
+      "courseTitle": "Object Oriented Programming Lab",
+      "teacherName": "Mohammad Kasedullah"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "C",
+      "courseCode": "CSE 1203",
+      "courseTitle": "Discrete Mathematics",
+      "teacherName": "Umme Rumman"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "C",
+      "courseCode": "EEE 1231",
+      "courseTitle": "Electronic Devices and Circuits",
+      "teacherName": "Ipshita Tasnim Raha"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "C",
+      "courseCode": "EEE 1232",
+      "courseTitle": "Electronic Devices and Circuits Lab",
+      "teacherName": "Ipshita Tasnim Raha"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "C",
+      "courseCode": "EEE 1232",
+      "courseTitle": "Electronic Devices and Circuits Lab",
+      "teacherName": "Md. Alamin Hossain Pappu"
+    },
+    {
+      "semester": "2nd Semester",
+      "section": "C",
+      "courseCode": "MAT 1241",
+      "courseTitle": "Coordinate Geometry and Vector Analysis",
+      "teacherName": "Md. Mizanur Rahman"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2101",
+      "courseTitle": "Object Oriented Design and Design Patterns",
+      "teacherName": "A.S.M. Delwar Hossain"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2102",
+      "courseTitle": "Object Oriented Design and Design Patterns Lab",
+      "teacherName": "A.S.M. Delwar Hossain"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2102",
+      "courseTitle": "Object Oriented Design and Design Patterns Lab",
+      "teacherName": "Md. Nour Noby"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2103",
+      "courseTitle": "Data Structures",
+      "teacherName": "Dr. Md. Golam Rashed"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2104",
+      "courseTitle": "Data Structures Lab",
+      "teacherName": "Mohammad Kasedullah"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2104",
+      "courseTitle": "Data Structures Lab",
+      "teacherName": "Samira Tareque"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2105",
+      "courseTitle": "Digital System Design",
+      "teacherName": "D.M. Asadujjaman"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2106",
+      "courseTitle": "Digital System Design Lab",
+      "teacherName": "D.M. Asadujjaman"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "CSE 2106",
+      "courseTitle": "Digital System Design Lab",
+      "teacherName": "Mst. Mazeda Noor Tasnim"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "A",
+      "courseCode": "MAT 2141",
+      "courseTitle": "Differential Equations",
+      "teacherName": "Anupoma Barman Shetu"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2101",
+      "courseTitle": "Object Oriented Design and Design Patterns",
+      "teacherName": "A.S.M. Delwar Hossain"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2102",
+      "courseTitle": "Object Oriented Design and Design Patterns Lab",
+      "teacherName": "A.S.M. Delwar Hossain"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2102",
+      "courseTitle": "Object Oriented Design and Design Patterns Lab",
+      "teacherName": "Mohammad Faisal Al-Naser"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2103",
+      "courseTitle": "Data Structures",
+      "teacherName": "Samira Tareque"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2104",
+      "courseTitle": "Data Structures Lab",
+      "teacherName": "D.M. Asadujjaman"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2104",
+      "courseTitle": "Data Structures Lab",
+      "teacherName": "Samira Tareque"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2105",
+      "courseTitle": "Digital System Design",
+      "teacherName": "D.M. Asadujjaman"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2106",
+      "courseTitle": "Digital System Design Lab",
+      "teacherName": "D.M. Asadujjaman"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "CSE 2106",
+      "courseTitle": "Digital System Design Lab",
+      "teacherName": "Mst. Mazeda Noor Tasnim"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "B",
+      "courseCode": "MAT 2141",
+      "courseTitle": "Differential Equations",
+      "teacherName": "Anupoma Barman Shetu"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2101",
+      "courseTitle": "Object Oriented Design and Design Patterns",
+      "teacherName": "A.S.M. Delwar Hossain"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2102",
+      "courseTitle": "Object Oriented Design and Design Patterns Lab",
+      "teacherName": "A.S.M. Delwar Hossain"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2102",
+      "courseTitle": "Object Oriented Design and Design Patterns Lab",
+      "teacherName": "Mohammad Faisal Al-Naser"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2103",
+      "courseTitle": "Data Structures",
+      "teacherName": "Samira Tareque"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2104",
+      "courseTitle": "Data Structures Lab",
+      "teacherName": "Israt Jahan Rinky"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2104",
+      "courseTitle": "Data Structures Lab",
+      "teacherName": "Samira Tareque"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2105",
+      "courseTitle": "Digital System Design",
+      "teacherName": "D.M. Asadujjaman"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2106",
+      "courseTitle": "Digital System Design Lab",
+      "teacherName": "D.M. Asadujjaman"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "CSE 2106",
+      "courseTitle": "Digital System Design Lab",
+      "teacherName": "Mst. Mazeda Noor Tasnim"
+    },
+    {
+      "semester": "3rd Semester",
+      "section": "C",
+      "courseCode": "MAT 2141",
+      "courseTitle": "Differential Equations",
+      "teacherName": "Anupoma Barman Shetu"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2201",
+      "courseTitle": "Software Engineering and System Analysis",
+      "teacherName": "Mohammad Kasedullah"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2203",
+      "courseTitle": "Computer Algorithms",
+      "teacherName": "Sumaiya Tasnim"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2204",
+      "courseTitle": "Computer Algorithms Lab",
+      "teacherName": "Samira Tareque"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2204",
+      "courseTitle": "Computer Algorithms Lab",
+      "teacherName": "Sumaiya Tasnim"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2205",
+      "courseTitle": "Numerical Methods",
+      "teacherName": "Adrita Alam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2206",
+      "courseTitle": "Numerical Methods Lab",
+      "teacherName": "Adrita Alam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2206",
+      "courseTitle": "Numerical Methods Lab",
+      "teacherName": "Md. Fayzul Islam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2207",
+      "courseTitle": "Computer Networks",
+      "teacherName": "Prof.Dr. Boshir Ahmed"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2208",
+      "courseTitle": "Computer Networks Lab",
+      "teacherName": "Arshad Wasif"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "CSE 2208",
+      "courseTitle": "Computer Networks Lab",
+      "teacherName": "Umme Rumman"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "A",
+      "courseCode": "MAT 2241",
+      "courseTitle": "Linear Algebra and Complex Variables",
+      "teacherName": "Dr. Ahammad Hossain"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2201",
+      "courseTitle": "Software Engineering and System Analysis",
+      "teacherName": "Mohammad Kasedullah"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2203",
+      "courseTitle": "Computer Algorithms",
+      "teacherName": "Dr. Md. Iqbal Aziz Khan"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2204",
+      "courseTitle": "Computer Algorithms Lab",
+      "teacherName": "Afroza Islam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2204",
+      "courseTitle": "Computer Algorithms Lab",
+      "teacherName": "Nafia Islam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2205",
+      "courseTitle": "Numerical Methods",
+      "teacherName": "Adrita Alam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2206",
+      "courseTitle": "Numerical Methods Lab",
+      "teacherName": "Adrita Alam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2206",
+      "courseTitle": "Numerical Methods Lab",
+      "teacherName": "Shamim Reza"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2207",
+      "courseTitle": "Computer Networks",
+      "teacherName": "Akib Ikbal"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2208",
+      "courseTitle": "Computer Networks Lab",
+      "teacherName": "Akib Ikbal"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "CSE 2208",
+      "courseTitle": "Computer Networks Lab",
+      "teacherName": "Umme Rumman"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "B",
+      "courseCode": "MAT 2241",
+      "courseTitle": "Linear Algebra and Complex Variables",
+      "teacherName": "Dr. Ahammad Hossain"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2201",
+      "courseTitle": "Software Engineering and System Analysis",
+      "teacherName": "Mohammad Faisal Al-Naser"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2203",
+      "courseTitle": "Computer Algorithms",
+      "teacherName": "Sumaiya Tasnim"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2204",
+      "courseTitle": "Computer Algorithms Lab",
+      "teacherName": "Ipshita Tasnim Raha"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2204",
+      "courseTitle": "Computer Algorithms Lab",
+      "teacherName": "Sumaiya Tasnim"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2205",
+      "courseTitle": "Numerical Methods",
+      "teacherName": "Adrita Alam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2206",
+      "courseTitle": "Numerical Methods Lab",
+      "teacherName": "Adrita Alam"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2206",
+      "courseTitle": "Numerical Methods Lab",
+      "teacherName": "Shamim Reza"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2207",
+      "courseTitle": "Computer Networks",
+      "teacherName": "Akib Ikbal"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2208",
+      "courseTitle": "Computer Networks Lab",
+      "teacherName": "Akib Ikbal"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "CSE 2208",
+      "courseTitle": "Computer Networks Lab",
+      "teacherName": "Umme Rumman"
+    },
+    {
+      "semester": "4th Semester",
+      "section": "C",
+      "courseCode": "MAT 2241",
+      "courseTitle": "Linear Algebra and Complex Variables",
+      "teacherName": "Arun Kumar Sikder"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3101",
+      "courseTitle": "Computer Graphics",
+      "teacherName": "Ayesha Akter Lima"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3102",
+      "courseTitle": "Computer Graphics Lab",
+      "teacherName": "Ayesha Akter Lima"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3102",
+      "courseTitle": "Computer Graphics Lab",
+      "teacherName": "Mst. Jannatul Ferdous"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3103",
+      "courseTitle": "Database Management System",
+      "teacherName": "Shamim Ahmad"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3104",
+      "courseTitle": "Database Management System Lab",
+      "teacherName": "Afifa Tasneem Quanita"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3104",
+      "courseTitle": "Database Management System Lab",
+      "teacherName": "Sumaia Rahman"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3106",
+      "courseTitle": "Computer Architecture Lab",
+      "teacherName": "Md. Ruhul Amin"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3106",
+      "courseTitle": "Computer Architecture Lab",
+      "teacherName": "Protik Chakroborty"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "CSE 3107",
+      "courseTitle": "Communication Engineering",
+      "teacherName": "Zannatul Mifta"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "A",
+      "courseCode": "MAT 3141",
+      "courseTitle": "Applied Statistics and Probability",
+      "teacherName": "Prof. A.H.M. Rahmatullah Imon, Ph.D."
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3101",
+      "courseTitle": "Computer Graphics",
+      "teacherName": "Ayesha Akter Lima"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3102",
+      "courseTitle": "Computer Graphics Lab",
+      "teacherName": "Ayesha Akter Lima"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3102",
+      "courseTitle": "Computer Graphics Lab",
+      "teacherName": "Mst. Jannatul Ferdous"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3103",
+      "courseTitle": "Database Management System",
+      "teacherName": "Shamim Ahmad"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3104",
+      "courseTitle": "Database Management System Lab",
+      "teacherName": "Afifa Tasneem Quanita"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3104",
+      "courseTitle": "Database Management System Lab",
+      "teacherName": "Sumaia Rahman"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3105",
+      "courseTitle": "Computer Architecture",
+      "teacherName": "Protik Chakroborty"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3106",
+      "courseTitle": "Computer Architecture Lab",
+      "teacherName": "Md. Ruhul Amin"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3106",
+      "courseTitle": "Computer Architecture Lab",
+      "teacherName": "Protik Chakroborty"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "CSE 3107",
+      "courseTitle": "Communication Engineering",
+      "teacherName": "Foez Ahmed"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "B",
+      "courseCode": "MAT 3141",
+      "courseTitle": "Applied Statistics and Probability",
+      "teacherName": "Dr. Ahammad Hossain"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3012",
+      "courseTitle": "Computer Graphics Lab",
+      "teacherName": "Ayesha Akter Lima"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3012",
+      "courseTitle": "Computer Graphics Lab",
+      "teacherName": "Zuairia Raisa Bintay Makin"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3101",
+      "courseTitle": "Computer Graphics",
+      "teacherName": "Ayesha Akter Lima"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3103",
+      "courseTitle": "Database Management System",
+      "teacherName": "Afifa Tasneem Quanita"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3104",
+      "courseTitle": "Database Management System Lab",
+      "teacherName": "Afifa Tasneem Quanita"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3104",
+      "courseTitle": "Database Management System Lab",
+      "teacherName": "Sumaia Rahman"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3105",
+      "courseTitle": "Computer Architecture",
+      "teacherName": "Protik Chakroborty"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3106",
+      "courseTitle": "Computer Architecture Lab",
+      "teacherName": "Mohsiul Mumit Alik"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3106",
+      "courseTitle": "Computer Architecture Lab",
+      "teacherName": "Protik Chakroborty"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "CSE 3107",
+      "courseTitle": "Communication Engineering",
+      "teacherName": "Arifa Ferdous"
+    },
+    {
+      "semester": "5th Semester",
+      "section": "C",
+      "courseCode": "MAT 3141",
+      "courseTitle": "Applied Statistics and Probability",
+      "teacherName": "Dr. Ahammad Hossain"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3201",
+      "courseTitle": "Theory of Computation and Compiler Design",
+      "teacherName": "Sumaia Rahman"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3203",
+      "courseTitle": "Operating System and System Programming",
+      "teacherName": "Rokaiya Tasnim"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3204",
+      "courseTitle": "Operating System and System Programming Lab",
+      "teacherName": "Md. Rakibul Islam"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3204",
+      "courseTitle": "Operating System and System Programming Lab",
+      "teacherName": "Rokaiya Tasnim"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3205",
+      "courseTitle": "Microprocessor and Assembly Language",
+      "teacherName": "Tahrima Sayem Sowa"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3206",
+      "courseTitle": "Microprocessor and Assembly Language Lab",
+      "teacherName": "Md. Alamin Hossain Pappu"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3206",
+      "courseTitle": "Microprocessor and Assembly Language Lab",
+      "teacherName": "Tahrima Sayem Sowa"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3207",
+      "courseTitle": "Digital Signal Processing",
+      "teacherName": "Shamim Reza"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3208",
+      "courseTitle": "Digital Signal Processing Lab",
+      "teacherName": "Mst. Jannatul Ferdous"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3208",
+      "courseTitle": "Digital Signal Processing Lab",
+      "teacherName": "Shamim Reza"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3209",
+      "courseTitle": "E-commerce and Web Programming",
+      "teacherName": "Mehedi Hasan Shakil"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3210",
+      "courseTitle": "E-commerce and Web Programming Project Lab",
+      "teacherName": "Akib Ikbal"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "CSE 3210",
+      "courseTitle": "E-commerce and Web Programming Project Lab",
+      "teacherName": "Mehedi Hasan Shakil"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "A",
+      "courseCode": "ECO 3271",
+      "courseTitle": "Engineering Economics",
+      "teacherName": "ECO New Teacher"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3201",
+      "courseTitle": "Theory of Computation and Compiler Design",
+      "teacherName": "Israt Jahan Rinky"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3203",
+      "courseTitle": "Operating System and System Programming",
+      "teacherName": "Rokaiya Tasnim"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3204",
+      "courseTitle": "Operating System and System Programming Lab",
+      "teacherName": "Md. Rakibul Islam"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3204",
+      "courseTitle": "Operating System and System Programming Lab",
+      "teacherName": "Rokaiya Tasnim"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3205",
+      "courseTitle": "Microprocessor and Assembly Language",
+      "teacherName": "Tahrima Sayem Sowa"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3206",
+      "courseTitle": "Microprocessor and Assembly Language Lab",
+      "teacherName": "Md. Alamin Hossain Pappu"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3206",
+      "courseTitle": "Microprocessor and Assembly Language Lab",
+      "teacherName": "Tahrima Sayem Sowa"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3207",
+      "courseTitle": "Digital Signal Processing",
+      "teacherName": "Mst. Mazeda Noor Tasnim"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3208",
+      "courseTitle": "Digital Signal Processing Lab",
+      "teacherName": "Mst. Mazeda Noor Tasnim"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3208",
+      "courseTitle": "Digital Signal Processing Lab",
+      "teacherName": "Zuairia Raisa Bintay Makin"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3209",
+      "courseTitle": "E-commerce and Web Programming",
+      "teacherName": "Mehedi Hasan Shakil"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3210",
+      "courseTitle": "E-commerce and Web Programming Project Lab",
+      "teacherName": "Akib Ikbal"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "CSE 3210",
+      "courseTitle": "E-commerce and Web Programming Project Lab",
+      "teacherName": "Mehedi Hasan Shakil"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "B",
+      "courseCode": "ECO 3271",
+      "courseTitle": "Engineering Economics",
+      "teacherName": "ECO New Teacher"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3201",
+      "courseTitle": "Theory of Computation and Compiler Design",
+      "teacherName": "Israt Jahan Rinky"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3203",
+      "courseTitle": "Operating System and System Programming",
+      "teacherName": "Rokaiya Tasnim"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3204",
+      "courseTitle": "Operating System and System Programming Lab",
+      "teacherName": "Md. Rakibul Islam"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3204",
+      "courseTitle": "Operating System and System Programming Lab",
+      "teacherName": "Rokaiya Tasnim"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3205",
+      "courseTitle": "Microprocessor and Assembly Language",
+      "teacherName": "Tahrima Sayem Sowa"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3206",
+      "courseTitle": "Microprocessor and Assembly Language Lab",
+      "teacherName": "Md. Mahfujur Rahman"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3206",
+      "courseTitle": "Microprocessor and Assembly Language Lab",
+      "teacherName": "Tahrima Sayem Sowa"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3207",
+      "courseTitle": "Digital Signal Processing",
+      "teacherName": "Shamim Reza"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3209",
+      "courseTitle": "E-commerce and Web Programming",
+      "teacherName": "Barisha Chowdhury"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3210",
+      "courseTitle": "E-commerce and Web Programming Project Lab",
+      "teacherName": "Barisha Chowdhury"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "CSE 3210",
+      "courseTitle": "E-commerce and Web Programming Project Lab",
+      "teacherName": "Israt Jahan Rinky"
+    },
+    {
+      "semester": "6th Semester",
+      "section": "C",
+      "courseCode": "ECO 3271",
+      "courseTitle": "Engineering Economics",
+      "teacherName": "ECO New Teacher"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "ACC 4171",
+      "courseTitle": "Industrial Management and Accountancy",
+      "teacherName": "Bebak More"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4101",
+      "courseTitle": "Artificial Intelligence",
+      "teacherName": "Md. Mahfujur Rahman"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4102",
+      "courseTitle": "Artificial Intelligence Lab",
+      "teacherName": "Md. Mahfujur Rahman"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4102",
+      "courseTitle": "Artificial Intelligence Lab",
+      "teacherName": "Mst. Nafia Islam Shishir"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4103",
+      "courseTitle": "Digital Image Processing",
+      "teacherName": "Md. Taufiq Khan"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4104",
+      "courseTitle": "Digital Image Processing Lab",
+      "teacherName": "Md. Taufiq Khan"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4104",
+      "courseTitle": "Digital Image Processing Lab",
+      "teacherName": "Sajeeb Kumar Ray"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4105",
+      "courseTitle": "Engineering Ethics and Environmental Protection",
+      "teacherName": "Shakil Hossan"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4107",
+      "courseTitle": "Microcontroller, Computer Peripherals and Interfacing",
+      "teacherName": "Dr. Md. Ariful Islam Nahid"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4108",
+      "courseTitle": "Microcontroller, Computer Peripherals and Interfacing Lab",
+      "teacherName": "Asim Moin Saad"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4108",
+      "courseTitle": "Microcontroller, Computer Peripherals and Interfacing Lab",
+      "teacherName": "Zannatul Mifta"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4122",
+      "courseTitle": "Technical Report Writing",
+      "teacherName": "Israt Jahan Rinky"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "A",
+      "courseCode": "CSE 4122",
+      "courseTitle": "Technical Report Writing",
+      "teacherName": "Rokaiya Tasnim"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "ACC 4171",
+      "courseTitle": "Industrial Management and Accountancy",
+      "teacherName": "Md. Moniruzzaman Kiron"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4101",
+      "courseTitle": "Artificial Intelligence",
+      "teacherName": "Md. Mahfujur Rahman"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4102",
+      "courseTitle": "Artificial Intelligence Lab",
+      "teacherName": "Md. Mahfujur Rahman"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4102",
+      "courseTitle": "Artificial Intelligence Lab",
+      "teacherName": "Mst. Nafia Islam Shishir"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4103",
+      "courseTitle": "Digital Image Processing",
+      "teacherName": "Md. Taufiq Khan"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4104",
+      "courseTitle": "Digital Image Processing Lab",
+      "teacherName": "Md. Taufiq Khan"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4104",
+      "courseTitle": "Digital Image Processing Lab",
+      "teacherName": "Sajeeb Kumar Ray"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4105",
+      "courseTitle": "Engineering Ethics and Environmental Protection",
+      "teacherName": "Shakil Hossan"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4107",
+      "courseTitle": "Microcontroller, Computer Peripherals and Interfacing",
+      "teacherName": "Dr. Md. Johirul Islam"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4108",
+      "courseTitle": "Microcontroller, Computer Peripherals and Interfacing Lab",
+      "teacherName": "Mohsiul Mumit Alik"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4108",
+      "courseTitle": "Microcontroller, Computer Peripherals and Interfacing Lab",
+      "teacherName": "Zannatul Mifta"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4122",
+      "courseTitle": "Technical Report Writing",
+      "teacherName": "Rokaiya Tasnim"
+    },
+    {
+      "semester": "7th Semester",
+      "section": "B",
+      "courseCode": "CSE 4122",
+      "courseTitle": "Technical Report Writing",
+      "teacherName": "Shakil Hossan"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 423",
+      "courseTitle": "Advanced CSE Course 423",
+      "teacherName": "Sajeeb Kumar Ray"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 424",
+      "courseTitle": "Advanced CSE Course 424",
+      "teacherName": "Md. Jamil Chaudhary"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 424",
+      "courseTitle": "Advanced CSE Course 424",
+      "teacherName": "Sajeeb Kumar Ray"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 431",
+      "courseTitle": "Advanced CSE Course 431",
+      "teacherName": "Sushmit Jahan Rose"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 432",
+      "courseTitle": "Advanced CSE Course 432",
+      "teacherName": "Barisha Chowdhury"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 432",
+      "courseTitle": "Advanced CSE Course 432",
+      "teacherName": "Sushmit Jahan Rose"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 433",
+      "courseTitle": "Advanced CSE Course 433",
+      "teacherName": "Md. Shahid Ahammed Shakil"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Md. Shahid Ahammed Shakil"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Md. Taufiq Khan"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 435",
+      "courseTitle": "Advanced CSE Course 435",
+      "teacherName": "Md. Toufikul Islam"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 436",
+      "courseTitle": "Advanced CSE Course 436",
+      "teacherName": "Md. Toufikul Islam"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "A",
+      "courseCode": "CSE 436",
+      "courseTitle": "Advanced CSE Course 436",
+      "teacherName": "Sumaya Hannan Shova"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 423",
+      "courseTitle": "Advanced CSE Course 423",
+      "teacherName": "Md. Fatin Ilham"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 424",
+      "courseTitle": "Advanced CSE Course 424",
+      "teacherName": "Ahmed-Al-Azmain"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 424",
+      "courseTitle": "Advanced CSE Course 424",
+      "teacherName": "Md. Fatin Ilham"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 431",
+      "courseTitle": "Advanced CSE Course 431",
+      "teacherName": "Sushmit Jahan Rose"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 432",
+      "courseTitle": "Advanced CSE Course 432",
+      "teacherName": "Sumaya Hannan Shova"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 432",
+      "courseTitle": "Advanced CSE Course 432",
+      "teacherName": "Sushmit Jahan Rose"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 433",
+      "courseTitle": "Advanced CSE Course 433",
+      "teacherName": "Md. Shahid Ahammed Shakil"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Md. Shahid Ahammed Shakil"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Mohammad Faisal Al-Naser"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 435",
+      "courseTitle": "Advanced CSE Course 435",
+      "teacherName": "Md. Khalid Sakib"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 436",
+      "courseTitle": "Advanced CSE Course 436",
+      "teacherName": "Md. Fatin Ilham"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "B",
+      "courseCode": "CSE 436",
+      "courseTitle": "Advanced CSE Course 436",
+      "teacherName": "Md. Khalid Sakib"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 423",
+      "courseTitle": "Advanced CSE Course 423",
+      "teacherName": "Md. Fatin Ilham"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 424",
+      "courseTitle": "Advanced CSE Course 424",
+      "teacherName": "Ahmed-Al-Azmain"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 424",
+      "courseTitle": "Advanced CSE Course 424",
+      "teacherName": "Md. Fatin Ilham"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 431",
+      "courseTitle": "Advanced CSE Course 431",
+      "teacherName": "Sushmit Jahan Rose"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 433",
+      "courseTitle": "Advanced CSE Course 433",
+      "teacherName": "Md. Shahid Ahammed Shakil"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Ahmed-Al-Azmain"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Md. Shahid Ahammed Shakil"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 435",
+      "courseTitle": "Advanced CSE Course 435",
+      "teacherName": "Md. Khalid Sakib"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 436",
+      "courseTitle": "Advanced CSE Course 436",
+      "teacherName": "Md. Khalid Sakib"
+    },
+    {
+      "semester": "8th Semester",
+      "section": "C",
+      "courseCode": "CSE 436",
+      "courseTitle": "Advanced CSE Course 436",
+      "teacherName": "Sumaya Hannan Shova"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 423",
+      "courseTitle": "Advanced CSE Course 423",
+      "teacherName": "Ahmed-Al-Azmain"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 424",
+      "courseTitle": "Advanced CSE Course 424",
+      "teacherName": "Ahmed-Al-Azmain"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 424",
+      "courseTitle": "Advanced CSE Course 424",
+      "teacherName": "Md. Fatin Ilham"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 431",
+      "courseTitle": "Advanced CSE Course 431",
+      "teacherName": "Shakil Hossan"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 432",
+      "courseTitle": "Advanced CSE Course 432",
+      "teacherName": "Arshad Wasif"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 432",
+      "courseTitle": "Advanced CSE Course 432",
+      "teacherName": "Shakil Hossan"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 433",
+      "courseTitle": "Advanced CSE Course 433",
+      "teacherName": "Zuairia Raisa Bintay Makin"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Md. Shahid Ahammed Shakil"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Syeda Tamanna Alam Monisha"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 434",
+      "courseTitle": "Advanced CSE Course 434",
+      "teacherName": "Zuairia Raisa Bintay Makin"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 435",
+      "courseTitle": "Advanced CSE Course 435",
+      "teacherName": "Md. Toufikul Islam"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 436",
+      "courseTitle": "Advanced CSE Course 436",
+      "teacherName": "Md. Khalid Sakib"
+    },
+    {
+      "semester": "9th Semester",
+      "section": "General",
+      "courseCode": "CSE 436",
+      "courseTitle": "Advanced CSE Course 436",
+      "teacherName": "Md. Toufikul Islam"
+    }
+  ]
+}

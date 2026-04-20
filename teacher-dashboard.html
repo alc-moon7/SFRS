@@ -24,7 +24,8 @@
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="https://sfrs.moonx.dev/vu">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="teacher-dashboard.html">Teacher Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link active" href="teacher-dashboard.html">Teacher Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="teacher-profile.html">Profile View</a></li>
           <li class="nav-item"><a class="nav-link" href="#" data-logout>Logout</a></li>
         </ul>
       </div>
@@ -32,113 +33,153 @@
   </nav>
 
   <main class="container py-4">
-    <div class="row g-4">
-      <div class="col-lg-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Teacher Profile</h5>
-            <p class="mb-2"><span class="fw-semibold">Name:</span> <span data-user-name></span></p>
-            <p class="mb-2"><span class="fw-semibold">Designation:</span> <span data-user-role></span></p>
-            <p class="mb-0"><span class="fw-semibold">Email:</span> <span data-user-email></span></p>
-          </div>
+    <section class="page-shell mb-4">
+      <div class="dashboard-heading">
+        <div>
+          <span class="badge-role mb-2 d-inline-block">Teacher Workspace</span>
+          <h1 class="page-title mb-1">My Feedback Overview</h1>
+          <p class="section-lead mb-0">Review anonymized course feedback, category scores, and recent student comments.</p>
         </div>
-        <div class="info-card mt-4">
-          <h6 class="fw-semibold">Review Notes</h6>
-          <ul class="mb-0">
-            <li>Student identities remain anonymous.</li>
-            <li>Results are based on the official SFRS question set.</li>
-            <li>Use the view button to see detailed responses.</li>
-          </ul>
+        <div class="dashboard-badges">
+          <a class="btn btn-outline-success" id="teacherProfileLink" href="teacher-profile.html">Open Profile</a>
         </div>
       </div>
+    </section>
 
-      <div class="col-lg-8">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="stat-card">
-              <div class="text-muted">Total Feedback Received</div>
-              <div class="display-6 fw-bold" id="totalReviews">0</div>
+    <div id="teacherDashboardAlert"></div>
+
+    <div class="teacher-profile-shell">
+      <section class="profile-header-card">
+        <div class="profile-identity">
+          <div class="avatar-pill" data-user-avatar aria-hidden="true"></div>
+          <div>
+            <h2 class="profile-name mb-1" data-user-name></h2>
+            <div class="text-muted mb-2">
+              <span data-user-role></span>
+              <span class="mx-2">&middot;</span>
+              <span data-user-department>Computer Science and Engineering</span>
+            </div>
+            <div class="profile-chip-row">
+              <span class="chip" data-user-email></span>
+              <span class="chip" data-user-short-code>Teacher Profile</span>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="stat-card">
-              <div class="text-muted">Average Satisfaction Score (1-3)</div>
-              <div class="display-6 fw-bold" id="averageScore">0.00</div>
+        </div>
+        <div class="profile-scoreboard">
+          <div>
+            <div class="score-label">Average Rating</div>
+            <div class="score-value" data-profile-average>0.00</div>
+          </div>
+          <div>
+            <div class="score-label">Total Reviews</div>
+            <div class="score-value" data-profile-count>0</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="row g-4 mb-4">
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Feedback Received</div>
+            <div class="display-6 fw-bold" id="totalReviews">0</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Average Rating</div>
+            <div class="display-6 fw-bold" id="averageScore">0.00</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Active Assignments</div>
+            <div class="display-6 fw-bold" data-assignment-count>0</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Visible Comments</div>
+            <div class="display-6 fw-bold" data-comment-count>0</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="row g-4">
+        <div class="col-lg-5">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Profile Details</h5>
+              <p class="text-muted mb-3" data-user-bio>No teacher bio added yet.</p>
+              <div class="profile-detail-list">
+                <div><span class="fw-semibold">Email:</span> <span data-contact-email></span></div>
+                <div><span class="fw-semibold">Phone:</span> <span data-contact-phone></span></div>
+                <div><span class="fw-semibold">Office Room:</span> <span data-contact-office></span></div>
+                <div><span class="fw-semibold">Status:</span> <span data-teacher-status class="status-badge">Active</span></div>
+              </div>
+              <hr>
+              <h6 class="fw-semibold mb-3">Current Assignments</h6>
+              <div class="chip-stack" data-assignment-chip-stack></div>
             </div>
           </div>
         </div>
 
-        <div class="card mt-3">
-          <div class="card-body">
-            <h5 class="card-title">Overall Satisfaction Distribution</h5>
-            <div class="mb-3">
-              <div class="d-flex justify-content-between">
-                <span>Excellent</span>
-                <span data-overall-count="Excellent">0</span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-success" data-overall-bar="Excellent" style="width: 0%">0%</div>
-              </div>
-            </div>
-            <div class="mb-3">
-              <div class="d-flex justify-content-between">
-                <span>Good</span>
-                <span data-overall-count="Good">0</span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-warning text-dark" data-overall-bar="Good" style="width: 0%">0%</div>
-              </div>
-            </div>
-            <div class="mb-0">
-              <div class="d-flex justify-content-between">
-                <span>Average</span>
-                <span data-overall-count="Average">0</span>
-              </div>
-              <div class="progress">
-                <div class="progress-bar bg-danger" data-overall-bar="Average" style="width: 0%">0%</div>
-              </div>
+        <div class="col-lg-7">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Category Rating Breakdown</h5>
+              <div data-category-breakdown class="rating-breakdown-list"></div>
             </div>
           </div>
-        </div>
 
-        <div class="card mt-3">
-          <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-              <h5 class="card-title mb-0">AI Feedback Summary</h5>
-              <button class="btn btn-outline-success btn-sm" type="button" id="aiSummaryBtn">Generate Summary</button>
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <h5 class="card-title mb-0">AI Feedback Summary</h5>
+                <button class="btn btn-outline-success btn-sm" type="button" id="aiSummaryBtn">Generate Summary</button>
+              </div>
+              <p class="text-muted small mb-2">Uses anonymized category scores and recent comments to generate a short summary.</p>
+              <div id="aiSummaryAlert"></div>
+              <div id="aiSummaryResult" class="ai-output text-muted">Click generate to view insights.</div>
             </div>
-            <p class="text-muted small mb-2">Uses anonymized response statistics to highlight strengths and improvement areas.</p>
-            <div id="aiSummaryAlert"></div>
-            <div id="aiSummaryResult" class="ai-output text-muted">Click generate to view insights.</div>
           </div>
         </div>
+      </section>
 
-        <div class="card mt-4">
-          <div class="card-body">
-            <h5 class="card-title">Recent Feedback</h5>
-            <div class="table-responsive">
-              <table class="table table-bordered align-middle">
-                <thead>
-                  <tr>
-                    <th>Course Code</th>
-                    <th>Course Title</th>
-                    <th>Semester / Section</th>
-                    <th>Submitted At</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="teacherReviewsBody"></tbody>
-              </table>
-            </div>
+      <section class="card mt-4">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <h5 class="card-title mb-0">Recent Student Comments</h5>
+            <span class="text-muted small">Anonymous by design</span>
+          </div>
+          <div class="comment-stack mt-3" data-comment-list></div>
+        </div>
+      </section>
+
+      <section class="card mt-4">
+        <div class="card-body">
+          <h5 class="card-title">Recent Feedback Records</h5>
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered align-middle">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Semester / Section</th>
+                  <th>Overall</th>
+                  <th>Submitted At</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="teacherReviewsBody"></tbody>
+            </table>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   </main>
 
   <footer>
     <div class="container">
-      <div class="footer-note">SFRS - Teacher dashboard. Feedback is stored securely in Supabase.</div>
+      <div class="footer-note">SFRS - Teacher dashboard. Student identities are never shown in this view.</div>
     </div>
   </footer>
 
@@ -164,6 +205,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/supabase-config.js"></script>
   <script src="assets/js/questions.js"></script>
+  <script src="assets/js/review-data.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>
