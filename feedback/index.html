@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body data-page="home">
+<body data-page="home" class="feedback-home">
   <nav class="navbar navbar-expand-lg navbar-light fixed-top" aria-label="Primary">
     <div class="container">
       <a class="navbar-brand" href="/feedback/">
@@ -37,58 +37,139 @@
 
   <header class="hero">
     <div class="container">
-      <div class="row align-items-center g-4">
-        <div class="col-lg-6">
-          <span class="badge bg-light text-dark mb-3">Student Feedback Review System</span>
-          <h1 class="display-5 fw-bold">Academic Feedback Portal</h1>
-          <p class="lead mb-4">Course-wise feedback, teacher insights, and assignment-based review access in one place.</p>
-          <div class="d-flex flex-wrap gap-2">
+      <div class="feedback-kicker">Varendra University Digital Review Experience</div>
+      <div class="feedback-hero-grid align-items-stretch">
+        <div>
+          <span class="badge-role hero-badge mb-3">Student Feedback Review System</span>
+          <h1 class="display-5 fw-bold mb-3">A cleaner, friendlier way to review academic experience</h1>
+          <p class="lead mb-4">Students can submit structured feedback only for the teachers assigned to their semester and section. Teachers and admins get focused, role-based insights without extra clutter.</p>
+          <div class="feedback-chip-row mb-4">
+            <span class="feedback-chip">Semester matched access</span>
+            <span class="feedback-chip">Anonymous-ready workflow</span>
+            <span class="feedback-chip">Teacher profile based reviews</span>
+          </div>
+          <div class="d-flex flex-wrap gap-2 mb-3">
             <a class="btn btn-light btn-lg" href="../student-login.html">Student Login</a>
             <a class="btn btn-outline-light btn-lg" href="../teacher-login.html">Teacher Login</a>
+            <a class="btn btn-outline-light btn-lg" href="../admin-login.html">Admin Panel</a>
           </div>
-          <div class="mt-3">
-            <a class="link-light fw-semibold me-3" href="../student-signup.html">Student Sign Up</a>
-            <a class="link-light fw-semibold me-3" href="../teacher-signup.html">Teacher Sign Up</a>
-            <a class="link-light fw-semibold" href="../admin-login.html">Admin Login</a>
+          <div class="hero-link-row">
+            <a class="link-light fw-semibold" href="../student-signup.html">Create Student Account</a>
+            <a class="link-light fw-semibold" href="../teacher-signup.html">Register Teacher</a>
+            <a class="link-light fw-semibold" href="/">Return to VU Home</a>
           </div>
         </div>
-        <div class="col-lg-6">
-          <div class="hero-card">
-            <h5 class="fw-semibold">How it works</h5>
-            <ul class="mb-0">
-              <li>Students only see teachers assigned to their semester and section.</li>
-              <li>Teachers get structured summaries and anonymized trends.</li>
-              <li>Admins manage assignments, moderation, and analytics.</li>
-            </ul>
+        <div>
+          <div class="feedback-panel feedback-panel-main">
+            <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+              <div>
+                <div class="section-eyebrow text-white-50 mb-2">Portal Highlights</div>
+                <h5 class="fw-semibold mb-1">Built around the actual campus workflow</h5>
+                <p class="small mb-0 text-white-50">From eligible teacher discovery to analytics and moderation.</p>
+              </div>
+              <span class="feedback-chip feedback-chip-light">VU Style</span>
+            </div>
+            <div class="panel-stat-grid mt-4">
+              <div class="panel-stat">
+                <strong>Student</strong>
+                <span>Course-wise assignment based feedback</span>
+              </div>
+              <div class="panel-stat">
+                <strong>Teacher</strong>
+                <span>Profile panel with ratings and summaries</span>
+              </div>
+              <div class="panel-stat">
+                <strong>Admin</strong>
+                <span>Assignment control, moderation, and analytics</span>
+              </div>
+              <div class="panel-stat">
+                <strong>Secure</strong>
+                <span>Frontend and backend eligibility enforcement</span>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-panel">
+            <div class="section-eyebrow mb-2">Review Journey</div>
+            <div class="feedback-flow-list">
+              <div class="flow-step">
+                <span class="flow-index">1</span>
+                <div>
+                  <strong>Login</strong>
+                  <span>Enter the portal using your role-specific access.</span>
+                </div>
+              </div>
+              <div class="flow-step">
+                <span class="flow-index">2</span>
+                <div>
+                  <strong>Find assigned teachers</strong>
+                  <span>Only semester and section eligible teachers appear.</span>
+                </div>
+              </div>
+              <div class="flow-step">
+                <span class="flow-index">3</span>
+                <div>
+                  <strong>Submit structured review</strong>
+                  <span>Rate categories, add comments, and track submission.</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </header>
 
+  <section class="pb-4">
+    <div class="container">
+      <div class="trust-strip">
+        <div class="trust-item">
+          <strong>Eligible Teachers Only</strong>
+          <span>No cross-section or cross-semester reviewing.</span>
+        </div>
+        <div class="trust-item">
+          <strong>Clear Rating Categories</strong>
+          <span>Teaching quality, communication, support, punctuality, and more.</span>
+        </div>
+        <div class="trust-item">
+          <strong>Teacher Profiles</strong>
+          <span>Students can preview profile and course assignment before reviewing.</span>
+        </div>
+        <div class="trust-item">
+          <strong>Admin Oversight</strong>
+          <span>Moderation, assignment management, and reporting in one place.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <main>
-    <section class="py-5">
+    <section class="pt-2 pb-4">
       <div class="container">
+        <div class="text-center mb-4">
+          <div class="section-eyebrow">Quick Access</div>
+          <h2 class="section-title mb-2">Choose the portal that matches your role</h2>
+          <p class="section-copy mx-auto">The feedback experience follows the same university identity, but stays simple, focused, and easy to use on both phone and desktop.</p>
+        </div>
         <div class="row g-4 align-items-stretch">
           <div class="col-lg-4">
             <div class="info-card h-100">
               <span class="badge-role mb-2 d-inline-block">Student</span>
               <h5 class="form-section-title">Eligible feedback only</h5>
-              <p class="text-muted mb-0">Review only the teachers assigned to your semester, section, and course list.</p>
+              <p class="text-muted mb-0">Review only the teachers assigned to your semester, section, and current courses with a guided submission flow.</p>
             </div>
           </div>
           <div class="col-lg-4">
             <div class="info-card h-100">
               <span class="badge-role mb-2 d-inline-block">Teacher</span>
               <h5 class="form-section-title">Insightful dashboard</h5>
-              <p class="text-muted mb-0">See recent ratings, category averages, and AI-assisted summaries.</p>
+              <p class="text-muted mb-0">See recent ratings, category averages, anonymized comments, and AI-assisted summaries in a cleaner layout.</p>
             </div>
           </div>
           <div class="col-lg-4">
             <div class="info-card h-100">
               <span class="badge-role mb-2 d-inline-block">Admin</span>
               <h5 class="form-section-title">Manage assignments</h5>
-              <p class="text-muted mb-0">Control teacher profiles, review windows, assignments, and moderation.</p>
+              <p class="text-muted mb-0">Control teacher profiles, review windows, semester-section assignments, and moderation with less friction.</p>
             </div>
           </div>
         </div>
@@ -101,8 +182,14 @@
           <div class="col-lg-4">
             <div class="card portal-card h-100">
               <div class="card-body">
+                <span class="portal-icon" aria-hidden="true">S</span>
                 <h4 class="card-title">Student Portal</h4>
-                <p class="text-muted">Give secure feedback for your assigned teachers and track submission status.</p>
+                <p class="text-muted">Give secure feedback for your assigned teachers and track submission status without confusion.</p>
+                <ul class="portal-feature-list">
+                  <li>Assigned teacher cards with course tags</li>
+                  <li>Simple submission status tracking</li>
+                  <li>Search and filter by teacher or course</li>
+                </ul>
                 <div class="d-flex flex-wrap gap-2">
                   <a class="btn btn-success" href="../student-login.html">Open Student Portal</a>
                   <a class="btn btn-outline-success" href="../student-signup.html">Create Account</a>
@@ -113,8 +200,14 @@
           <div class="col-lg-4">
             <div class="card portal-card h-100">
               <div class="card-body">
+                <span class="portal-icon" aria-hidden="true">T</span>
                 <h4 class="card-title">Teacher Portal</h4>
-                <p class="text-muted">Review anonymized feedback trends, profile details, and summary performance.</p>
+                <p class="text-muted">Review anonymized feedback trends, profile details, and summary performance in a more readable dashboard.</p>
+                <ul class="portal-feature-list">
+                  <li>Profile panel with assignment overview</li>
+                  <li>Category-wise rating summaries</li>
+                  <li>Recent feedback and AI insight support</li>
+                </ul>
                 <div class="d-flex flex-wrap gap-2">
                   <a class="btn btn-success" href="../teacher-login.html">Open Teacher Portal</a>
                   <a class="btn btn-outline-success" href="../teacher-signup.html">Register</a>
@@ -125,12 +218,37 @@
           <div class="col-lg-4">
             <div class="card portal-card h-100">
               <div class="card-body">
+                <span class="portal-icon" aria-hidden="true">A</span>
                 <h4 class="card-title">Admin Portal</h4>
-                <p class="text-muted">Manage teacher profiles, assignments, settings, moderation, and analytics.</p>
+                <p class="text-muted">Manage teacher profiles, assignments, settings, moderation, and analytics with a cleaner workflow.</p>
+                <ul class="portal-feature-list">
+                  <li>Teacher and assignment management</li>
+                  <li>Feedback visibility control</li>
+                  <li>Analytics filters by course and section</li>
+                </ul>
                 <div class="d-flex flex-wrap gap-2">
                   <a class="btn btn-success" href="../admin-login.html">Open Admin Portal</a>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-5">
+      <div class="container">
+        <div class="page-shell">
+          <div class="dashboard-heading">
+            <div>
+              <div class="section-eyebrow">Need help?</div>
+              <h3 class="section-title mb-2">Start with the student portal for the smoothest experience</h3>
+              <p class="section-lead mb-0">Students see the most guided flow: assigned teachers, profile previews, feedback modal, and submission tracking in one place.</p>
+            </div>
+            <div class="feedback-chip-row">
+              <span class="feedback-chip">Mobile friendly</span>
+              <span class="feedback-chip">Role based</span>
+              <span class="feedback-chip">VU aligned styling</span>
             </div>
           </div>
         </div>
