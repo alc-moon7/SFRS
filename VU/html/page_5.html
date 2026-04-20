@@ -1,0 +1,1478 @@
+﻿<html lang="en" style="height: auto; min-height: 100%;">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <base href="../"/>
+  <meta content="" name="description"/>
+  <meta content="" name="author"/>
+  <link href="favicon.ico" rel="icon"/>
+  <title>
+   Varendra University
+  </title>
+  <link href="css/app.css" rel="stylesheet" type="text/css"/>
+  <style type="text/css">
+   body {
+            padding-top: 50px;
+            padding-bottom: 80px;
+        }
+
+        fieldset{
+          margin-top: 20px;
+        }
+
+        .extra-padding{
+          padding-bottom: 50px;
+        }
+
+        .navbar-inverse {
+            background-color: #c44d2d;
+            border-color: #fff;
+        }
+
+        .navbar-inverse .navbar-brand {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .navbar-inverse .navbar-nav>li>a {
+            color: #fff;
+        } 
+
+        .navbar-inverse .navbar-nav>li>a:hover {
+            font-weight: bold;
+        }
+
+        .main-footer{
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          z-index: 1030;
+          margin: 0;
+          border-color:#c44d2d; 
+        }
+
+        .btn-vu {
+            background-color: rgba(0,0,0,.7);
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .btn-vu:hover {
+            background-color: #c44d2d;
+            color: white;
+        }
+
+        .btn-vu.active {
+            background-color: #c44d2d;
+            color: white;
+        }
+
+        .btn-text-lg{
+          font-size: 2em;
+        }
+
+        .text-banner h1{
+            font-weight: bold;
+            margin:20px;
+            color:#c44d2d;
+        }
+  </style>
+ </head>
+ <body style="height: auto; min-height: 100%;">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+   <div class="container">
+    <div class="navbar-header">
+     <button aria-controls="navbar" aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button">
+      <span class="sr-only">
+       Toggle navigation
+      </span>
+      <span class="icon-bar">
+      </span>
+      <span class="icon-bar">
+      </span>
+      <span class="icon-bar">
+      </span>
+     </button>
+     <a class="navbar-brand" href="http://160.187.25.3:8083">
+      Varendra University
+     </a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar">
+     <ul class="nav navbar-nav navbar-right">
+     </ul>
+    </div>
+   </div>
+  </nav>
+  <div class="content">
+   <!-- <div class="alert alert-info text-center">
+    <h4>
+    <i class="fa fa-bullhorn fa-2x"></i>
+    Bkash payment will be unavailable in between  19/10/2020 12:00 am to 19/10/2020 11:30 am</h4>
+</div> -->
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-sm-4">
+      <div class="nav-tabs-custom">
+       <ul class="nav nav-tabs pull-right">
+        <li class="active">
+         <a href="http://160.187.25.3:8083/front/applicant/home">
+          <strong>
+           Already Registered?
+          </strong>
+         </a>
+        </li>
+        <li class="">
+         <a href="http://160.187.25.3:8083/front/applicant/home?reg=1">
+          <strong>
+           New Applicant? (Sign Up)
+          </strong>
+         </a>
+        </li>
+       </ul>
+       <div class="tab-content">
+        <div class="tab-pane active">
+         <h4 class="text-center text-muted">
+          Login
+         </h4>
+         <form accept-charset="UTF-8" action="http://160.187.25.3:8083/front/applicant/home/login" method="POST">
+          <input name="_token" type="hidden" value="1GiSD6ikxAHiMkPOiF8smiwHLOXbq36zbxaSTAfm"/>
+          <div class="form-group">
+           <label>
+            Applicant's Mobile No
+           </label>
+           <input class="form-control" name="mobile" type="text"/>
+          </div>
+          <div class="form-group">
+           <label>
+            Password
+           </label>
+           <input class="form-control" name="password" type="password" value=""/>
+          </div>
+          <a href="http://160.187.25.3:8083/front/applicant/home/reset-password">
+           Forgot password?
+          </a>
+          <input class="btn btn-primary pull-right" type="submit" value="Login"/>
+          <div class="clearfix">
+          </div>
+         </form>
+        </div>
+        <div class="tab-pane">
+         <h4 class="text-center text-muted">
+          Register
+         </h4>
+         <form accept-charset="UTF-8" action="http://160.187.25.3:8083/front/applicant/home/register" method="POST">
+          <input name="_token" type="hidden" value="1GiSD6ikxAHiMkPOiF8smiwHLOXbq36zbxaSTAfm"/>
+          <div class="row">
+           <div class="col-sm-6">
+            <div class="form-group">
+             <label>
+              SSC Board
+             </label>
+             <select class="form-control input-sm" name="ssc_board">
+              <option selected="selected" value="">
+               -- Select Board --
+              </option>
+              <option value="Barisal">
+               Barisal
+              </option>
+              <option value="Chittagong">
+               Chittagong
+              </option>
+              <option value="Comilla">
+               Comilla
+              </option>
+              <option value="Dhaka">
+               Dhaka
+              </option>
+              <option value="Dinajpur">
+               Dinajpur
+              </option>
+              <option value="Jessore">
+               Jessore
+              </option>
+              <option value="Mymensingh">
+               Mymensingh
+              </option>
+              <option value="Rajshahi">
+               Rajshahi
+              </option>
+              <option value="Sylhet">
+               Sylhet
+              </option>
+              <option value="Madrasah">
+               Madrasah
+              </option>
+              <option value="Tec">
+               Technical
+              </option>
+              <option value="Bangladesh Nursing and Midwifery Council">
+               Bangladesh Nursing and Midwifery Council
+              </option>
+              <option value="Open University">
+               Open University
+              </option>
+             </select>
+             <span class="samll text-danger">
+             </span>
+            </div>
+            <div class="form-group">
+             <label>
+              SSC Roll
+             </label>
+             <input class="form-control input-sm" name="ssc_roll" type="text"/>
+             <span class="samll text-danger">
+             </span>
+            </div>
+            <div class="form-group">
+             <label>
+              SSC Reg. No
+             </label>
+             <input class="form-control input-sm" name="ssc_reg_no" type="text"/>
+             <span class="samll text-danger">
+             </span>
+            </div>
+            <div class="form-group">
+             <label>
+              SSC Year
+             </label>
+             <input class="form-control input-sm" name="ssc_year" type="text"/>
+             <span class="samll text-danger">
+             </span>
+            </div>
+           </div>
+           <div class="col-sm-6">
+            <div class="form-group">
+             <label>
+              HSC Board
+             </label>
+             <select class="form-control input-sm" name="hsc_board">
+              <option selected="selected" value="">
+               -- Select Board --
+              </option>
+              <option value="Barisal">
+               Barisal
+              </option>
+              <option value="Chittagong">
+               Chittagong
+              </option>
+              <option value="Comilla">
+               Comilla
+              </option>
+              <option value="Dhaka">
+               Dhaka
+              </option>
+              <option value="Dinajpur">
+               Dinajpur
+              </option>
+              <option value="Jessore">
+               Jessore
+              </option>
+              <option value="Mymensingh">
+               Mymensingh
+              </option>
+              <option value="Rajshahi">
+               Rajshahi
+              </option>
+              <option value="Sylhet">
+               Sylhet
+              </option>
+              <option value="Madrasah">
+               Madrasah
+              </option>
+              <option value="Tec">
+               Technical
+              </option>
+              <option value="Bangladesh Nursing and Midwifery Council">
+               Bangladesh Nursing and Midwifery Council
+              </option>
+              <option value="Open University">
+               Open University
+              </option>
+             </select>
+             <span class="samll text-danger">
+             </span>
+            </div>
+            <div class="form-group">
+             <label>
+              HSC Roll
+             </label>
+             <input class="form-control input-sm" name="hsc_roll" type="text"/>
+             <span class="samll text-danger">
+             </span>
+            </div>
+            <div class="form-group">
+             <label>
+              HSC Reg. No
+             </label>
+             <input class="form-control input-sm" name="hsc_reg_no" type="text"/>
+             <span class="samll text-danger">
+             </span>
+            </div>
+            <div class="form-group">
+             <label>
+              HSC Year
+             </label>
+             <input class="form-control input-sm" name="hsc_year" type="text"/>
+             <span class="samll text-danger">
+             </span>
+            </div>
+           </div>
+          </div>
+          <div class="form-group">
+           <label>
+            Applicant's Mobile No
+           </label>
+           <input class="form-control input-sm" name="mobile" type="text"/>
+           <span class="samll text-danger">
+           </span>
+          </div>
+          <div class="row">
+           <div class="col-sm-6">
+            <div class="form-group">
+             <label>
+              Password
+             </label>
+             <input class="form-control input-sm" name="password" placeholder="Enter a 6 digit new password" type="password" value=""/>
+             <span class="samll text-danger">
+             </span>
+            </div>
+           </div>
+           <div class="col-sm-6">
+            <div class="form-group">
+             <label>
+              Confirm Password
+             </label>
+             <input class="form-control input-sm" name="password_confirmation" placeholder="Confirm your password" type="password" value=""/>
+            </div>
+           </div>
+          </div>
+          <input class="btn btn-primary pull-right" type="submit" value="Register"/>
+          <div class="clearfix">
+          </div>
+         </form>
+        </div>
+       </div>
+      </div>
+      <div class="alert alert-success text-justify">
+       <strong>
+        As per the guidelines of UGC and Bangladesh Accreditation Council, from Spring 2023 Varendra University will conduct all educational activities in Bi-semester system.
+       </strong>
+      </div>
+     </div>
+     <div class="col-sm-8">
+      <div class="box box-solid">
+       <div class="box-body">
+        <div class="row">
+         <div class="col-sm-4 col-sm-offset-4">
+          <img class="img-responsive" src="images/wide_logo.png"/>
+         </div>
+        </div>
+        <hr/>
+        <h3 class="text-center">
+         Admission Going on for Spring-2026 Session
+        </h3>
+        <div class="text-center">
+         <a class="btn bg-navy" href="http://160.187.25.3:8083/instructions/online_admission_instructions.pdf" target="_blank">
+          <i class="fa fa-download">
+          </i>
+          Form Fill-up Instructions
+         </a>
+        </div>
+        <br/>
+        <div class="box-group" id="accordion">
+         <div class="panel box box-primary">
+          <div class="box-header with-border">
+           <h4 class="box-title">
+            <a data-parent="#accordion" data-toggle="collapse" href="#collapseOne">
+             Academic Programs
+            </a>
+           </h4>
+          </div>
+          <div class="panel-collapse collapse" id="collapseOne">
+           <div class="box-body">
+            <div class="row">
+             <div class="col-sm-6">
+              <h4>
+               Bachelor's Degree
+              </h4>
+              <ul>
+               <li>
+                B Pharm Honors
+               </li>
+               <li>
+                B. Sc. in CSE
+               </li>
+               <li>
+                B. Sc. in EEE
+               </li>
+               <li>
+                B.Sc. in Nutrition and Food Engineering
+               </li>
+               <li>
+                BA Honors in English
+               </li>
+               <li>
+                BA in Islamic History and Culture
+               </li>
+               <li>
+                BBA
+               </li>
+               <li>
+                BSS (Hons.) in Political Science
+               </li>
+               <li>
+                BSS Honors in Economics
+               </li>
+               <li>
+                BSS Honors in JCMS
+               </li>
+               <li>
+                BSS Honors in Sociology
+               </li>
+               <li>
+                LLB Honors
+               </li>
+              </ul>
+             </div>
+             <div class="col-sm-6">
+              <h4>
+               Master's Degree
+              </h4>
+              <ul>
+               <li>
+                Executive MBA
+               </li>
+               <li>
+                LLM (Final)
+               </li>
+               <li>
+                MA in English
+               </li>
+               <li>
+                MBA-Regular
+               </li>
+               <li>
+                MSS in Economics
+               </li>
+               <li>
+                MSS in Political Science
+               </li>
+               <li>
+                MSS in Sociology (Regular)
+               </li>
+               <li>
+                Master of Public Health
+               </li>
+              </ul>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="panel box box-primary">
+          <div class="box-header with-border">
+           <h4 class="box-title">
+            <a data-parent="#accordion" data-toggle="collapse" href="#collapseTwo">
+             Admission Requirements
+            </a>
+            <button class="btn btn-primary btn-xs" id="language_toggle">
+             Bangla/English
+            </button>
+           </h4>
+          </div>
+          <div class="panel-collapse collapse" id="collapseTwo">
+           <div class="box-body" id="requirements_in_english">
+            <h4 style="text-decoration:underline;">
+             <strong>
+              For Undergraduate Programs:
+             </strong>
+            </h4>
+            <ol style="list-style-type: lower-roman; text-align:justify;">
+             <li style="padding-left: 10px;">
+              Total GPA 5 with minimum 2.5 either in SSC or HSC/equivalent is required for admission in
+                    Honors Programs. But a student having a minimum GPA 2.00 in SSC/HSC/equivalent with total
+                    GPA 6.00 or above may apply
+              <strong>
+               (except CSE, EEE, Pharmacy &amp; Law and Human Rights Department)
+              </strong>
+              .
+             </li>
+             <li style="padding-left: 10px;">
+              Minimum five subjects from O-Level and two subjects from A-Level are required for
+                    the admission of new students. Out of seven subjects, students must have obtained B-
+                    grade or GPA 4.00 in four subjects and C grade or GPA 3.50 in other three subjects
+                    respectively.
+             </li>
+             <li style="padding-left: 10px;">
+              Total GPA of 5.00 in both SSC and HSC Examinations for the children of the Freedom
+                    Fighter.
+             </li>
+             <li style="padding-left: 10px;">
+              The candidates who intend to admit in any Undergraduate Programs under the School of Science
+                    and Technology and the School of Engineering must pass HSC/Diploma/equivalent examination
+                    from science group.
+             </li>
+             <li style="padding-left: 10px;">
+              All diploma holders from the Govt. and the UGC or related Council approved
+                    Institutions/Institutes will be considered as HSC/Equivalent, and they will have to take
+                    usual admission test for any existing programs of Varendra University.
+             </li>
+            </ol>
+            <strong>
+             For Computer Science &amp; Engineering and Electrical &amp; Electronic Engineering Department:
+            </strong>
+            <ol start="5" style="list-style-type: lower-roman; text-align:justify;">
+             <li style="padding-left: 10px;">
+              Candidates must have GPA 3.00 in both SSC/equivalent and HSC/equivalent examinations.
+             </li>
+             <li style="padding-left: 10px;">
+              Candidate must pass HSC/Diploma/equivalent examination from science group.
+             </li>
+             <li style="padding-left: 10px;">
+              Candidate must obtain HSC/Diploma/equivalent examination with a minimum GPA
+                    3.00 in Mathematics (in a scale of 5.00).
+             </li>
+            </ol>
+            <strong>
+             For Law and Human Rights Department:
+            </strong>
+            <ol start="5" style="list-style-type: lower-roman; text-align:justify;">
+             <li style="padding-left: 10px;">
+              Candidates must have GPA 3.00 in both SSC/equivalent and HSC/equivalent examinations.
+             </li>
+            </ol>
+            <strong>
+             For Pharmacy Department:
+            </strong>
+            <ol start="7" style="list-style-type: lower-roman; text-align:justify;">
+             <li style="padding-left: 10px;">
+              Candidates must have a total of GPA 8.00 (in a scale of 10.00) in both SSC/equivalent and HSC/equivalent examinations from science group but must have GPA not less than 3.50 (in a scale of 5.00) in any examinations. Candidates must have minimum GPA 3.50 (in a scale of 5.00) in Chemistry &amp; Biology and minimum GPA 3.00 (in a scale of 5.00) in Physics in HSC/equivalent examination.
+             </li>
+             <li style="padding-left: 10px;">
+              Candidates must have a minimum GPA 3.00 (in a scale of 5.00) in Mathematics in HSC/equivalent examination. Candidates having no Mathematics or having GPA less than 3.00 in Mathematics in HSC/A-Level/equivalent examinations can be admitted, but they will need to take an extra 3 (three) credit course on mathematics during B. Pharm. (Honors) candidature at Varendra University.
+             </li>
+             <li style="padding-left: 10px;">
+              For A-Level, candidates must have a minimum B Grade in Chemistry and Biology and a minimum C Grade in Physics &amp; Mathematics.
+             </li>
+             <li style="padding-left: 10px;">
+              Candidates must complete the admission process within 3 years from the year of publication of HSC/equivalent examination result
+             </li>
+             <li style="padding-left: 10px;">
+              Candidates having a diploma in pharmacy degree from an institution affiliated to the Pharmacy Council of Bangladesh (PCB) need to apply for admission through the Department of Pharmacy, VU.
+             </li>
+            </ol>
+            <h4 style="text-decoration:underline;margin-top:20px;">
+             <strong>
+              For Graduate Programs:
+             </strong>
+            </h4>
+            <p style="text-align: justify;">
+             Students who intend to get themselves admitted into Masters Programs should have at least
+                5.00 points as shown below without any 3rd division/class or 6.00 points with a 3rd
+                division/class. The points to be computed as below:
+            </p>
+            <div class="table-responsive">
+             SSC/equivalent and HSC/equivalent examinations. Candidates having no Mathematics or having
+                GPA less than 3.50 in Mathematics in HSC/A-Level/equivalent examinations can be admitted, but
+                they will need to take an extra 3 (three) credit course on mathematics during B. Pharm. (Honors)
+                candidature at Varendra University.
+             <table class="table table-bordered text-center">
+              <thead>
+               <tr>
+                <th rowspan="2" style="vertical-align:middle;">
+                 Degree
+                </th>
+                <th colspan="3">
+                 Points
+                </th>
+               </tr>
+               <tr>
+                <th>
+                 1st Division/Class/
+                 <br/>
+                 Equivalent
+                 <br/>
+                 (3.5 and above)
+                </th>
+                <th>
+                 2nd Division/Class/
+                 <br/>
+                 Equivalent
+                 <br/>
+                 (2.50 to 3.49)
+                </th>
+                <th>
+                 3rd Division/Class/
+                 <br/>
+                 Equivalent
+                 <br/>
+                 (2.00 to 2.49)
+                </th>
+               </tr>
+              </thead>
+              <tbody>
+               <tr>
+                <td>
+                 SSC/Equivalent
+                </td>
+                <td>
+                 3
+                </td>
+                <td>
+                 2
+                </td>
+                <td>
+                 1
+                </td>
+               </tr>
+               <tr>
+                <td>
+                 HSC/Equivalent
+                </td>
+                <td>
+                 3
+                </td>
+                <td>
+                 2
+                </td>
+                <td>
+                 1
+                </td>
+               </tr>
+               <tr>
+                <td>
+                 Degree Pass
+                </td>
+                <td>
+                 3
+                </td>
+                <td>
+                 2
+                </td>
+                <td>
+                 1
+                </td>
+               </tr>
+               <tr>
+                <td>
+                 Honors or 4 years degree
+                </td>
+                <td>
+                 4
+                </td>
+                <td>
+                 3
+                </td>
+                <td>
+                 2
+                </td>
+               </tr>
+              </tbody>
+              <caption style="caption-side:bottom">
+               <strong>
+                Note:
+               </strong>
+               Minimum CGPA 2.00 is required at each level of examination.
+              </caption>
+             </table>
+            </div>
+           </div>
+           <div class="box-body" id="requirements_in_bangla" style="display: none;">
+            <h4 style="text-decoration:underline;">
+             <strong>
+              à¦¸à§à¦¨à¦¾à¦¤à¦• à¦ªà¦°à§à¦¯à¦¾à§Ÿ:
+             </strong>
+            </h4>
+            <ol style="list-style-type: lower-roman; text-align:justify;">
+             <li style="padding-left: 10px;">
+              à¦à¦¸à¦à¦¸à¦¸à¦¿ à¦“ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿ à¦¬à¦¾ à¦¸à¦®à¦®à¦¾à¦¨à§‡à¦° à¦ªà¦¾à¦¬à¦²à¦¿à¦• à¦ªà¦°à§€à¦•à§à¦·à¦¾à¦° à¦ªà§à¦°à¦¤à¦¿à¦Ÿà¦¿ à¦ªà¦°à§à¦¯à¦¾à§Ÿà§‡ à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦¦à§à¦¬à¦¿à¦¤à§€à§Ÿ  à¦¬à¦¿à¦­à¦¾à¦— à¦…à¦¥à¦¬à¦¾ à¦œà¦¿à¦ªà¦¿à¦ à§¨.à§«à§¦ à¦…à¦¥à¦¬à¦¾ à¦¸à¦®à¦®à¦¾à¦¨à§‡à¦° à¦—à§à¦°à§‡à¦¡ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤ à¦¤à¦¬à§‡ à¦•à§‹à¦¨ à¦à¦•à¦Ÿà¦¿ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦œà¦¿à¦ªà¦¿à¦ à§¨.à§¦à§¦ à¦¥à¦¾à¦•à¦²à§‡ à¦‰à¦­à§Ÿ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦®à§‹à¦Ÿ à¦œà¦¿à¦ªà¦¿à¦ à¦…à¦¨à§à¦¯à§‚à¦¨ à§¬.à§¦à§¦ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡
+              <strong>
+               (à¦¸à¦¿à¦à¦¸à¦‡, à¦‡à¦‡à¦‡, à¦†à¦‡à¦¨ à¦“ à¦®à¦¾à¦¨à¦¬à¦¾à¦§à¦¿à¦•à¦¾à¦° à¦à¦¬à¦‚ à¦«à¦¾à¦°à§à¦®à§‡à¦¸à§€ à¦¬à¦¿à¦­à¦¾à¦— à¦¬à§à¦¯à¦¤à§€à¦¤)
+              </strong>
+              à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              â€˜à¦“â€™ à¦²à§‡à¦­à§‡à¦² (O-Level) à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦ªà¦¾à¦à¦šà¦Ÿà¦¿ à¦¬à¦¿à¦·à§Ÿ (Subject) à¦à¦¬à¦‚ â€˜à¦â€™ à¦²à§‡à¦­à§‡à¦² (A-Level) à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦¦à§à¦Ÿà¦¿ à¦¬à¦¿à¦·à§Ÿ (Subject) à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤ à¦‰à¦•à§à¦¤ à¦¦à§à¦Ÿà¦¿ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦…à¦¨à§à¦¯à§‚à¦¨ à¦¸à¦¾à¦¤à¦Ÿà¦¿ à¦¬à¦¿à¦·à§Ÿà§‡à¦° à¦®à¦§à§à¦¯à§‡ à¦šà¦¾à¦°à¦Ÿà¦¿à¦¤à§‡ â€˜à¦¬à¦¿â€™ à¦—à§à¦°à§‡à¦¡ à¦¬à¦¾ à¦œà¦¿à¦ªà¦¿à¦ à§ª.à§¦à§¦ à¦à¦¬à¦‚ à¦¬à¦¾à¦•à¦¿ à¦¤à¦¿à¦¨à¦Ÿà¦¿ à¦¬à¦¿à¦·à§Ÿà§‡ â€˜à¦¸à¦¿â€™ à¦—à§à¦°à§‡à¦¡ à¦¬à¦¾ à¦œà¦¿à¦ªà¦¿à¦ à§©.à§«à§¦ à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              à¦®à§à¦•à§à¦¤à¦¿à¦¯à§‹à¦¦à§à¦§à¦¾à¦° à¦¸à¦¨à§à¦¤à¦¾à¦¨à¦¦à§‡à¦° à¦œà¦¨à§à¦¯ à¦à¦¸à¦à¦¸à¦¸à¦¿ à¦“ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿ à¦¬à¦¾ à¦¸à¦®à¦®à¦¾à¦¨à§‡à¦° à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦®à§‹à¦Ÿ à¦œà¦¿à¦ªà¦¿à¦ à§«.à§¦à§¦ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              à¦¨à¦¾à¦¤à¦• à¦ªà¦°à§à¦¯à¦¾à§Ÿà§‡ à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨, à¦ªà§à¦°à¦¯à§à¦•à§à¦¤à¦¿ à¦“ à¦ªà§à¦°à¦•à§Œà¦¶à¦² à¦…à¦¨à§à¦·à¦¦à¦­à§‚à¦•à§à¦¤ à¦ªà§à¦°à§‹à¦—à§à¦°à¦¾à¦®/à¦•à§‹à¦°à§à¦¸à¦¸à¦®à§‚à¦¹à§‡ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦•à§‡à¦¬à¦²à¦®à¦¾à¦¤à§à¦° à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨ à¦¬à¦¿à¦­à¦¾à¦— à¦¥à§‡à¦•à§‡ à¦‰à¦¤à§à¦¤à§€à¦°à§à¦£ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€ à¦­à¦°à§à¦¤à¦¿ à¦•à¦°à¦¾ à¦¯à¦¾à¦¬à§‡à¥¤ à¦‰à¦•à§à¦¤ à¦ªà§à¦°à§‹à¦—à§à¦°à¦¾à¦®/à¦•à§‹à¦°à§à¦¸à¦¸à¦®à§‚à¦¹à§‡ à¦•à¦²à¦¾, à¦®à¦¾à¦¨à¦¬à¦¿à¦• à¦à¦¬à¦‚ à¦¬à¦¾à¦£à¦¿à¦œà§à¦¯ à¦¬à¦¿à¦­à¦¾à¦— à¦¥à§‡à¦•à§‡ à¦‰à¦¤à§à¦¤à§€à¦°à§à¦£ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€ à¦­à¦°à§à¦¤à¦¿ à¦•à¦°à¦¾ à¦¯à¦¾à¦¬à§‡ à¦¨à¦¾à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              à¦¸à¦°à¦•à¦¾à¦°/à¦‡à¦‰à¦œà¦¿à¦¸à¦¿/à¦¸à¦‚à¦¶à§à¦²à¦¿à¦·à§à¦Ÿ à¦•à¦¾à¦‰à¦¨à§à¦¸à¦¿à¦² à¦•à¦°à§à¦¤à§ƒà¦• à¦…à¦¨à§à¦®à§‹à¦¦à¦¿à¦¤ à¦¶à¦¿à¦•à§à¦·à¦¾ à¦ªà§à¦°à¦¤à¦¿à¦·à§à¦ à¦¾à¦¨ à¦¥à§‡à¦•à§‡ à¦¡à¦¿à¦ªà§à¦²à§‹à¦®à¦¾ à¦¡à¦¿à¦—à§à¦°à§€ à¦ªà§à¦°à¦¾à¦ªà§à¦¤ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€à¦°à¦¾ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿ à¦¬à¦¾ à¦¸à¦®à¦®à¦¾à¦¨ à¦¡à¦¿à¦—à§à¦°à§€ à¦ªà§à¦°à¦¾à¦ªà§à¦¤ à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¬à¦¿à¦¬à§‡à¦šà¦¿à¦¤ à¦¹à§Ÿà§‡ à¦­à¦°à§à¦¤à¦¿ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦‰à¦¤à§à¦¤à§€à¦°à§à¦£ à¦¹à¦“à§Ÿà¦¾ à¦¸à¦¾à¦ªà§‡à¦•à§à¦·à§‡ à¦­à¦°à§à¦¤à¦¿ à¦¹à¦¤à§‡ à¦ªà¦¾à¦°à¦¬à§‡à¥¤
+             </li>
+            </ol>
+            <strong>
+             à¦¸à¦¿à¦à¦¸à¦‡ à¦“ à¦‡à¦‡à¦‡ à¦¬à¦¿à¦­à¦¾à¦—à§‡à¦° à¦œà¦¨à§à¦¯:
+            </strong>
+            <ol start="6" style="list-style-type: lower-roman; text-align:justify;">
+             <li style="padding-left: 10px;">
+              à¦à¦¸à¦à¦¸à¦¸à¦¿ à¦“ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿ à¦¬à¦¾ à¦¸à¦®à¦®à¦¾à¦¨à§‡à¦° à¦ªà¦¾à¦¬à¦²à¦¿à¦• à¦ªà¦°à§€à¦•à§à¦·à¦¾à¦° à¦ªà§à¦°à¦¤à¦¿à¦Ÿà¦¿ à¦ªà¦°à§à¦¯à¦¾à§Ÿà§‡ à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦œà¦¿à¦ªà¦¿à¦ à§©.à§¦à§¦ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤à¦•à§‡à¦¬à¦²à¦®à¦¾à¦¤à§à¦° à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨ à¦¬à¦¿à¦­à¦¾à¦— à¦¥à§‡à¦•à§‡ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦‰à¦¤à§à¦¤à§€à¦°à§à¦£ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€ à¦­à¦°à§à¦¤à¦¿ à¦¹à¦¤à§‡ à¦ªà¦¾à¦°à¦¬à§‡à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              à¦•à§‡à¦¬à¦²à¦®à¦¾à¦¤à§à¦° à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨ à¦¬à¦¿à¦­à¦¾à¦— à¦¥à§‡à¦•à§‡ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦‰à¦¤à§à¦¤à§€à¦°à§à¦£ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€ à¦­à¦°à§à¦¤à¦¿ à¦¹à¦¤à§‡ à¦ªà¦¾à¦°à¦¬à§‡à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              à¦ªà§à¦°à¦¾à¦°à§à¦¥à§€à¦•à§‡ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿ à¦¬à¦¾ à¦¸à¦®à¦®à¦¾à¦¨à§‡à¦° à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦—à¦£à¦¿à¦¤à§‡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦œà¦¿à¦ªà¦¿à¦ à§©.à§¦à§¦ (à§« à¦¸à§à¦•à§‡à¦²) à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+             </li>
+            </ol>
+            <strong>
+             à¦†à¦‡à¦¨ à¦“ à¦®à¦¾à¦¨à¦¬à¦¾à¦§à¦¿à¦•à¦¾à¦° à¦¬à¦¿à¦­à¦¾à¦—à§‡à¦° à¦œà¦¨à§à¦¯:
+            </strong>
+            <ol start="6" style="list-style-type: lower-roman; text-align:justify;">
+             <li style="padding-left: 10px;">
+              à¦à¦¸à¦à¦¸à¦¸à¦¿ à¦“ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿ à¦¬à¦¾ à¦¸à¦®à¦®à¦¾à¦¨à§‡à¦° à¦ªà¦¾à¦¬à¦²à¦¿à¦• à¦ªà¦°à§€à¦•à§à¦·à¦¾à¦° à¦ªà§à¦°à¦¤à¦¿à¦Ÿà¦¿ à¦ªà¦°à§à¦¯à¦¾à§Ÿà§‡ à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦œà¦¿à¦ªà¦¿à¦ à§©.à§¦à§¦ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+             </li>
+            </ol>
+            <strong>
+             à¦«à¦¾à¦°à§à¦®à§‡à¦¸à§€ à¦¬à¦¿à¦­à¦¾à¦—à§‡à¦° à¦œà¦¨à§à¦¯:
+            </strong>
+            <ol start="7" style="list-style-type: lower-roman; text-align:justify;">
+             <li style="padding-left: 10px;">
+              à¦ªà§à¦°à¦¾à¦°à§à¦¥à§€à¦•à§‡ à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨ à¦¬à¦¿à¦­à¦¾à¦— à¦¥à§‡à¦•à§‡ à¦à¦¸à¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦à¦¬à¦‚ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦®à§‹à¦Ÿ à¦œà¦¿à¦ªà¦¿à¦ à§®.à§¦à§¦ (à§§à§¦ à¦¸à§à¦•à§‡à¦²à§‡) à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡, à¦¤à¦¬à§‡ à¦•à§‹à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦œà¦¿à¦ªà¦¿à¦ à§©.à§«à§¦ (à§« à¦¸à§à¦•à§‡à¦²à§‡) à¦à¦° à¦•à¦® à¦¹à¦¬à§‡ à¦¨à¦¾à¥¤ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦…à¦¬à¦¶à§à¦¯à¦‡ à¦°à¦¸à¦¾à§Ÿà¦¨ à¦“ à¦œà§€à¦¬ à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨ à¦¬à¦¿à¦·à§Ÿà§‡ à¦œà¦¿à¦ªà¦¿à¦ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à§©.à§«à§¦ (à§« à¦¸à§à¦•à§‡à¦²à§‡) à¦à¦¬à¦‚ à¦ªà¦¦à¦¾à¦°à§à¦¥ à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨ à¦¬à¦¿à¦·à§Ÿà§‡ à¦œà¦¿à¦ªà¦¿à¦ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à§©.à§¦à§¦ (à§« à¦¸à§à¦•à§‡à¦²à§‡) à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦—à¦£à¦¿à¦¤ à¦¬à¦¿à¦·à§Ÿà§‡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦œà¦¿à¦ªà¦¿à¦ à§©.à§¦à§¦ (à§« à¦¸à§à¦•à§‡à¦²à§‡) à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤ à¦¤à¦¬à§‡ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/â€˜Aâ€™ Level à¦¬à¦¾ à¦¸à¦®à¦®à¦¾à¦¨à§‡à¦° à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦—à¦£à¦¿à¦¤à§‡ à¦…à¦•à§ƒà¦¤à¦•à¦¾à¦°à§à¦¯/à¦—à¦£à¦¿à¦¤à§‡ à¦œà¦¿à¦ªà¦¿à¦ à§©.à§¦à§¦ à¦à¦° à¦•à¦®/à¦—à¦£à¦¿à¦¤ à¦¬à§à¦¯à¦¤à¦¿à¦¤ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€à¦°à¦¾ à¦­à¦°à§à¦¤à¦¿ à¦¹à¦¤à§‡ à¦ªà¦¾à¦°à¦¬à§‡ à¦•à¦¿à¦¨à§à¦¤à§ à¦¤à¦¾à¦¦à§‡à¦°à¦•à§‡ à¦¬à¦¿.à¦«à¦¾à¦°à§à¦® à¦•à¦¾à¦°à¦¿à¦•à§à¦²à¦¾à¦®à§‡à¦° à¦¸à¦¾à¦¥à§‡ à¦¸à¦¾à¦®à¦žà§à¦œà¦¸à§à¦¯à¦ªà§‚à¦°à§à¦£ à§© à¦•à§à¦°à§‡à¦¡à¦¿à¦Ÿà§‡à¦° à§§ (à¦à¦•) à¦Ÿà¦¿ à¦…à¦¤à¦¿à¦°à¦¿à¦•à§à¦¤ à¦—à¦£à¦¿à¦¤ à¦•à§‹à¦°à§à¦¸ à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦•à¦°à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              â€˜Aâ€™ Level à¦à¦° à¦•à§à¦·à§‡à¦¤à§à¦°à§‡ à¦°à¦¸à¦¾à§Ÿà¦¨ à¦“ à¦œà§€à¦¬ à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨ à¦¬à¦¿à¦·à§Ÿà§‡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦‡ à¦—à§à¦°à§‡à¦¡ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡ à¦à¦¬à¦‚ à¦ªà¦¦à¦¾à¦°à§à¦¥ à¦“ à¦—à¦£à¦¿à¦¤ à¦¬à¦¿à¦·à§Ÿà§‡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦ˆ à¦—à§à¦°à§‡à¦¡ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              à¦¬à¦¿.à¦«à¦¾à¦°à§à¦® à¦•à§‹à¦°à§à¦¸à§‡ à¦­à¦°à§à¦¤à¦¿à¦° à¦†à¦¬à§‡à¦¦à¦¨à¦•à¦¾à¦°à§€à¦•à§‡ à¦‰à¦šà§à¦šà¦®à¦¾à¦§à§à¦¯à¦®à¦¿à¦•/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à¦° à¦«à¦²à¦¾à¦«à¦² à¦ªà§à¦°à¦•à¦¾à¦¶à§‡à¦° à¦¬à¦›à¦° (à¦–à§à¦°à¦¿à¦¸à§à¦Ÿà¦¾à¦¬à§à¦¦) à¦¥à§‡à¦•à§‡ à§¦à§© (à¦¤à¦¿à¦¨) à¦¬à¦›à¦°à§‡à¦° à¦®à¦§à§à¦¯à§‡ à¦­à¦°à§à¦¤à¦¿ à¦ªà§à¦°à¦•à§à¦°à¦¿à§Ÿà¦¾ à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦•à¦°à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+             </li>
+             <li style="padding-left: 10px;">
+              à¦«à¦¾à¦°à§à¦®à§‡à¦¸à§€ à¦•à¦¾à¦‰à¦¨à§à¦¸à¦¿à¦² à¦•à¦°à§à¦¤à§ƒà¦• à¦…à¦¨à§à¦®à§‹à¦¦à¦¿à¦¤ à¦ªà§à¦°à¦¤à¦¿à¦·à§à¦ à¦¾à¦¨ à¦¥à§‡à¦•à§‡ à¦¡à¦¿à¦ªà§à¦²à§‹à¦®à¦¾ à¦‡à¦¨ à¦«à¦¾à¦°à§à¦®à§‡à¦¸à§€ à¦¡à¦¿à¦—à§à¦°à¦¿ à¦ªà§à¦°à¦¾à¦ªà§à¦¤ à¦­à¦°à§à¦¤à¦¿à¦šà§à¦›à§ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€à¦¦à§‡à¦° à¦¬à¦°à§‡à¦¨à§à¦¦à§à¦° à¦¬à¦¿à¦¶à§à¦¬à¦¬à¦¿à¦¦à§à¦¯à¦¾à¦²à§Ÿà§‡à¦° à¦«à¦¾à¦°à§à¦®à§‡à¦¸à§€ à¦¬à¦¿à¦­à¦¾à¦—à§‡à¦° à¦…à¦¨à§à¦®à§‹à¦¦à¦¨ à¦¸à¦¾à¦ªà§‡à¦•à§à¦·à§‡ à¦­à¦°à§à¦¤à¦¿à¦° à¦†à¦¬à§‡à¦¦à¦¨ à¦•à¦°à¦¤à§‡ à¦¹à¦¬à§‡
+             </li>
+            </ol>
+            <h4 style="text-decoration:underline;margin-top:20px;">
+             <strong>
+              à¦¸à§à¦¨à¦¾à¦¤à¦•à§‹à¦¤à§à¦¤à¦° à¦ªà¦°à§à¦¯à¦¾à§Ÿ:
+             </strong>
+            </h4>
+            <p style="text-align: justify;">
+             à¦¸à§à¦¨à¦¾à¦¤à¦•à§‹à¦¤à§à¦¤à¦° à¦ªà¦°à§à¦¯à¦¾à§Ÿà§‡ à¦­à¦°à§à¦¤à¦¿à¦šà§à¦›à§ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€à¦¦à§‡à¦° à¦¨à¦¿à¦®à§à¦¨à§‡ à¦¬à¦°à§à¦£à¦¿à¦¤ à¦ªà§Ÿà§‡à¦¨à§à¦Ÿ à¦Ÿà§‡à¦¬à¦¿à¦² à¦…à¦¨à§à¦¸à¦¾à¦°à§‡ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à§«.à§¦à§¦ à¦ªà§Ÿà§‡à¦¨à§à¦Ÿ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤ à¦¯à¦¦à¦¿ à¦•à§‹à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à§©à§Ÿ à¦¬à¦¿à¦­à¦¾à¦—/à¦•à§à¦²à¦¾à¦¸ à¦¥à§‡à¦•à§‡ à¦¥à¦¾à¦•à§‡ à¦¤à¦¬à§‡ à§©à§Ÿ à¦¬à¦¿à¦­à¦¾à¦—/à¦•à§à¦²à¦¾à¦¸ à¦¸à¦¹ à¦®à§‹à¦Ÿ à§¬.à§¦à§¦ à¦ªà§Ÿà§‡à¦¨à§à¦Ÿ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤ à¦ªà§Ÿà§‡à¦¨à§à¦Ÿ à¦Ÿà§‡à¦¬à¦¿à¦² à¦¨à¦¿à¦®à§à¦¨à¦°à§‚à¦ª:
+            </p>
+            <div class="table-responsive">
+             <table class="table table-bordered text-center">
+              <thead>
+               <tr>
+                <th rowspan="2" style="vertical-align:middle;">
+                 à¦¡à¦¿à¦—à§à¦°à§€
+                </th>
+                <th colspan="3">
+                 à¦ªà§Ÿà§‡à¦¨à§à¦Ÿ
+                </th>
+               </tr>
+               <tr>
+                <th>
+                 à§§à¦® à¦¬à¦¿à¦­à¦¾à¦—/à¦¶à§à¦°à§‡à¦£à¦¿/à¦¸à¦®à¦®à¦¾à¦¨
+                 <br/>
+                 (à§©.à§«à§¦ à¦à¦¬à¦‚ à¦à¦° à¦Šà¦°à§à¦§à§à¦¬à§‡)
+                </th>
+                <th>
+                 à§¨à§Ÿ à¦¬à¦¿à¦­à¦¾à¦—/à¦¶à§à¦°à§‡à¦£à¦¿/à¦¸à¦®à¦®à¦¾à¦¨
+                 <br/>
+                 (à§¨.à§«à§¦ à¦¥à§‡à¦•à§‡ à§©.à§ªà§¯)
+                </th>
+                <th>
+                 à§©à§Ÿ à¦¬à¦¿à¦­à¦¾à¦—/à¦¶à§à¦°à§‡à¦£à¦¿/à¦¸à¦®à¦®à¦¾à¦¨
+                 <br/>
+                 Equivalent
+                 <br/>
+                 (à§¨.à§¦à§¦ à¦¥à§‡à¦•à§‡ à§¨.à§ªà§¯)
+                </th>
+               </tr>
+              </thead>
+              <tbody>
+               <tr>
+                <td>
+                 à¦à¦¸à¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨
+                </td>
+                <td>
+                 à§©
+                </td>
+                <td>
+                 à§¨
+                </td>
+                <td>
+                 à§§
+                </td>
+               </tr>
+               <tr>
+                <td>
+                 à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨
+                </td>
+                <td>
+                 à§©
+                </td>
+                <td>
+                 à§¨
+                </td>
+                <td>
+                 à§§
+                </td>
+               </tr>
+               <tr>
+                <td>
+                 à¦¡à¦¿à¦—à§à¦°à§€ à¦ªà¦¾à¦¶
+                </td>
+                <td>
+                 à§©
+                </td>
+                <td>
+                 à§¨
+                </td>
+                <td>
+                 à§§
+                </td>
+               </tr>
+               <tr>
+                <td>
+                 à¦…à¦¨à¦¾à¦°à§à¦¸/à§ª à¦¬à¦›à¦° à¦®à§‡à§Ÿà¦¾à¦¦à§€ à¦¡à¦¿à¦—à§à¦°à§€
+                </td>
+                <td>
+                 à§ª
+                </td>
+                <td>
+                 à§©
+                </td>
+                <td>
+                 à§¨
+                </td>
+               </tr>
+              </tbody>
+              <caption style="caption-side:bottom">
+               <strong>
+                à¦¨à§‹à¦Ÿ:
+               </strong>
+               à¦ªà§à¦°à¦¤à¦¿à¦Ÿà¦¿ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦¨à§à¦¯à§‚à¦¨à¦¤à¦® à¦¸à¦¿à¦œà¦¿à¦ªà¦¿à¦ à§¨.à§¦à§¦ à¦¥à¦¾à¦•à¦¤à§‡ à¦¹à¦¬à§‡à¥¤
+              </caption>
+             </table>
+            </div>
+            <p style="text-align: justify;">
+             à¦¸à§à¦¨à¦¾à¦¤à¦•à§‹à¦¤à§à¦¤à¦° à¦ªà¦°à§à¦¯à¦¾à§Ÿà§‡ à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨, à¦ªà§à¦°à¦¯à§à¦•à§à¦¤à¦¿ à¦“ à¦ªà§à¦°à¦•à§Œà¦¶à¦² à¦…à¦¨à§à¦·à¦¦à¦­à§‚à¦•à§à¦¤ à¦ªà§à¦°à§‹à¦—à§à¦°à¦¾à¦®/à¦•à§‹à¦°à§à¦¸à¦¸à¦®à§‚à¦¹à§‡ à¦à¦‡à¦šà¦à¦¸à¦¸à¦¿/à¦¸à¦®à¦®à¦¾à¦¨ à¦ªà¦°à§€à¦•à§à¦·à¦¾à§Ÿ à¦•à§‡à¦¬à¦²à¦®à¦¾à¦¤à§à¦° à¦¬à¦¿à¦œà§à¦žà¦¾à¦¨ à¦¬à¦¿à¦­à¦¾à¦— à¦¥à§‡à¦•à§‡ à¦‰à¦¤à§à¦¤à§€à¦°à§à¦£ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€ à¦­à¦°à§à¦¤à¦¿ à¦•à¦°à¦¾ à¦¯à¦¾à¦¬à§‡à¥¤ à¦‰à¦•à§à¦¤ à¦ªà§à¦°à§‹à¦—à§à¦°à¦¾à¦®/à¦•à§‹à¦°à§à¦¸à¦¸à¦®à§‚à¦¹à§‡ à¦•à¦²à¦¾, à¦®à¦¾à¦¨à¦¬à¦¿à¦• à¦à¦¬à¦‚ à¦¬à¦¾à¦£à¦¿à¦œà§à¦¯ à¦¬à¦¿à¦­à¦¾à¦— à¦¥à§‡à¦•à§‡ à¦‰à¦¤à§à¦¤à§€à¦°à§à¦£ à¦¶à¦¿à¦•à§à¦·à¦¾à¦°à§à¦¥à§€ à¦­à¦°à§à¦¤à¦¿ à¦•à¦°à¦¾ à¦¯à¦¾à¦¬à§‡ à¦¨à¦¾à¥¤
+            </p>
+           </div>
+          </div>
+         </div>
+         <div class="panel box box-primary">
+          <div class="box-header with-border">
+           <h4 class="box-title">
+            <a data-parent="#accordion" data-toggle="collapse" href="#collapseThree">
+             Tution &amp; Other Fees
+            </a>
+           </h4>
+          </div>
+          <div class="panel-collapse collapse" id="collapseThree">
+           <div class="box-body">
+            <div class="form-group">
+             <label>
+              Select a program to get fee information
+             </label>
+             <select class="form-control" id="program-select-for-fees" name="progran_id">
+              <option selected="selected" value="">
+               -- Select Program --
+              </option>
+              <option value="1">
+               BA Honors in English
+              </option>
+              <option value="2">
+               MA in English
+              </option>
+              <option value="3">
+               BSS Honors in Sociology
+              </option>
+              <option value="4">
+               BSS Honors in Economics
+              </option>
+              <option value="5">
+               BSS Honors in JCMS
+              </option>
+              <option value="6">
+               B Pharm Honors
+              </option>
+              <option value="8">
+               B. Sc. in CSE
+              </option>
+              <option value="10">
+               B. Sc. in EEE
+              </option>
+              <option value="11">
+               BBA
+              </option>
+              <option value="12">
+               MBA-Regular
+              </option>
+              <option value="13">
+               Executive MBA
+              </option>
+              <option value="14">
+               LLB Honors
+              </option>
+              <option value="15">
+               LLM (Final)
+              </option>
+              <option value="19">
+               MSS in Sociology (Regular)
+              </option>
+              <option value="21">
+               BA in Islamic History and Culture
+              </option>
+              <option value="22">
+               BSS (Hons.) in Political Science
+              </option>
+              <option value="23">
+               Master of Public Health
+              </option>
+              <option value="26">
+               MSS in Economics
+              </option>
+              <option value="27">
+               MSS in Political Science
+              </option>
+              <option value="29">
+               B.Sc. in Nutrition and Food Engineering
+              </option>
+             </select>
+            </div>
+            <div id="show-fee">
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="panel box box-primary">
+          <div class="box-header with-border">
+           <h4 class="box-title">
+            <a data-parent="#accordion" data-toggle="collapse" href="#collapseFour">
+             Admission Exam Schedule
+            </a>
+           </h4>
+          </div>
+          <div class="panel-collapse collapse" id="collapseFour">
+           <div class="box-body">
+            <table class="table table-bordered">
+             <thead>
+              <tr>
+               <th>
+                Program
+               </th>
+               <th class="text-center">
+                Session
+               </th>
+               <th class="text-center">
+                Exam Date
+               </th>
+               <th class="text-center">
+                Form Price
+               </th>
+              </tr>
+             </thead>
+             <tbody>
+              <tr>
+               <td>
+                BA Honors in English
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                MA in English
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                -
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                BSS Honors in Sociology
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                BSS Honors in Economics
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                BSS Honors in JCMS
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                B Pharm Honors
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                23 December 2025
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                B. Sc. in CSE
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                29 December 2025
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                B. Sc. in EEE
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                BBA
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                LLB Honors
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                23 December 2025
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                LLM (Final)
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                -
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                MSS in Sociology (Regular)
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                -
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                BA in Islamic History and Culture
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                BSS (Hons.) in Political Science
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                Master of Public Health
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                -
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                MSS in Economics
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                -
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                MSS in Political Science
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                -
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+              <tr>
+               <td>
+                B.Sc. in Nutrition and Food Engineering
+               </td>
+               <td class="text-center">
+                Spring-2026
+               </td>
+               <td class="text-center">
+                25 January 2026
+               </td>
+               <td class="text-center">
+                500.00
+               </td>
+              </tr>
+             </tbody>
+            </table>
+           </div>
+          </div>
+         </div>
+         <div class="panel box box-primary">
+          <div class="box-header with-border">
+           <h4 class="box-title">
+            <a data-parent="#accordion" data-toggle="collapse" href="#collapseFive">
+             Scholarships/Waivers
+            </a>
+           </h4>
+          </div>
+          <div class="panel-collapse collapse" id="collapseFive">
+           <div class="box-body">
+            <img alt="Waivers" class="img-responsive thumbnail" src="images/Waivers.jpg"/>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="modal fade in" id="delete_modal">
+   <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+      <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+       <span aria-hidden="true">
+        Ã—
+       </span>
+      </button>
+      <h4 class="modal-title">
+       Item Delete Confirmation
+      </h4>
+     </div>
+     <div class="modal-body">
+      <p class="alert alert-warning text-justify">
+       You are about to delete an item permanently. Do you want to delete this item permanently? Remember that this action cannot be undone.
+      </p>
+     </div>
+     <div class="modal-footer">
+      <button class="btn btn-default pull-left" data-dismiss="modal" type="button">
+       Cancel
+      </button>
+      <form accept-charset="UTF-8" action="http://160.187.25.3:8083/front/applicant/home" id="delete_form" method="POST">
+       <input name="_method" type="hidden" value="DELETE"/>
+       <input name="_token" type="hidden" value="1GiSD6ikxAHiMkPOiF8smiwHLOXbq36zbxaSTAfm"/>
+       <input class="btn btn-danger" type="submit" value="Delete"/>
+      </form>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="modal fade in" id="confirm_modal">
+   <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+      <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+       <span aria-hidden="true">
+        Ã—
+       </span>
+      </button>
+      <h4 class="modal-title">
+       Confirmation
+      </h4>
+     </div>
+     <div class="modal-body">
+      <p class="alert alert-warning text-justify">
+       Please confirm your actions.
+      </p>
+     </div>
+     <div class="modal-footer">
+      <button class="btn btn-default pull-left" data-dismiss="modal" type="button">
+       Cancel
+      </button>
+      <a class="btn btn-success" href="#" id="confirmed_link">
+       Confirm
+      </a>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="modal fade in" id="common_modal">
+   <div class="modal-dialog">
+    <div class="modal-content" id="common_modal_content">
+    </div>
+   </div>
+  </div>
+  <div class="modal fade in" id="common_modal_two">
+   <div class="modal-dialog">
+    <div class="modal-content" id="common_modal_two_content">
+    </div>
+   </div>
+  </div>
+  <div class="modal fade in" id="common_modal_large">
+   <div class="modal-dialog modal-lg">
+    <div class="modal-content" id="common_modal_large_content">
+    </div>
+   </div>
+  </div>
+  <div class="modal fade in" id="common_modal_large_two">
+   <div class="modal-dialog modal-lg">
+    <div class="modal-content" id="common_modal_large_two_content">
+    </div>
+   </div>
+  </div>
+  <footer class="main-footer">
+   <div class="pull-right hidden-xs">
+    <b>
+     Version
+    </b>
+    2.0.0
+   </div>
+   <strong>
+    Copyright Â© 2026
+    <a href="../index.html">
+     Varendra University
+    </a>
+    .
+   </strong>
+   All rights
+	reserved.
+  </footer>
+  <script src="js/app.js" type="text/javascript">
+  </script>
+  <script>
+   $(document).ready(function(){
+    $("#language_toggle").click(function(){
+        $("#requirements_in_english").slideToggle();
+        $("#requirements_in_bangla").slideToggle();
+    });
+});
+  </script>
+  <script>
+   $(document).ready(function(){
+    $("#program-select-for-fees").change(function(){
+        if($(this).val())
+        {
+            $("#show-fee").html('Please Wait...');
+            $.ajax({
+                'type':'GET',
+                'url':'http://160.187.25.3:8083/front/applicant/home/tutionfees/'+$(this).val(),
+                success:function(response){
+                    $("#show-fee").html(response);
+                }
+            });
+        }
+        else
+        {
+            $("#show-fee").html('');
+        }
+    });
+});
+  </script>
+  <script type="text/javascript">
+   $(document).ready(function(){
+  $(document.body).on('click','.delete',function(){
+    $("#delete_form").attr('action',$(this).attr('href'));
+    $("#delete_modal").modal('show');
+    return false;
+  });
+
+  $(document.body).on('click','.confirm',function(){  
+    $("#confirmed_link").attr('href',$(this).attr('href'));
+    $("#confirm_modal").modal('show');
+    return false;
+  });
+
+  $(document.body).on('click','.show_in_modal',function(e){
+    $.ajax({
+      type:'GET',
+      url:$(this).attr('href'),
+      success:function(response)
+      {
+        $("#common_modal_content").html(response);
+        $("#common_modal").modal('show');
+      }
+    });    
+    return false;
+  });
+
+  $(document.body).on('click','.show_in_modal_two',function(e){
+    $("#common_modal").modal('hide');
+    $.ajax({
+      type:'GET',
+      url:$(this).attr('href'),
+      success:function(response)
+      {
+        $("#common_modal_two_content").html(response);
+        $("#common_modal_two").modal('show');
+      }
+    });    
+    return false;
+  });
+
+  $(document.body).on('submit','.show_in_modal_form',function(e){
+    $("#common_modal").modal('hide');
+    var form = $(this);
+    var actionUrl = form.attr('action');
+    $.ajax({
+      type:'GET',
+      url:actionUrl,
+      data: form.serialize(),
+      success:function(response)
+      {
+        $("#common_modal_two_content").html(response);
+        $("#common_modal_two").modal('show');
+      }
+    });    
+    return false;
+  });
+
+  $(document.body).on('click','.show_in_modal_large',function(e){
+    $("#common_modal_large").modal('hide');
+    $.ajax({
+      type:'GET',
+      url:$(this).attr('href'),
+      success:function(response)
+      {
+        $("#common_modal_large_content").html(response);
+        $("#common_modal_large").modal('show');
+      }
+    });    
+    return false;
+  });
+
+  $(document.body).on('submit','.show_in_modal_form_large',function(e){
+    $("#common_modal_large").modal('hide');
+    var form = $(this);
+    var actionUrl = form.attr('action');
+    $.ajax({
+      type:'GET',
+      url:actionUrl,
+      data: form.serialize(),
+      success:function(response)
+      {
+        $("#common_modal_large_two_content").html(response);
+        $("#common_modal_large_two").modal('show');
+      }
+    });    
+    return false;
+  });
+
+});
+  </script>
+ </body>
+</html>
+

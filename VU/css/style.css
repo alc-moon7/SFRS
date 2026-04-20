@@ -400,7 +400,7 @@ img {
 /* ========== Mega Menu Branding Section ========== */
 .mega-menu-item-logo {
     background: linear-gradient(to right, rgba(217, 217, 217, 0.7) 0%, #fff 96%),
-        url("../images/dropdown_menu_img.jpg");
+        url("../img/dropdown_menu_img.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: left center;
@@ -814,7 +814,7 @@ img {
 
 .home-mission-vision {
     position: relative;
-    background: url("../images/mission_vision_bg.webp");
+    background: url("../img/mission_vision_bg.webp");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -883,7 +883,7 @@ img {
 /* ======== Home Counter Start ======== */
 .home-counter {
     position: relative;
-    background: url("../images/dropdown_menu_img.jpg");
+    background: url("../img/dropdown_menu_img.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;

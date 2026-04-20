@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
             drag: false,
             autoWidth: true,
             autoHeight: true,
-            clones: totalItems < 6 ? totalItems * 4 : totalItems,
+            //clones: totalItems < 6 ? totalItems * 4 : totalItems,
             autoScroll: {
                 speed,
             },
