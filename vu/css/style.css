@@ -221,6 +221,22 @@ img {
     transition: var(--transition);
 }
 
+.student-feedback-btn {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 2px 12px;
+    border-radius: 999px;
+}
+
+.student-feedback-btn a {
+    color: white;
+    font-weight: 500;
+}
+
+.student-feedback-btn:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    transition: var(--transition);
+}
+
 .header-top-links li a {
     color: white;
     transition: 0.3s;
