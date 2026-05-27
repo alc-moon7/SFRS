@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Varendra University</title>
-  <meta name="description" content="Varendra University official website and Student Feedback Review System access portal.">
+  <title>Student Feedback Review System - SFRS</title>
+  <meta name="description" content="Student Feedback Review System access portal for Varendra University.">
   <noscript>
-    <meta http-equiv="refresh" content="0; url=/vu/">
+    <meta http-equiv="refresh" content="0; url=/feedback/">
   </noscript>
   <style>
     :root {
@@ -89,33 +89,32 @@
 <body>
   <main class="loader-card">
     <div class="loader-mark" aria-hidden="true"></div>
-    <h1 id="loader-title">Opening Varendra University</h1>
-    <p id="loader-copy">The VU homepage is loading at the root domain. If it takes a moment, you can still open the feedback portal directly.</p>
+    <h1 id="loader-title">Opening SFRS</h1>
+    <p id="loader-copy">The Student Feedback Review System is loading. The VU mirror remains available from its own path.</p>
     <div class="actions" id="loader-actions" hidden>
-      <a class="btn btn-primary" href="/vu/">Open VU Site</a>
-      <a class="btn btn-secondary" href="/feedback/">Open Feedback Portal</a>
+      <a class="btn btn-primary" href="/feedback/">Open Feedback Portal</a>
+      <a class="btn btn-secondary" href="/vu/">Open VU Site</a>
     </div>
   </main>
 
   <script>
-    (async function loadVuHomepage() {
+    (async function loadFeedbackPortal() {
       try {
-        const response = await fetch("vu/index.html", { cache: "no-store" });
+        const response = await fetch("feedback/index.html", { cache: "no-store" });
         if (!response.ok) {
-          throw new Error("Failed to load vu/index.html");
+          throw new Error("Failed to load feedback/index.html");
         }
 
         let html = await response.text();
-        html = html.replace(/<base[^>]*href=["'][^"']*["'][^>]*>/i, '<base href="/vu/">');
-        html = html.replace(/href="\.\//g, 'href="/"');
-        html = html.replace(/href='\.\//g, "href='/'");
+        html = html.replace(/<base[^>]*href=["'][^"']*["'][^>]*>/i, "");
+        html = html.replace(/<head>/i, '<head>\n  <base href="/feedback/">');
 
         document.open();
         document.write("<!DOCTYPE html>\n" + html);
         document.close();
       } catch (error) {
-        document.getElementById("loader-title").textContent = "VU homepage could not be loaded";
-        document.getElementById("loader-copy").textContent = "You can open the VU mirror directly or continue to the Student Feedback Review System portal.";
+        document.getElementById("loader-title").textContent = "SFRS could not be loaded";
+        document.getElementById("loader-copy").textContent = "You can open the feedback portal directly or visit the VU mirror from its own path.";
         document.getElementById("loader-actions").hidden = false;
         console.error(error);
       }

@@ -986,13 +986,14 @@
 
   function appendChatMessage(container, role, text) {
     if (!container) {
-      return;
+      return null;
     }
     const message = document.createElement("div");
     message.className = `chat-message ${role}`;
     message.textContent = text;
     container.appendChild(message);
     container.scrollTop = container.scrollHeight;
+    return message;
   }
 
   function clampChatHistory(history, limit) {
@@ -1000,6 +1001,162 @@
       return history;
     }
     return history.slice(history.length - limit);
+  }
+
+  function buildAiWidgetContext() {
+    return JSON.stringify({
+      page: document.body.dataset.page || "home",
+      path: window.location.pathname,
+      title: document.title
+    });
+  }
+
+  function initAiChatWidget() {
+    if (document.getElementById("sfrsAiWidget")) {
+      return;
+    }
+
+    const widget = document.createElement("section");
+    widget.id = "sfrsAiWidget";
+    widget.className = "ai-chat-widget";
+    widget.setAttribute("aria-label", "SFRS AI Chat");
+
+    const panel = document.createElement("div");
+    panel.className = "ai-chat-panel";
+    panel.hidden = true;
+
+    const header = document.createElement("div");
+    header.className = "ai-chat-header";
+
+    const titleWrap = document.createElement("div");
+    const title = document.createElement("div");
+    title.className = "ai-chat-title";
+    title.textContent = "AI Chat";
+    const subtitle = document.createElement("div");
+    subtitle.className = "ai-chat-subtitle";
+    subtitle.textContent = "SFRS support";
+    titleWrap.append(title, subtitle);
+
+    const headerActions = document.createElement("div");
+    headerActions.className = "ai-chat-actions";
+
+    const clearButton = document.createElement("button");
+    clearButton.type = "button";
+    clearButton.className = "ai-chat-icon-button";
+    clearButton.textContent = "Clear";
+    clearButton.setAttribute("aria-label", "Clear AI chat");
+
+    const closeButton = document.createElement("button");
+    closeButton.type = "button";
+    closeButton.className = "ai-chat-icon-button";
+    closeButton.textContent = "x";
+    closeButton.setAttribute("aria-label", "Close AI chat");
+
+    headerActions.append(clearButton, closeButton);
+    header.append(titleWrap, headerActions);
+
+    const messages = document.createElement("div");
+    messages.className = "chat-window ai-chat-messages";
+    messages.setAttribute("aria-live", "polite");
+
+    const form = document.createElement("form");
+    form.className = "ai-chat-form";
+    form.autocomplete = "off";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "form-control";
+    input.placeholder = "Ask about SFRS...";
+    input.required = true;
+    input.maxLength = 700;
+
+    const sendButton = document.createElement("button");
+    sendButton.type = "submit";
+    sendButton.className = "btn btn-success ai-chat-send";
+    sendButton.textContent = "Send";
+
+    form.append(input, sendButton);
+    panel.append(header, messages, form);
+
+    const launcher = document.createElement("button");
+    launcher.type = "button";
+    launcher.className = "ai-chat-launcher";
+    launcher.setAttribute("aria-label", "Open AI chat");
+    launcher.setAttribute("aria-expanded", "false");
+    launcher.innerHTML = "<span class=\"ai-chat-mark\">AI</span><span class=\"ai-chat-label\">Chat</span>";
+
+    widget.append(panel, launcher);
+    document.body.appendChild(widget);
+
+    const chatHistory = [];
+    const greeting = "Hi! Ask me about SFRS login, feedback submission, dashboards, or portal rules.";
+
+    const resetMessages = () => {
+      messages.innerHTML = "";
+      appendChatMessage(messages, "assistant", greeting);
+    };
+
+    const setOpen = (isOpen) => {
+      widget.classList.toggle("is-open", isOpen);
+      panel.hidden = !isOpen;
+      launcher.setAttribute("aria-expanded", String(isOpen));
+      if (isOpen) {
+        window.setTimeout(() => input.focus(), 0);
+      }
+    };
+
+    resetMessages();
+
+    launcher.addEventListener("click", () => {
+      setOpen(!widget.classList.contains("is-open"));
+    });
+
+    closeButton.addEventListener("click", () => setOpen(false));
+
+    clearButton.addEventListener("click", () => {
+      chatHistory.splice(0, chatHistory.length);
+      resetMessages();
+      input.focus();
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const message = input.value.trim();
+      if (!message) {
+        return;
+      }
+
+      if (typeof supabaseClient === "undefined") {
+        appendChatMessage(messages, "assistant", "AI chat is not configured on this page.");
+        return;
+      }
+
+      appendChatMessage(messages, "user", message);
+      chatHistory.push({ role: "user", content: message });
+      input.value = "";
+      input.disabled = true;
+      sendButton.disabled = true;
+      const typingMessage = appendChatMessage(messages, "assistant", "Thinking...");
+
+      try {
+        const reply = await invokeAiAssistant({
+          type: "chat",
+          message,
+          history: clampChatHistory(chatHistory.slice(0, -1), 8),
+          context: buildAiWidgetContext()
+        });
+        typingMessage?.remove();
+        appendChatMessage(messages, "assistant", reply || "I could not generate a reply.");
+        chatHistory.push({ role: "assistant", content: reply || "" });
+      } catch (error) {
+        typingMessage?.remove();
+        appendChatMessage(messages, "assistant", error.message || "Unable to reach the AI assistant.");
+      } finally {
+        input.disabled = false;
+        sendButton.disabled = false;
+        input.focus();
+      }
+    });
   }
 
   async function getProfile() {
@@ -1546,60 +1703,6 @@
     `;
   }
 
-  function bindStudentAssistant(useDemo) {
-    const chatWindow = document.getElementById("aiChatWindow");
-    const chatForm = document.getElementById("aiChatForm");
-    const chatInput = document.getElementById("aiChatInput");
-    const chatSend = document.getElementById("aiChatSend");
-    const chatAlert = document.getElementById("aiChatAlert");
-
-    if (!chatWindow || !chatForm || !chatInput) {
-      return;
-    }
-
-    const chatHistory = [];
-    appendChatMessage(chatWindow, "assistant", "Hi! I can help with SFRS rules, feedback steps, and portal questions.");
-
-    chatForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      clearAlert(chatAlert);
-      const message = chatInput.value.trim();
-      if (!message) {
-        return;
-      }
-
-      appendChatMessage(chatWindow, "user", message);
-      chatHistory.push({ role: "user", content: message });
-      chatInput.value = "";
-      chatInput.disabled = true;
-      if (chatSend) {
-        chatSend.disabled = true;
-      }
-
-      if (useDemo) {
-        appendChatMessage(chatWindow, "assistant", "AI assistant is disabled in demo mode. Log in with a real account to use it.");
-      } else {
-        try {
-          const reply = await invokeAiAssistant({
-            type: "chat",
-            message,
-            history: clampChatHistory(chatHistory.slice(0, -1), 8)
-          });
-          appendChatMessage(chatWindow, "assistant", reply || "I could not generate a reply.");
-          chatHistory.push({ role: "assistant", content: reply || "" });
-        } catch (error) {
-          showAlert(chatAlert, "danger", error.message || "Unable to reach the AI assistant.");
-        }
-      }
-
-      chatInput.disabled = false;
-      if (chatSend) {
-        chatSend.disabled = false;
-      }
-      chatInput.focus();
-    });
-  }
-
   function buildCourseCatalog(assignments) {
     const map = new Map();
     assignments.forEach((assignment) => {
@@ -2132,8 +2235,6 @@
     setText("[data-user-program]", `${profile.program || DEFAULT_PROGRAM} | ${profile.semester} | ${profile.section}`);
     setText("[data-student-semester-badge]", profile.semester);
     setText("[data-student-section-badge]", `Section ${profile.section}`);
-
-    bindStudentAssistant(useDemo);
 
     let settings;
     let assignments;
@@ -3062,6 +3163,7 @@
   function initPage() {
     initLogout();
     populateEntryLinks();
+    initAiChatWidget();
 
     switch (document.body.dataset.page) {
       case "student-login":

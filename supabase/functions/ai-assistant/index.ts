@@ -1,5 +1,13 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 
+type ChatMessage = {
+  role: "system" | "user" | "assistant";
+  content: string;
+};
+
+const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";
+const DEFAULT_GROQ_MODEL = "llama-3.1-8b-instant";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -24,27 +32,20 @@ serve(async (req) => {
     return jsonResponse(400, { error: "Invalid JSON payload." });
   }
 
-  const geminiKey = Deno.env.get("GEMINI_API_KEY");
-  if (!geminiKey) {
-    return jsonResponse(500, { error: "GEMINI_API_KEY is not set." });
+  const groqKey = Deno.env.get("GROQ_API_KEY")?.trim();
+  if (!groqKey) {
+    return jsonResponse(500, { error: "GROQ_API_KEY is not set." });
   }
 
-  const baseUrl =
-    (Deno.env.get("GEMINI_BASE_URL") || "https://generativelanguage.googleapis.com/v1beta")
-      .replace(/\/+$/, "");
-  const defaultModel = Deno.env.get("GEMINI_MODEL") || "gemini-1.5-flash";
-  const summaryModel = Deno.env.get("GEMINI_SUMMARY_MODEL") || defaultModel;
-  const chatModel = Deno.env.get("GEMINI_CHAT_MODEL") || defaultModel;
-  const timeoutMs = Number(Deno.env.get("GEMINI_TIMEOUT_MS") || 15000);
+  const groqModel = DEFAULT_GROQ_MODEL;
+  const timeoutMs = Number(Deno.env.get("GROQ_TIMEOUT_MS") || 15000);
   const type = body.type;
 
   let temperature = 0.3;
   let maxTokens = 350;
-  let messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [];
-  let model = defaultModel;
+  let messages: ChatMessage[] = [];
 
   if (type === "summary") {
-    model = summaryModel;
     const payload = (body.payload || {}) as Record<string, unknown>;
     const userPrompt =
       "Summarize the following anonymized feedback statistics for a teacher. " +
@@ -75,18 +76,22 @@ serve(async (req) => {
       }))
       .slice(-8);
 
-    model = chatModel;
     temperature = 0.5;
     maxTokens = 400;
+    const context = String(body.context || "").trim().slice(0, 1000);
+    const contextText = context ? ` Current page context: ${context}` : "";
 
     messages = [
       {
         role: "system",
         content:
-          "You are the SFRS student support assistant. Help with portal usage, " +
-          "feedback submission steps, and general guidance. If asked for grades, " +
-          "personal data, or anything outside the portal, say you cannot access it " +
-          "and suggest contacting the department. Reply in Bengali and keep it concise."
+          "You are the SFRS support assistant for students, teachers, and admins. " +
+          "Help with portal navigation, feedback submission, teacher dashboards, " +
+          "admin workflow, and general guidance. If asked for grades, personal data, " +
+          "or anything outside the portal, say you cannot access it and suggest " +
+          "contacting the department. Reply in Bengali when the user writes Bengali; " +
+          "otherwise match the user's language. Keep replies concise." +
+          contextText
       },
       ...safeHistory,
       { role: "user", content: message }
@@ -98,64 +103,43 @@ serve(async (req) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-  const systemMessage = messages.find((item) => item.role === "system");
-  const contents = messages
-    .filter((item) => item.role !== "system")
-    .map((item) => ({
-      role: item.role === "assistant" ? "model" : "user",
-      parts: [{ text: item.content }]
-    }));
-  const requestBody: Record<string, unknown> = {
-    contents,
-    generationConfig: {
-      temperature,
-      maxOutputTokens: maxTokens
-    }
-  };
-  if (systemMessage?.content) {
-    requestBody.systemInstruction = {
-      role: "system",
-      parts: [{ text: systemMessage.content }]
-    };
-  }
-
-  let geminiResponse: Response;
+  let groqResponse: Response;
   try {
-    geminiResponse = await fetch(
-      `${baseUrl}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(geminiKey)}`,
-      {
+    groqResponse = await fetch(GROQ_CHAT_COMPLETIONS_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${groqKey}`
+      },
       body: JSON.stringify({
-        ...requestBody
+        model: groqModel,
+        messages,
+        temperature,
+        max_tokens: maxTokens,
+        stream: false
       }),
       signal: controller.signal
-    }
-    );
+    });
   } catch (error) {
     clearTimeout(timeoutId);
     return jsonResponse(500, {
-      error: "Gemini request failed.",
+      error: "Groq request failed.",
       details: error instanceof Error ? error.message : "Unknown error."
     });
   } finally {
     clearTimeout(timeoutId);
   }
 
-  if (!geminiResponse.ok) {
-    const errorText = await geminiResponse.text();
-    return jsonResponse(geminiResponse.status, {
-      error: "Gemini request failed.",
+  if (!groqResponse.ok) {
+    const errorText = await groqResponse.text();
+    return jsonResponse(groqResponse.status, {
+      error: "Groq request failed.",
       details: errorText.slice(0, 300)
     });
   }
 
-  const data = await geminiResponse.json();
-  const parts = data?.candidates?.[0]?.content?.parts || [];
-  const result = parts
-    .map((part: { text?: string }) => part.text || "")
-    .join("")
-    .trim();
+  const data = await groqResponse.json();
+  const result = String(data?.choices?.[0]?.message?.content || "").trim();
   if (!result) {
     return jsonResponse(500, { error: "No response from AI." });
   }
