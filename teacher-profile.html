@@ -14,16 +14,16 @@
       <a class="navbar-brand" href="/feedback/">
         <span class="logo-mark" aria-hidden="true"></span>
         <span class="brand-text">
-          <span class="brand-title">Varendra University</span><br>
-          <span class="brand-subtitle">CSE Department</span>
+          <span class="brand-title">SFRS</span>
+          <span class="brand-subtitle">Teacher Profile</span>
         </span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <ul class="navbar-nav ms-lg-auto">
+          <li class="nav-item"><a class="nav-link" href="/feedback/">Home</a></li>
           <li class="nav-item"><a class="nav-link active" href="teacher-profile.html">Teacher Profile</a></li>
           <li class="nav-item"><a class="nav-link" href="#" data-teacher-profile-back>Back</a></li>
           <li class="nav-item"><a class="nav-link" href="#" data-logout>Logout</a></li>
@@ -32,18 +32,40 @@
     </div>
   </nav>
 
-  <main class="container py-4">
-    <div id="teacherProfileAlert"></div>
+  <main class="app-shell">
+    <aside class="app-sidebar" aria-label="Teacher profile navigation">
+      <div class="app-sidebar-title">Profile View</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link active" href="#profileOverview">Overview</a>
+        <a class="sidebar-link" href="#aboutTeacher">About</a>
+        <a class="sidebar-link" href="#profileRatings">Ratings</a>
+        <a class="sidebar-link" href="#profileComments">Comments</a>
+        <a class="sidebar-link" href="#" data-teacher-profile-back>Back</a>
+        <a class="sidebar-link danger" href="#" data-logout>Logout</a>
+      </nav>
+    </aside>
 
-    <section class="teacher-profile-shell">
-      <div class="profile-header-card">
+    <div class="app-content">
+      <div class="app-topbar">
+        <div>
+          <div class="section-eyebrow">Teacher Profile</div>
+          <h1 class="h3 section-title mb-1">Faculty Feedback Profile</h1>
+          <p class="section-lead mb-0">Anonymized ratings, assignments, public contact details, and recent comments.</p>
+        </div>
+        <button class="btn btn-outline-secondary" type="button" data-teacher-profile-back>Back</button>
+      </div>
+
+      <div id="teacherProfileAlert"></div>
+
+      <section id="profileOverview" class="profile-header-card mb-4">
         <div class="profile-identity">
           <div class="avatar-pill" data-profile-avatar aria-hidden="true"></div>
           <div>
-            <h1 class="profile-name mb-1" data-profile-name>Teacher Profile</h1>
+            <span class="badge-role mb-2">Faculty</span>
+            <h2 class="profile-name mb-1" data-profile-name>Teacher Profile</h2>
             <div class="text-muted mb-2">
               <span data-profile-designation>Lecturer</span>
-              <span class="mx-2">&middot;</span>
+              <span class="mx-2">|</span>
               <span data-profile-department>Computer Science and Engineering</span>
             </div>
             <div class="profile-chip-row">
@@ -62,13 +84,14 @@
             <div class="score-value" data-profile-review-count>0</div>
           </div>
         </div>
-      </div>
+      </section>
 
       <div class="row g-4">
         <div class="col-lg-5">
-          <div class="card h-100">
+          <section id="aboutTeacher" class="card h-100">
             <div class="card-body">
-              <h5 class="card-title">About</h5>
+              <div class="section-eyebrow">About</div>
+              <h2 class="h5 section-title">Profile Details</h2>
               <p class="text-muted" data-profile-bio>No teacher bio added yet.</p>
               <div class="profile-detail-list">
                 <div><span class="fw-semibold">Email:</span> <span data-profile-email>Not shared</span></div>
@@ -76,29 +99,31 @@
                 <div><span class="fw-semibold">Office Room:</span> <span data-profile-office>Not listed</span></div>
               </div>
               <hr>
-              <h6 class="fw-semibold mb-3">Assigned Courses</h6>
+              <h3 class="h6 section-title mb-3">Assigned Courses</h3>
               <div class="chip-stack" data-profile-assignment-list></div>
             </div>
-          </div>
+          </section>
         </div>
 
         <div class="col-lg-7">
-          <div class="card mb-4">
+          <section id="profileRatings" class="card mb-4">
             <div class="card-body">
-              <h5 class="card-title">Rating Breakdown</h5>
-              <div data-profile-rating-breakdown class="rating-breakdown-list"></div>
+              <div class="section-eyebrow">Ratings</div>
+              <h2 class="h5 section-title">Rating Breakdown</h2>
+              <div data-profile-rating-breakdown class="rating-breakdown-list mt-3"></div>
             </div>
-          </div>
+          </section>
 
-          <div class="card">
+          <section id="profileComments" class="card">
             <div class="card-body">
-              <h5 class="card-title">Recent Comments</h5>
-              <div class="comment-stack" data-profile-comment-list></div>
+              <div class="section-eyebrow">Comments</div>
+              <h2 class="h5 section-title">Recent Comments</h2>
+              <div class="comment-stack mt-3" data-profile-comment-list></div>
             </div>
-          </div>
+          </section>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer>

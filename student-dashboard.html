@@ -14,17 +14,17 @@
       <a class="navbar-brand" href="/feedback/">
         <span class="logo-mark" aria-hidden="true"></span>
         <span class="brand-text">
-          <span class="brand-title">Varendra University</span><br>
-          <span class="brand-subtitle">CSE Department</span>
+          <span class="brand-title">SFRS</span>
+          <span class="brand-subtitle">Student Portal</span>
         </span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="student-dashboard.html">Student Dashboard</a></li>
+        <ul class="navbar-nav ms-lg-auto">
+          <li class="nav-item"><a class="nav-link" href="/feedback/">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="student-dashboard.html">Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="teacher-profile.html">Teacher Profiles</a></li>
           <li class="nav-item"><a class="nav-link" href="#" data-logout>Logout</a></li>
         </ul>
@@ -32,114 +32,148 @@
     </div>
   </nav>
 
-  <main class="container py-4">
-    <section class="page-shell mb-4">
-      <div class="dashboard-heading">
+  <main class="app-shell">
+    <aside class="app-sidebar" aria-label="Student workspace navigation">
+      <div class="app-sidebar-title">Student Workspace</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link active" href="#overview">Dashboard</a>
+        <a class="sidebar-link" href="#teacherList">Teachers</a>
+        <a class="sidebar-link" href="#feedbackHistory">History</a>
+        <a class="sidebar-link" href="#profilePanel">Profile</a>
+        <a class="sidebar-link" href="#notifications">Notifications</a>
+        <a class="sidebar-link danger" href="#" data-logout>Logout</a>
+      </nav>
+    </aside>
+
+    <div class="app-content">
+      <div class="app-topbar">
         <div>
-          <span class="badge-role mb-2 d-inline-block">Student Workspace</span>
-          <h1 class="page-title mb-1">My Course Teachers</h1>
-          <p class="section-lead mb-0">See only the teachers assigned to your current semester and section, then submit course-wise feedback.</p>
+          <div class="section-eyebrow">Student Portal</div>
+          <h1 class="h3 section-title mb-1">My Course Teachers</h1>
+          <p class="section-lead mb-0">Review assigned teachers, submit feedback, and track your submission history.</p>
         </div>
         <div class="dashboard-badges">
           <span class="badge-role" data-student-semester-badge>Semester</span>
           <span class="badge-role" data-student-section-badge>Section</span>
         </div>
       </div>
-    </section>
 
-    <section class="row g-3 mb-4">
-      <div class="col-sm-6 col-xl-3">
-        <div class="stat-card h-100">
-          <div class="text-muted">Total Assigned Teachers</div>
-          <div class="display-6 fw-bold" data-stat-total-assigned>0</div>
+      <section id="overview" class="page-shell mb-4">
+        <div class="dashboard-heading">
+          <div>
+            <span class="badge-role mb-2 d-inline-block">Welcome Banner</span>
+            <h2 class="page-title mb-1">Academic feedback made simple</h2>
+            <p class="section-lead mb-0">Only teachers assigned to your semester and section appear here.</p>
+          </div>
+          <a class="btn btn-primary" href="#teacherList">Submit Feedback</a>
         </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="stat-card h-100">
-          <div class="text-muted">Pending Feedback</div>
-          <div class="display-6 fw-bold" data-stat-pending>0</div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="stat-card h-100">
-          <div class="text-muted">Submitted Feedback</div>
-          <div class="display-6 fw-bold" data-stat-submitted>0</div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="stat-card h-100">
-          <div class="text-muted">Closed Feedback</div>
-          <div class="display-6 fw-bold" data-stat-closed>0</div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <div class="row g-4">
-      <div class="col-xl-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Student Profile</h5>
-            <div class="profile-meta-list">
-              <div><span class="fw-semibold">Name:</span> <span data-user-name></span></div>
-              <div><span class="fw-semibold">Student ID:</span> <span data-user-id></span></div>
-              <div><span class="fw-semibold">Program:</span> <span data-user-program></span></div>
-            </div>
+      <section class="row g-3 mb-4" aria-label="Student statistics">
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Pending Feedback</div>
+            <div class="display-6 fw-bold" data-stat-pending>0</div>
           </div>
         </div>
-        <div class="info-card mt-4">
-          <h6 class="fw-semibold">Feedback Notes</h6>
-          <ul class="mb-0">
-            <li>Only your assigned semester and section teachers appear here.</li>
-            <li>One submission is allowed per teacher assignment.</li>
-            <li>Comments stay anonymous if the review setting allows it.</li>
-          </ul>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Submitted Feedback</div>
+            <div class="display-6 fw-bold" data-stat-submitted>0</div>
+          </div>
         </div>
-      </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Courses</div>
+            <div class="display-6 fw-bold" data-stat-courses>0</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Teachers</div>
+            <div class="display-6 fw-bold" data-stat-total-assigned>0</div>
+          </div>
+        </div>
+      </section>
 
-      <div class="col-xl-8">
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="toolbar-row">
-              <div class="toolbar-field flex-grow-1">
-                <label class="form-label" for="teacherSearchInput">Search Teacher or Course</label>
-                <input type="search" class="form-control" id="teacherSearchInput" placeholder="Type a teacher name or course code">
-              </div>
-              <div class="toolbar-field">
-                <label class="form-label" for="courseFilterSelect">Course Filter</label>
-                <select class="form-select" id="courseFilterSelect">
-                  <option value="">All courses</option>
-                </select>
+      <div class="row g-4">
+        <div class="col-xl-4">
+          <section id="profilePanel" class="card h-100">
+            <div class="card-body">
+              <div class="section-eyebrow">Profile Panel</div>
+              <h2 class="h5 section-title">Student Profile</h2>
+              <div class="profile-meta-list mt-3">
+                <div><span class="fw-semibold">Name:</span> <span data-user-name></span></div>
+                <div><span class="fw-semibold">Student ID:</span> <span data-user-id></span></div>
+                <div><span class="fw-semibold">Program:</span> <span data-user-program></span></div>
               </div>
             </div>
-            <div id="studentAssignmentsAlert" class="mt-3"></div>
-            <div id="studentAssignmentsGrid" class="teacher-grid mt-4"></div>
-            <div id="studentAssignmentsEmpty" class="empty-state d-none mt-4">
-              No teacher assignments match your current filters.
-            </div>
-          </div>
+          </section>
+
+          <section id="notifications" class="info-card mt-4">
+            <div class="section-eyebrow">Notifications</div>
+            <h2 class="h6 section-title">Feedback Rules</h2>
+            <ul class="mb-0 text-muted">
+              <li>One submission is allowed per active teacher assignment.</li>
+              <li>Anonymous comments depend on the current admin setting.</li>
+              <li>Closed windows disable new submissions until reopened.</li>
+            </ul>
+          </section>
         </div>
 
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-              <h5 class="card-title mb-0">My Submitted Feedback</h5>
-              <span class="text-muted small" data-submission-caption>Latest submissions appear first.</span>
+        <div class="col-xl-8">
+          <section id="teacherList" class="card mb-4">
+            <div class="card-body">
+              <div class="dashboard-heading mb-3">
+                <div>
+                  <div class="section-eyebrow">Teacher List</div>
+                  <h2 class="h5 section-title mb-1">Assigned Teachers</h2>
+                  <p class="text-muted mb-0">Search by teacher, course code, or course title.</p>
+                </div>
+              </div>
+              <div class="toolbar-row">
+                <div class="toolbar-field flex-grow-1">
+                  <label class="form-label" for="teacherSearchInput">Search Teacher or Course</label>
+                  <input type="search" class="form-control" id="teacherSearchInput" placeholder="Type a teacher name or course code">
+                </div>
+                <div class="toolbar-field">
+                  <label class="form-label" for="courseFilterSelect">Course Filter</label>
+                  <select class="form-select" id="courseFilterSelect">
+                    <option value="">All courses</option>
+                  </select>
+                </div>
+              </div>
+              <div id="studentAssignmentsAlert" class="mt-3"></div>
+              <div id="studentAssignmentsGrid" class="teacher-grid mt-4"></div>
+              <div id="studentAssignmentsEmpty" class="empty-state d-none mt-4">No teacher assignments match your current filters.</div>
             </div>
-            <div class="table-responsive mt-3">
-              <table class="table table-bordered align-middle">
-                <thead>
-                  <tr>
-                    <th>Teacher</th>
-                    <th>Course</th>
-                    <th>Status</th>
-                    <th>Submitted At</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="studentReviewsBody"></tbody>
-              </table>
+          </section>
+
+          <section id="feedbackHistory" class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                  <div class="section-eyebrow">History Table</div>
+                  <h2 class="h5 section-title mb-0">My Submitted Feedback</h2>
+                </div>
+                <span class="text-muted small" data-submission-caption>Latest submissions appear first.</span>
+              </div>
+              <div class="table-responsive mt-3">
+                <table class="table table-bordered align-middle">
+                  <thead>
+                    <tr>
+                      <th>Teacher</th>
+                      <th>Course</th>
+                      <th>Status</th>
+                      <th>Submitted At</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="studentReviewsBody"></tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </div>
@@ -157,7 +191,7 @@
         <div class="modal-header">
           <div>
             <h5 class="modal-title" id="feedbackModalLabel">Submit Feedback</h5>
-            <p class="text-muted small mb-0" data-feedback-modal-subtitle>Select category ratings and an optional comment.</p>
+            <p class="text-muted small mb-0" data-feedback-modal-subtitle>Rate the assigned teacher and add a constructive comment.</p>
           </div>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -170,14 +204,15 @@
             <div class="mt-4">
               <label for="feedbackComment" class="form-label">Optional Comment</label>
               <textarea class="form-control" id="feedbackComment" name="comment" rows="4" maxlength="700" placeholder="Share a short, constructive comment if you want."></textarea>
+              <div class="form-text text-end"><span data-character-count="#feedbackComment">0</span>/700</div>
             </div>
             <div class="form-check form-switch mt-3" data-anonymous-wrapper>
               <input class="form-check-input" type="checkbox" role="switch" id="feedbackAnonymous" checked>
               <label class="form-check-label" for="feedbackAnonymous">Submit as anonymous review</label>
             </div>
-            <div class="d-flex justify-content-end gap-2 mt-4">
+            <div class="d-flex justify-content-end gap-2 mt-4 flex-wrap">
               <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-success" id="feedbackSubmitBtn">Submit Feedback</button>
+              <button type="submit" class="btn btn-primary" id="feedbackSubmitBtn">Submit Feedback</button>
             </div>
           </form>
         </div>

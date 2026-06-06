@@ -5,8 +5,14 @@ type ChatMessage = {
   content: string;
 };
 
-const GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions";
-const DEFAULT_GROQ_MODEL = "llama-3.1-8b-instant";
+const DEEPSEEK_CHAT_COMPLETIONS_URL = "https://api.deepseek.com/chat/completions";
+const DEEPSEEK_MODEL = "deepseek-v4-flash";
+const SFRS_KNOWLEDGE =
+  "SFRS routes: / and /feedback open the Student Feedback Review System; /vu opens the VU mirror. " +
+  "Student: student-login, student-signup, student-dashboard. Students see only semester/section assigned teachers, search/filter courses, submit one feedback per active assignment, rate teaching quality, communication, organization, supportiveness, punctuality, overall satisfaction, add optional comment, and may submit anonymously when allowed. " +
+  "Teacher: teacher-login, teacher-signup, teacher-dashboard, teacher-profile. Teachers see assigned courses, category averages, anonymized comments, and AI summaries. " +
+  "Admin: admin-login and admin-dashboard manage teacher profiles, assignments, review window/settings, feedback moderation, analytics, and export. " +
+  "Password reset page exists. No grades, private student identities, or external university records are available.";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -32,13 +38,12 @@ serve(async (req) => {
     return jsonResponse(400, { error: "Invalid JSON payload." });
   }
 
-  const groqKey = Deno.env.get("GROQ_API_KEY")?.trim();
-  if (!groqKey) {
-    return jsonResponse(500, { error: "GROQ_API_KEY is not set." });
+  const deepseekKey = Deno.env.get("DEEPSEEK_API_KEY")?.trim();
+  if (!deepseekKey) {
+    return jsonResponse(500, { error: "DEEPSEEK_API_KEY is not set." });
   }
 
-  const groqModel = DEFAULT_GROQ_MODEL;
-  const timeoutMs = Number(Deno.env.get("GROQ_TIMEOUT_MS") || 15000);
+  const timeoutMs = Number(Deno.env.get("DEEPSEEK_TIMEOUT_MS") || 15000);
   const type = body.type;
 
   let temperature = 0.3;
@@ -46,11 +51,12 @@ serve(async (req) => {
   let messages: ChatMessage[] = [];
 
   if (type === "summary") {
+    maxTokens = 220;
     const payload = (body.payload || {}) as Record<string, unknown>;
     const userPrompt =
       "Summarize the following anonymized feedback statistics for a teacher. " +
-      "Return plain text with these sections: Overview, Strengths, Improvement Areas, Next Steps. " +
-      "Use short bullet points under each section and keep it under 120 words. " +
+      "Return plain text with: Overview, Strengths, Improvement Areas, Next Steps. " +
+      "Use short bullets and keep it under 90 words. " +
       "Do not mention student identities or speculate about individuals. Data: " +
       JSON.stringify(payload);
 
@@ -62,7 +68,7 @@ serve(async (req) => {
       { role: "user", content: userPrompt }
     ];
   } else if (type === "chat") {
-    const message = String(body.message || "").trim();
+    const message = String(body.message || "").trim().slice(0, 700);
     if (!message) {
       return jsonResponse(400, { error: "Message is required." });
     }
@@ -72,25 +78,26 @@ serve(async (req) => {
       .filter((item) => item && (item.role === "user" || item.role === "assistant"))
       .map((item) => ({
         role: item.role,
-        content: String(item.content || "")
+        content: String(item.content || "").slice(0, 500)
       }))
-      .slice(-8);
+      .slice(-4);
 
-    temperature = 0.5;
-    maxTokens = 400;
-    const context = String(body.context || "").trim().slice(0, 1000);
+    temperature = 0.35;
+    maxTokens = 320;
+    const context = String(body.context || "").trim().slice(0, 350);
     const contextText = context ? ` Current page context: ${context}` : "";
 
     messages = [
       {
         role: "system",
         content:
-          "You are the SFRS support assistant for students, teachers, and admins. " +
-          "Help with portal navigation, feedback submission, teacher dashboards, " +
-          "admin workflow, and general guidance. If asked for grades, personal data, " +
-          "or anything outside the portal, say you cannot access it and suggest " +
-          "contacting the department. Reply in Bengali when the user writes Bengali; " +
-          "otherwise match the user's language. Keep replies concise." +
+          "You are the SFRS website assistant. Use this compact site knowledge: " +
+          SFRS_KNOWLEDGE +
+          " Answer accurately from this knowledge and current page context. " +
+          "Keep answers concise and complete: usually 3-4 short bullets, each under 18 words. " +
+          "Avoid long intros, tables, and extra explanations unless needed. " +
+          "Reply in Bengali when the user writes Bengali; otherwise match the user's language. " +
+          "If asked for unavailable personal data, grades, or records, say you cannot access it and suggest contacting the department." +
           contextText
       },
       ...safeHistory,
@@ -103,19 +110,20 @@ serve(async (req) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-  let groqResponse: Response;
+  let deepseekResponse: Response;
   try {
-    groqResponse = await fetch(GROQ_CHAT_COMPLETIONS_URL, {
+    deepseekResponse = await fetch(DEEPSEEK_CHAT_COMPLETIONS_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${groqKey}`
+        Authorization: `Bearer ${deepseekKey}`
       },
       body: JSON.stringify({
-        model: groqModel,
+        model: DEEPSEEK_MODEL,
         messages,
         temperature,
         max_tokens: maxTokens,
+        thinking: { type: "disabled" },
         stream: false
       }),
       signal: controller.signal
@@ -123,22 +131,22 @@ serve(async (req) => {
   } catch (error) {
     clearTimeout(timeoutId);
     return jsonResponse(500, {
-      error: "Groq request failed.",
+      error: "DeepSeek request failed.",
       details: error instanceof Error ? error.message : "Unknown error."
     });
   } finally {
     clearTimeout(timeoutId);
   }
 
-  if (!groqResponse.ok) {
-    const errorText = await groqResponse.text();
-    return jsonResponse(groqResponse.status, {
-      error: "Groq request failed.",
+  if (!deepseekResponse.ok) {
+    const errorText = await deepseekResponse.text();
+    return jsonResponse(deepseekResponse.status, {
+      error: "DeepSeek request failed.",
       details: errorText.slice(0, 300)
     });
   }
 
-  const data = await groqResponse.json();
+  const data = await deepseekResponse.json();
   const result = String(data?.choices?.[0]?.message?.content || "").trim();
   if (!result) {
     return jsonResponse(500, { error: "No response from AI." });

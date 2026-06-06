@@ -4,7 +4,9 @@
   const DEFAULT_DEPARTMENT = "Computer Science and Engineering";
   const DEFAULT_PROGRAM = "B.Sc. in CSE";
   const DEFAULT_TERM = "Spring 2026";
-  const DEMO_CREDENTIALS = { username: "admin", password: "admin" };
+  const SUPER_USER_LOGIN_ALIAS = "super_user";
+  const SUPER_USER_AUTH_EMAIL = window.SFRS_SUPER_USER_AUTH_EMAIL || "super_user@sfrs.local";
+  const ENABLE_DEMO_AUTH = false;
   const DEMO_SESSION_KEY = "sfrs_demo_session";
   const DEMO_FEEDBACK_KEY = "sfrs_demo_feedbacks";
   const DEMO_ASSIGNMENT_KEY = "sfrs_demo_assignments";
@@ -263,7 +265,15 @@
   }
 
   function isDemoCredential(identifier, password) {
-    return normalizeLookup(identifier) === DEMO_CREDENTIALS.username && password === DEMO_CREDENTIALS.password;
+    return false;
+  }
+
+  function resolveAuthIdentifier(identifier) {
+    const normalized = normalizeLookup(identifier);
+    if (normalized === normalizeLookup(SUPER_USER_LOGIN_ALIAS)) {
+      return normalizeEmail(SUPER_USER_AUTH_EMAIL);
+    }
+    return normalizeIdentifier(identifier);
   }
 
   function createDemoId(prefix) {
@@ -491,6 +501,9 @@
   }
 
   function getDemoSession() {
+    if (!ENABLE_DEMO_AUTH) {
+      return null;
+    }
     return readStorage(DEMO_SESSION_KEY, null);
   }
 
@@ -516,6 +529,9 @@
   }
 
   function setDemoSession(role) {
+    if (!ENABLE_DEMO_AUTH) {
+      return;
+    }
     const profile = resolveDemoProfile(role);
     if (!profile) {
       return;
@@ -1004,11 +1020,11 @@
   }
 
   function buildAiWidgetContext() {
-    return JSON.stringify({
-      page: document.body.dataset.page || "home",
-      path: window.location.pathname,
-      title: document.title
-    });
+    return [
+      `page=${document.body.dataset.page || "home"}`,
+      `path=${window.location.pathname}`,
+      `title=${document.title}`
+    ].join("; ");
   }
 
   function initAiChatWidget() {
@@ -1142,7 +1158,7 @@
         const reply = await invokeAiAssistant({
           type: "chat",
           message,
-          history: clampChatHistory(chatHistory.slice(0, -1), 8),
+          history: clampChatHistory(chatHistory.slice(0, -1), 4),
           context: buildAiWidgetContext()
         });
         typingMessage?.remove();
@@ -1844,7 +1860,18 @@
       return;
     }
     const alertBox = document.getElementById(config.alertId);
+    const debugTeacherSelect = config.debugTeacherSelectId
+      ? document.getElementById(config.debugTeacherSelectId)
+      : null;
     redirectIfAuthenticated();
+
+    if (debugTeacherSelect) {
+      loadTeacherDirectory()
+        .then((teachers) => populateTeacherSelect(debugTeacherSelect, teachers, "Teacher debug preview"))
+        .catch(() => {
+          debugTeacherSelect.innerHTML = "<option value=\"\">Teacher list unavailable</option>";
+        });
+    }
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -1854,7 +1881,8 @@
         return;
       }
 
-      const identifier = normalizeIdentifier(form.querySelector("[name=\"email\"]")?.value || "");
+      const rawIdentifier = form.querySelector("[name=\"email\"]")?.value || "";
+      const identifier = resolveAuthIdentifier(rawIdentifier);
       const password = form.querySelector("[name=\"password\"]")?.value || "";
 
       if (isDemoCredential(identifier, password)) {
@@ -1864,7 +1892,7 @@
       }
 
       if (!isEmail(identifier)) {
-        showAlert(alertBox, "warning", "Enter a valid email address or use the demo credentials.");
+        showAlert(alertBox, "warning", "Enter a valid email address or configured super user alias.");
         return;
       }
 
@@ -1886,6 +1914,17 @@
           return;
         }
         if (result.profile.role !== config.role) {
+          const selectedDebugTeacherId = safeNumber(debugTeacherSelect?.value || "");
+          const isSuperUserAlias = normalizeLookup(rawIdentifier) === normalizeLookup(SUPER_USER_LOGIN_ALIAS);
+          if (config.allowAdminTeacherDebug && result.profile.role === "admin" && isSuperUserAlias) {
+            if (!selectedDebugTeacherId) {
+              await supabaseClient.auth.signOut();
+              showAlert(alertBox, "warning", "Select a teacher for developer preview.");
+              return;
+            }
+            window.location.href = `teacher-dashboard.html?debugTeacherId=${selectedDebugTeacherId}`;
+            return;
+          }
           await supabaseClient.auth.signOut();
           showAlert(alertBox, "warning", `This account is not registered as ${config.role}.`);
           return;
@@ -1915,7 +1954,9 @@
       formId: "teacherLoginForm",
       alertId: "teacherLoginAlert",
       role: "teacher",
-      target: "teacher-dashboard.html"
+      target: "teacher-dashboard.html",
+      allowAdminTeacherDebug: true,
+      debugTeacherSelectId: "teacherDebugSelect"
     });
   }
 
@@ -2266,12 +2307,14 @@
     const submittedAssignments = assignments.filter((assignment) => Boolean(findFeedbackForAssignment(feedbackLookup, assignment)));
     const submittedCount = submittedAssignments.length;
     const totalAssigned = assignments.length;
+    const courseCount = new Set(assignments.map((assignment) => assignment.course_code).filter(Boolean)).size;
     const pendingCount = settings.review_window_open ? Math.max(totalAssigned - submittedCount, 0) : 0;
     const closedCount = settings.review_window_open ? 0 : Math.max(totalAssigned - submittedCount, 0);
 
     setText("[data-stat-total-assigned]", String(totalAssigned));
     setText("[data-stat-pending]", String(pendingCount));
     setText("[data-stat-submitted]", String(submittedCount));
+    setText("[data-stat-courses]", String(courseCount));
     setText("[data-stat-closed]", String(closedCount));
 
     populateValueSelect(
@@ -2385,15 +2428,22 @@
   }
 
   async function initTeacherDashboard() {
-    const authData = await requireRole("teacher", "teacher-login.html");
+    const params = new URLSearchParams(window.location.search);
+    const debugTeacherId = safeNumber(params.get("debugTeacherId"));
+    const authData = debugTeacherId
+      ? await requireAnyRole(["teacher", "admin"], "teacher-login.html")
+      : await requireRole("teacher", "teacher-login.html");
     if (!authData) {
       return;
     }
 
     const { profile, demo: useDemo } = authData;
     const alertBox = document.getElementById("teacherDashboardAlert");
+    const teacherDirectoryId = debugTeacherId && profile.role === "admin"
+      ? debugTeacherId
+      : profile.teacher_directory_id;
 
-    if (!profile.teacher_directory_id) {
+    if (!teacherDirectoryId) {
       showAlert(alertBox, "danger", "Teacher profile is not linked to a directory record yet.");
       return;
     }
@@ -2404,13 +2454,13 @@
       [profilePayload, feedbacks] = await Promise.all([
         loadTeacherProfilePayload({
           useDemo,
-          teacherId: profile.teacher_directory_id,
+          teacherId: teacherDirectoryId,
           viewerProfile: profile
         }),
         loadFeedbacks({
           useDemo,
           filters: {
-            teacher_directory_id: profile.teacher_directory_id,
+            teacher_directory_id: teacherDirectoryId,
             exclude_hidden: true
           }
         })
@@ -2424,6 +2474,10 @@
     const assignments = (profilePayload.assignments || []).map(normalizeAssignmentRecord);
     const stats = buildTeacherStats(feedbacks);
 
+    if (profile.role === "admin" && debugTeacherId) {
+      showAlert(alertBox, "info", `Admin debug preview: viewing ${teacher.name || "teacher"} dashboard.`);
+    }
+
     setAvatar(document.querySelector("[data-user-avatar]"), teacher.name, teacher.avatar_url);
     setText("[data-user-name]", teacher.name);
     setText("[data-user-role]", teacher.designation || profile.designation || "Faculty");
@@ -2434,6 +2488,7 @@
     setText("[data-profile-count]", String(stats.totalReviews));
     setText("[data-assignment-count]", String(assignments.filter((item) => item.is_active).length));
     setText("[data-comment-count]", String(stats.visibleCommentCount));
+    setText("[data-improvement-score]", `${Math.round(Math.min(100, Math.max(0, stats.averageRating * 20)))}%`);
     setText("[data-user-bio]", teacher.bio || "No teacher bio added yet.");
     setText("[data-contact-email]", teacher.email || "Not shared");
     setText("[data-contact-phone]", teacher.phone || "Not listed");
@@ -2519,25 +2574,26 @@
     }
     const { profile, demo: useDemo } = authData;
     const alertBox = document.getElementById("teacherProfileAlert");
-    const backButton = document.querySelector("[data-teacher-profile-back]");
     const params = new URLSearchParams(window.location.search);
     const teacherId = Number(params.get("id") || profile.teacher_directory_id || "");
 
-    backButton?.addEventListener("click", (event) => {
-      event.preventDefault();
-      const fallback = DASHBOARD_ROUTES[profile.role] || "index.html";
-      if (document.referrer) {
-        try {
-          const referrer = new URL(document.referrer);
-          if (referrer.origin === window.location.origin) {
-            window.history.back();
-            return;
+    document.querySelectorAll("[data-teacher-profile-back]").forEach((backButton) => {
+      backButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        const fallback = DASHBOARD_ROUTES[profile.role] || "index.html";
+        if (document.referrer) {
+          try {
+            const referrer = new URL(document.referrer);
+            if (referrer.origin === window.location.origin) {
+              window.history.back();
+              return;
+            }
+          } catch (error) {
+            // Ignore malformed referrer and use fallback.
           }
-        } catch (error) {
-          // Ignore malformed referrer and use fallback.
         }
-      }
-      window.location.href = fallback;
+        window.location.href = fallback;
+      });
     });
 
     if (!teacherId) {
@@ -2678,10 +2734,14 @@
     }
 
     function renderSummaryCards() {
+      const studentIds = new Set(state.feedbacks.map((feedback) => feedback.student_id).filter(Boolean));
+      const activeTeachers = state.teachers.filter((teacher) => teacher.status !== "inactive").length;
       setText("[data-admin-total-teachers]", String(state.teachers.length));
       setText("[data-admin-total-assignments]", String(state.assignments.filter((item) => item.is_active).length));
       setText("[data-admin-total-feedback]", String(state.feedbacks.length));
       setText("[data-admin-hidden-feedback]", String(state.feedbacks.filter((item) => item.status === "hidden").length));
+      setText("[data-admin-total-students]", String(studentIds.size));
+      setText("[data-admin-active-users]", String(activeTeachers + studentIds.size));
       setText("[data-admin-active-term]", state.settings.active_term);
 
       if (settingsForm) {
@@ -2770,6 +2830,7 @@
           <td>${statusBadgeMarkup(teacher.status, teacher.status === "inactive" ? "Inactive" : "Active")}</td>
           <td>${escapeHtml(String(assignmentCounts.get(teacher.id) || 0))}</td>
           <td class="table-actions">
+            <button class="btn btn-sm btn-outline-primary" data-action="open-teacher-dashboard" data-teacher-id="${teacher.id}">Dashboard</button>
             <button class="btn btn-sm btn-outline-primary" data-action="view-profile" data-teacher-id="${teacher.id}">View</button>
             <button class="btn btn-sm btn-outline-success" data-action="edit-teacher" data-teacher-id="${teacher.id}">Edit</button>
             <button class="btn btn-sm btn-outline-secondary" data-action="toggle-teacher" data-teacher-id="${teacher.id}">
@@ -2975,6 +3036,10 @@
       if (!teacher) {
         return;
       }
+      if (button.dataset.action === "open-teacher-dashboard") {
+        window.location.href = `teacher-dashboard.html?debugTeacherId=${teacher.id}`;
+        return;
+      }
       if (button.dataset.action === "view-profile") {
         window.location.href = `teacher-profile.html?id=${teacher.id}`;
         return;
@@ -3160,10 +3225,92 @@
     codeInput.addEventListener("blur", setTitleFromCode);
   }
 
+  function initNavbarScrollState() {
+    const navbar = document.querySelector(".navbar.fixed-top");
+    if (!navbar) {
+      return;
+    }
+    const sync = () => {
+      navbar.classList.toggle("is-scrolled", window.scrollY > 12);
+    };
+    sync();
+    window.addEventListener("scroll", sync, { passive: true });
+  }
+
+  function initPasswordControls() {
+    document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+      const input = document.querySelector(button.dataset.passwordToggle || "");
+      if (!input) {
+        return;
+      }
+      button.addEventListener("click", () => {
+        const nextType = input.type === "password" ? "text" : "password";
+        input.type = nextType;
+        button.textContent = nextType === "password" ? "Show" : "Hide";
+        button.setAttribute("aria-label", nextType === "password" ? "Show password" : "Hide password");
+      });
+    });
+
+    document.querySelectorAll("[data-password-strength]").forEach((meter) => {
+      const input = document.querySelector(meter.dataset.passwordStrength || "");
+      const fill = meter.querySelector(".strength-fill");
+      const label = meter.querySelector(".strength-label");
+      if (!input || !fill || !label) {
+        return;
+      }
+      const sync = () => {
+        const value = input.value || "";
+        const score = [
+          value.length >= 8,
+          /[A-Z]/.test(value),
+          /[a-z]/.test(value),
+          /\d/.test(value),
+          /[^A-Za-z0-9]/.test(value)
+        ].filter(Boolean).length;
+        const states = [
+          { text: "Strength", width: "0%", color: "var(--danger)" },
+          { text: "Weak", width: "25%", color: "var(--danger)" },
+          { text: "Fair", width: "45%", color: "var(--warning)" },
+          { text: "Good", width: "70%", color: "var(--accent)" },
+          { text: "Strong", width: "88%", color: "var(--success)" },
+          { text: "Strong", width: "100%", color: "var(--success)" }
+        ];
+        const state = value ? states[score] : states[0];
+        meter.classList.toggle("is-visible", Boolean(value));
+        fill.style.width = state.width;
+        fill.style.backgroundColor = state.color;
+        label.textContent = state.text;
+      };
+      input.addEventListener("input", sync);
+      sync();
+    });
+  }
+
+  function initCharacterCounters() {
+    document.querySelectorAll("[data-character-count]").forEach((counter) => {
+      const input = document.querySelector(counter.dataset.characterCount || "");
+      if (!input) {
+        return;
+      }
+      const sync = () => {
+        counter.textContent = String((input.value || "").length);
+      };
+      input.addEventListener("input", sync);
+      sync();
+    });
+  }
+
+  function initUiEnhancements() {
+    initNavbarScrollState();
+    initPasswordControls();
+    initCharacterCounters();
+  }
+
   function initPage() {
     initLogout();
     populateEntryLinks();
     initAiChatWidget();
+    initUiEnhancements();
 
     switch (document.body.dataset.page) {
       case "student-login":

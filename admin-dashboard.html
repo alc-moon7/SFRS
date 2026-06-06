@@ -14,17 +14,17 @@
       <a class="navbar-brand" href="/feedback/">
         <span class="logo-mark" aria-hidden="true"></span>
         <span class="brand-text">
-          <span class="brand-title">Varendra University</span><br>
-          <span class="brand-subtitle">CSE Department</span>
+          <span class="brand-title">SFRS</span>
+          <span class="brand-subtitle">Admin Panel</span>
         </span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="admin-dashboard.html">Admin Dashboard</a></li>
+        <ul class="navbar-nav ms-lg-auto">
+          <li class="nav-item"><a class="nav-link" href="/feedback/">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="admin-dashboard.html">Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="#teacherManagement">Teachers</a></li>
           <li class="nav-item"><a class="nav-link" href="#assignmentManagement">Assignments</a></li>
           <li class="nav-item"><a class="nav-link" href="#feedbackAnalytics">Analytics</a></li>
@@ -34,255 +34,291 @@
     </div>
   </nav>
 
-  <main class="container py-4">
-    <section class="page-shell mb-4">
-      <div class="dashboard-heading">
+  <main class="app-shell">
+    <aside class="app-sidebar" aria-label="Admin workspace navigation">
+      <div class="app-sidebar-title">Admin Workspace</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link active" href="#overview">Dashboard</a>
+        <a class="sidebar-link" href="#users">Users</a>
+        <a class="sidebar-link" href="#users">Students</a>
+        <a class="sidebar-link" href="#teacherManagement">Teachers</a>
+        <a class="sidebar-link" href="#assignmentManagement">Departments</a>
+        <a class="sidebar-link" href="#feedbackAnalytics">Feedback</a>
+        <a class="sidebar-link" href="#feedbackAnalytics">Analytics</a>
+        <a class="sidebar-link" href="#settings">Settings</a>
+        <a class="sidebar-link danger" href="#" data-logout>Logout</a>
+      </nav>
+    </aside>
+
+    <div class="app-content">
+      <div class="app-topbar">
         <div>
-          <span class="badge-role mb-2 d-inline-block">Admin Workspace</span>
-          <h1 class="page-title mb-1">Feedback Review Management</h1>
-          <p class="section-lead mb-0">Manage teacher profiles, semester assignments, submission windows, analytics, and moderation from a single dashboard.</p>
+          <div class="section-eyebrow">Admin Panel</div>
+          <h1 class="h3 section-title mb-1">Feedback Review Management</h1>
+          <p class="section-lead mb-0">Manage users, teacher profiles, assignments, review windows, analytics, and moderation.</p>
         </div>
         <div class="dashboard-badges">
           <span class="badge-role" data-admin-active-term>Current Session</span>
+          <span class="badge-role"><span data-admin-hidden-feedback>0</span> hidden</span>
         </div>
       </div>
-    </section>
 
-    <div id="adminDashboardAlert" class="mb-4"></div>
+      <div id="adminDashboardAlert" class="mb-4"></div>
 
-    <section class="row g-3 mb-4">
-      <div class="col-sm-6 col-xl-3">
-        <div class="stat-card h-100">
-          <div class="text-muted">Teachers</div>
-          <div class="display-6 fw-bold" data-admin-total-teachers>0</div>
+      <section id="overview" class="row g-3 mb-4" aria-label="Admin dashboard widgets">
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Total Students</div>
+            <div class="display-6 fw-bold" data-admin-total-students>0</div>
+          </div>
         </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="stat-card h-100">
-          <div class="text-muted">Active Assignments</div>
-          <div class="display-6 fw-bold" data-admin-total-assignments>0</div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Total Teachers</div>
+            <div class="display-6 fw-bold" data-admin-total-teachers>0</div>
+          </div>
         </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="stat-card h-100">
-          <div class="text-muted">Submitted Feedback</div>
-          <div class="display-6 fw-bold" data-admin-total-feedback>0</div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Total Feedback</div>
+            <div class="display-6 fw-bold" data-admin-total-feedback>0</div>
+          </div>
         </div>
-      </div>
-      <div class="col-sm-6 col-xl-3">
-        <div class="stat-card h-100">
-          <div class="text-muted">Hidden Comments</div>
-          <div class="display-6 fw-bold" data-admin-hidden-feedback>0</div>
+        <div class="col-sm-6 col-xl-3">
+          <div class="stat-card h-100">
+            <div class="text-muted">Active Users</div>
+            <div class="display-6 fw-bold" data-admin-active-users>0</div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-          <h5 class="card-title mb-0">Feedback Window Settings</h5>
-          <span class="text-muted small">Controls affect student submission availability.</span>
-        </div>
-        <form id="feedbackSettingsForm" class="row g-3 mt-2">
-          <div class="col-md-4">
-            <label class="form-label" for="activeTermInput">Active Term / Session</label>
-            <input type="text" class="form-control" id="activeTermInput" name="activeTerm" placeholder="Spring 2026">
-          </div>
-          <div class="col-md-4">
-            <label class="form-label d-block">Review Window</label>
-            <div class="form-check form-switch mt-2">
-              <input class="form-check-input" type="checkbox" role="switch" id="reviewWindowSwitch" name="reviewWindow">
-              <label class="form-check-label" for="reviewWindowSwitch">Allow student submissions</label>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label d-block">Anonymous Comments</label>
-            <div class="form-check form-switch mt-2">
-              <input class="form-check-input" type="checkbox" role="switch" id="anonymousSwitch" name="anonymous">
-              <label class="form-check-label" for="anonymousSwitch">Allow anonymous toggle for students</label>
-            </div>
-          </div>
-          <div class="col-12">
-            <button type="submit" class="btn btn-success">Save Settings</button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <section id="teacherManagement" class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+      <section id="users" class="page-shell mb-4">
+        <div class="dashboard-heading">
           <div>
-            <h5 class="card-title mb-1">Teacher Management</h5>
-            <p class="text-muted small mb-0">Create, update, activate, deactivate, and review each teacher profile.</p>
+            <span class="badge-role mb-2 d-inline-block">Recent Activity Feed</span>
+            <h2 class="page-title mb-1">Academic operations overview</h2>
+            <p class="section-lead mb-0">Monitor assignments, teacher availability, feedback volume, and visibility decisions.</p>
           </div>
-          <button class="btn btn-success" type="button" id="openTeacherModalBtn">Add Teacher</button>
-        </div>
-        <div class="toolbar-row mb-3">
-          <div class="toolbar-field flex-grow-1">
-            <label class="form-label" for="teacherSearchFilter">Search Teacher</label>
-            <input type="search" class="form-control" id="teacherSearchFilter" placeholder="Search by name, code, or email">
-          </div>
-          <div class="toolbar-field">
-            <label class="form-label" for="teacherStatusFilter">Status</label>
-            <select class="form-select" id="teacherStatusFilter">
-              <option value="">All</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#teacherManagement">Teacher Directory</a>
+            <a class="btn btn-outline-primary" href="#assignmentManagement">Assignment Matrix</a>
           </div>
         </div>
-        <div class="table-responsive">
-          <table class="table table-bordered align-middle">
-            <thead>
-              <tr>
-                <th>Teacher</th>
-                <th>Contact</th>
-                <th>Profile Status</th>
-                <th>Assignments</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="adminTeacherBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="assignmentManagement" class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-          <div>
-            <h5 class="card-title mb-1">Assignment Management</h5>
-            <p class="text-muted small mb-0">Control exactly which teacher can be reviewed by each semester and section.</p>
+      <section id="settings" class="card mb-4">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+              <div class="section-eyebrow">Settings</div>
+              <h2 class="h5 section-title mb-1">Feedback Window Settings</h2>
+            </div>
+            <span class="text-muted small">Controls affect student submission availability.</span>
           </div>
-          <button class="btn btn-success" type="button" id="openAssignmentModalBtn">Add Assignment</button>
+          <form id="feedbackSettingsForm" class="row g-3 mt-2">
+            <div class="col-md-4">
+              <label class="form-label" for="activeTermInput">Active Term / Session</label>
+              <input type="text" class="form-control" id="activeTermInput" name="activeTerm" placeholder="Spring 2026">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label d-block">Review Window</label>
+              <div class="form-check form-switch mt-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="reviewWindowSwitch" name="reviewWindow">
+                <label class="form-check-label" for="reviewWindowSwitch">Allow student submissions</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label d-block">Anonymous Comments</label>
+              <div class="form-check form-switch mt-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="anonymousSwitch" name="anonymous">
+                <label class="form-check-label" for="anonymousSwitch">Allow anonymous toggle for students</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">Save Settings</button>
+            </div>
+          </form>
         </div>
-        <div class="toolbar-row mb-3">
-          <div class="toolbar-field">
-            <label class="form-label" for="assignmentSemesterFilter">Semester</label>
-            <select class="form-select" id="assignmentSemesterFilter">
-              <option value="">All semesters</option>
-            </select>
-          </div>
-          <div class="toolbar-field">
-            <label class="form-label" for="assignmentSectionFilter">Section</label>
-            <select class="form-select" id="assignmentSectionFilter">
-              <option value="">All sections</option>
-            </select>
-          </div>
-          <div class="toolbar-field">
-            <label class="form-label" for="assignmentTeacherFilter">Teacher</label>
-            <select class="form-select" id="assignmentTeacherFilter">
-              <option value="">All teachers</option>
-            </select>
-          </div>
-          <div class="toolbar-field flex-grow-1">
-            <label class="form-label" for="assignmentCourseFilter">Course Code</label>
-            <input type="search" class="form-control" id="assignmentCourseFilter" placeholder="Search course code">
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-bordered align-middle">
-            <thead>
-              <tr>
-                <th>Teacher</th>
-                <th>Course</th>
-                <th>Semester / Section</th>
-                <th>Term</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="adminAssignmentBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="feedbackAnalytics" class="card">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-          <div>
-            <h5 class="card-title mb-1">Feedback Analytics</h5>
-            <p class="text-muted small mb-0">Filter by teacher, course, semester, section, and moderate comments when needed.</p>
+      <section id="teacherManagement" class="card mb-4">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <div>
+              <div class="section-eyebrow">Teachers</div>
+              <h2 class="h5 section-title mb-1">Teacher Management</h2>
+              <p class="text-muted small mb-0">Create, update, activate, deactivate, and review each teacher profile.</p>
+            </div>
+            <button class="btn btn-primary" type="button" id="openTeacherModalBtn">Add Teacher</button>
           </div>
-          <button class="btn btn-outline-success" type="button" id="exportFeedbackBtn">Export CSV</button>
-        </div>
-
-        <div class="toolbar-row mb-3">
-          <div class="toolbar-field">
-            <label class="form-label" for="analyticsTeacherFilter">Teacher</label>
-            <select class="form-select" id="analyticsTeacherFilter">
-              <option value="">All teachers</option>
-            </select>
-          </div>
-          <div class="toolbar-field">
-            <label class="form-label" for="analyticsSemesterFilter">Semester</label>
-            <select class="form-select" id="analyticsSemesterFilter">
-              <option value="">All semesters</option>
-            </select>
-          </div>
-          <div class="toolbar-field">
-            <label class="form-label" for="analyticsSectionFilter">Section</label>
-            <select class="form-select" id="analyticsSectionFilter">
-              <option value="">All sections</option>
-            </select>
-          </div>
-          <div class="toolbar-field">
-            <label class="form-label" for="analyticsStatusFilter">Comment Status</label>
-            <select class="form-select" id="analyticsStatusFilter">
-              <option value="">All</option>
-              <option value="submitted">Visible</option>
-              <option value="hidden">Hidden</option>
-            </select>
-          </div>
-          <div class="toolbar-field flex-grow-1">
-            <label class="form-label" for="analyticsCourseFilter">Course Filter</label>
-            <input type="search" class="form-control" id="analyticsCourseFilter" placeholder="Search by course code or title">
-          </div>
-        </div>
-
-        <div class="row g-3 mb-3">
-          <div class="col-md-4">
-            <div class="analytics-pill">
-              <span class="text-muted">Filtered Reviews</span>
-              <strong data-analytics-total>0</strong>
+          <div class="toolbar-row mb-3">
+            <div class="toolbar-field flex-grow-1">
+              <label class="form-label" for="teacherSearchFilter">Search Teacher</label>
+              <input type="search" class="form-control" id="teacherSearchFilter" placeholder="Search by name, code, or email">
+            </div>
+            <div class="toolbar-field">
+              <label class="form-label" for="teacherStatusFilter">Status</label>
+              <select class="form-select" id="teacherStatusFilter">
+                <option value="">All</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="analytics-pill">
-              <span class="text-muted">Average Overall Rating</span>
-              <strong data-analytics-average>0.00</strong>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="analytics-pill">
-              <span class="text-muted">Visible Comments</span>
-              <strong data-analytics-comments>0</strong>
-            </div>
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+              <thead>
+                <tr>
+                  <th>Teacher</th>
+                  <th>Contact</th>
+                  <th>Profile Status</th>
+                  <th>Assignments</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminTeacherBody"></tbody>
+            </table>
           </div>
         </div>
+      </section>
 
-        <div class="table-responsive">
-          <table class="table table-bordered align-middle">
-            <thead>
-              <tr>
-                <th>Teacher</th>
-                <th>Course</th>
-                <th>Semester / Section</th>
-                <th>Overall</th>
-                <th>Comment</th>
-                <th>Submitted</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="adminFeedbackBody"></tbody>
-          </table>
+      <section id="assignmentManagement" class="card mb-4">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <div>
+              <div class="section-eyebrow">Departments</div>
+              <h2 class="h5 section-title mb-1">Assignment Management</h2>
+              <p class="text-muted small mb-0">Control exactly which teacher can be reviewed by each semester and section.</p>
+            </div>
+            <button class="btn btn-primary" type="button" id="openAssignmentModalBtn">Add Assignment</button>
+          </div>
+          <div class="toolbar-row mb-3">
+            <div class="toolbar-field">
+              <label class="form-label" for="assignmentSemesterFilter">Semester</label>
+              <select class="form-select" id="assignmentSemesterFilter">
+                <option value="">All semesters</option>
+              </select>
+            </div>
+            <div class="toolbar-field">
+              <label class="form-label" for="assignmentSectionFilter">Section</label>
+              <select class="form-select" id="assignmentSectionFilter">
+                <option value="">All sections</option>
+              </select>
+            </div>
+            <div class="toolbar-field">
+              <label class="form-label" for="assignmentTeacherFilter">Teacher</label>
+              <select class="form-select" id="assignmentTeacherFilter">
+                <option value="">All teachers</option>
+              </select>
+            </div>
+            <div class="toolbar-field flex-grow-1">
+              <label class="form-label" for="assignmentCourseFilter">Course Code</label>
+              <input type="search" class="form-control" id="assignmentCourseFilter" placeholder="Search course code">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+              <thead>
+                <tr>
+                  <th>Teacher</th>
+                  <th>Course</th>
+                  <th>Semester / Section</th>
+                  <th>Term</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminAssignmentBody"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section id="feedbackAnalytics" class="card">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <div>
+              <div class="section-eyebrow">Analytics</div>
+              <h2 class="h5 section-title mb-1">Feedback Analytics</h2>
+              <p class="text-muted small mb-0">Filter by teacher, course, semester, section, and moderate comments when needed.</p>
+            </div>
+            <button class="btn btn-outline-primary" type="button" id="exportFeedbackBtn">Export CSV</button>
+          </div>
+
+          <div class="toolbar-row mb-3">
+            <div class="toolbar-field">
+              <label class="form-label" for="analyticsTeacherFilter">Teacher</label>
+              <select class="form-select" id="analyticsTeacherFilter">
+                <option value="">All teachers</option>
+              </select>
+            </div>
+            <div class="toolbar-field">
+              <label class="form-label" for="analyticsSemesterFilter">Semester</label>
+              <select class="form-select" id="analyticsSemesterFilter">
+                <option value="">All semesters</option>
+              </select>
+            </div>
+            <div class="toolbar-field">
+              <label class="form-label" for="analyticsSectionFilter">Section</label>
+              <select class="form-select" id="analyticsSectionFilter">
+                <option value="">All sections</option>
+              </select>
+            </div>
+            <div class="toolbar-field">
+              <label class="form-label" for="analyticsStatusFilter">Comment Status</label>
+              <select class="form-select" id="analyticsStatusFilter">
+                <option value="">All</option>
+                <option value="submitted">Visible</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </div>
+            <div class="toolbar-field flex-grow-1">
+              <label class="form-label" for="analyticsCourseFilter">Course Filter</label>
+              <input type="search" class="form-control" id="analyticsCourseFilter" placeholder="Search by course code or title">
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <div class="analytics-pill">
+                <span class="text-muted">Filtered Reviews</span>
+                <strong data-analytics-total>0</strong>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="analytics-pill">
+                <span class="text-muted">Average Overall Rating</span>
+                <strong data-analytics-average>0.00</strong>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="analytics-pill">
+                <span class="text-muted">Visible Comments</span>
+                <strong data-analytics-comments>0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+              <thead>
+                <tr>
+                  <th>Teacher</th>
+                  <th>Course</th>
+                  <th>Semester / Section</th>
+                  <th>Overall</th>
+                  <th>Comment</th>
+                  <th>Submitted</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminFeedbackBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -352,9 +388,9 @@
               <label class="form-label" for="teacherBioInput">Short Bio / About</label>
               <textarea class="form-control" id="teacherBioInput" name="bio" rows="4" placeholder="Briefly describe this teacher profile."></textarea>
             </div>
-            <div class="col-12 d-flex justify-content-end gap-2">
+            <div class="col-12 d-flex justify-content-end gap-2 flex-wrap">
               <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-success">Save Teacher</button>
+              <button type="submit" class="btn btn-primary">Save Teacher</button>
             </div>
           </form>
         </div>
@@ -405,9 +441,9 @@
                 <label class="form-check-label" for="assignmentActiveInput">Active assignment</label>
               </div>
             </div>
-            <div class="col-12 d-flex justify-content-end gap-2">
+            <div class="col-12 d-flex justify-content-end gap-2 flex-wrap">
               <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-success">Save Assignment</button>
+              <button type="submit" class="btn btn-primary">Save Assignment</button>
             </div>
           </form>
         </div>

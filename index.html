@@ -9,9 +9,16 @@
     <meta http-equiv="refresh" content="0; url=/feedback/">
   </noscript>
   <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
     :root {
       color-scheme: light;
-      font-family: "Segoe UI", sans-serif;
+      font-family: "Inter", system-ui, sans-serif;
+      --primary: #0f172a;
+      --accent: #2563eb;
+      --background: #f8fafc;
+      --border: #e2e8f0;
+      --muted: #64748b;
     }
 
     body {
@@ -19,16 +26,17 @@
       min-height: 100vh;
       display: grid;
       place-items: center;
-      background: linear-gradient(180deg, #f5f7fa 0%, #eef2f7 100%);
-      color: #17324b;
+      background: var(--background);
+      color: var(--primary);
     }
 
     .loader-card {
       width: min(92vw, 34rem);
       padding: 2rem;
-      border-radius: 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
       background: #ffffff;
-      box-shadow: 0 18px 50px rgba(23, 50, 75, 0.12);
+      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.08);
       text-align: center;
     }
 
@@ -37,8 +45,8 @@
       height: 3rem;
       margin: 0 auto 1rem;
       border-radius: 999px;
-      border: 4px solid rgba(23, 50, 75, 0.15);
-      border-top-color: #c75a36;
+      border: 4px solid rgba(37, 99, 235, 0.16);
+      border-top-color: var(--accent);
       animation: spin 0.8s linear infinite;
     }
 
@@ -50,7 +58,7 @@
     p {
       margin: 0;
       line-height: 1.6;
-      color: #4f6478;
+      color: var(--muted);
     }
 
     .actions {
@@ -72,13 +80,13 @@
     }
 
     .btn-primary {
-      background: #17324b;
+      background: var(--accent);
       color: #fff;
     }
 
     .btn-secondary {
-      background: #f4ede8;
-      color: #c75a36;
+      background: #eef4ff;
+      color: var(--accent);
     }
 
     @keyframes spin {
