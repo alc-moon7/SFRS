@@ -1884,6 +1884,7 @@
       const rawIdentifier = form.querySelector("[name=\"email\"]")?.value || "";
       const identifier = resolveAuthIdentifier(rawIdentifier);
       const password = form.querySelector("[name=\"password\"]")?.value || "";
+      const isSuperUserAlias = normalizeLookup(rawIdentifier) === normalizeLookup(SUPER_USER_LOGIN_ALIAS);
 
       if (isDemoCredential(identifier, password)) {
         setDemoSession(config.role);
@@ -1902,6 +1903,14 @@
         password
       });
       if (error) {
+        if (isSuperUserAlias) {
+          showAlert(
+            alertBox,
+            "danger",
+            `Super user Auth account not ready. Create ${SUPER_USER_AUTH_EMAIL} in Supabase Auth, set the password, confirm the user, then run supabase/debug-super-user.sql.`
+          );
+          return;
+        }
         showAlert(alertBox, "danger", error.message);
         return;
       }
@@ -1910,12 +1919,15 @@
         const result = await getProfile();
         if (!result?.profile) {
           await supabaseClient.auth.signOut();
+          if (isSuperUserAlias) {
+            showAlert(alertBox, "warning", "Super user Auth exists, but admin profile is missing. Run supabase/debug-super-user.sql.");
+            return;
+          }
           showAlert(alertBox, "warning", "Profile not found. Please sign up or provision the profile first.");
           return;
         }
         if (result.profile.role !== config.role) {
           const selectedDebugTeacherId = safeNumber(debugTeacherSelect?.value || "");
-          const isSuperUserAlias = normalizeLookup(rawIdentifier) === normalizeLookup(SUPER_USER_LOGIN_ALIAS);
           if (config.allowAdminTeacherDebug && result.profile.role === "admin" && isSuperUserAlias) {
             if (!selectedDebugTeacherId) {
               await supabaseClient.auth.signOut();
