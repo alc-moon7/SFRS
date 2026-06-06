@@ -5,7 +5,7 @@
   const DEFAULT_PROGRAM = "B.Sc. in CSE";
   const DEFAULT_TERM = "Spring 2026";
   const SUPER_USER_LOGIN_ALIAS = "super_user";
-  const SUPER_USER_AUTH_EMAIL = window.SFRS_SUPER_USER_AUTH_EMAIL || "super_user@sfrs.local";
+  const SUPER_USER_AUTH_EMAIL = window.SFRS_SUPER_USER_AUTH_EMAIL || "super_user@moonx.dev";
   const ENABLE_DEMO_AUTH = false;
   const DEMO_SESSION_KEY = "sfrs_demo_session";
   const DEMO_FEEDBACK_KEY = "sfrs_demo_feedbacks";
@@ -1904,6 +1904,14 @@
       });
       if (error) {
         if (isSuperUserAlias) {
+          if (/not confirmed/i.test(error.message || "")) {
+            showAlert(
+              alertBox,
+              "danger",
+              `Super user exists but email is not confirmed. Confirm ${SUPER_USER_AUTH_EMAIL} in Supabase Auth or run supabase/debug-super-user.sql.`
+            );
+            return;
+          }
           showAlert(
             alertBox,
             "danger",
