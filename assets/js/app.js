@@ -1019,12 +1019,32 @@
     return history.slice(history.length - limit);
   }
 
+  function collectVisibleText(selector, limit) {
+    return Array.from(document.querySelectorAll(selector))
+      .filter((element) => {
+        if (!(element instanceof HTMLElement)) {
+          return false;
+        }
+        const style = window.getComputedStyle(element);
+        return style.display !== "none" && style.visibility !== "hidden" && element.offsetParent !== null;
+      })
+      .map((element) => String(element.textContent || "").replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .slice(0, limit);
+  }
+
   function buildAiWidgetContext() {
+    const headings = collectVisibleText("h1, h2, .section-title, .section-eyebrow", 12);
+    const actions = collectVisibleText("a.nav-link, a.btn, button.btn", 14);
+    const stats = collectVisibleText(".stat-card, .badge-role, .status-badge", 10);
     return [
       `page=${document.body.dataset.page || "home"}`,
       `path=${window.location.pathname}`,
-      `title=${document.title}`
-    ].join("; ");
+      `title=${document.title}`,
+      headings.length ? `visible_headings=${headings.join(" | ")}` : "",
+      actions.length ? `visible_actions=${actions.join(" | ")}` : "",
+      stats.length ? `visible_stats=${stats.join(" | ")}` : ""
+    ].filter(Boolean).join("; ").slice(0, 1200);
   }
 
   function initAiChatWidget() {
@@ -1047,10 +1067,10 @@
     const titleWrap = document.createElement("div");
     const title = document.createElement("div");
     title.className = "ai-chat-title";
-    title.textContent = "AI Chat";
+    title.textContent = "SFRS AI";
     const subtitle = document.createElement("div");
     subtitle.className = "ai-chat-subtitle";
-    subtitle.textContent = "SFRS support";
+    subtitle.textContent = "Support + teacher ratings";
     titleWrap.append(title, subtitle);
 
     const headerActions = document.createElement("div");
@@ -1105,7 +1125,7 @@
     document.body.appendChild(widget);
 
     const chatHistory = [];
-    const greeting = "Hi! Ask me about SFRS login, feedback submission, dashboards, or portal rules.";
+    const greeting = "Hi! Ask me about SFRS login, feedback, dashboards, or a teacher rating.";
 
     const resetMessages = () => {
       messages.innerHTML = "";
