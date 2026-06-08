@@ -103,6 +103,21 @@ function createSupabaseContextClient(req: Request): SupabaseContextClient | null
   }) as unknown as SupabaseContextClient;
 }
 
+function createSupabaseDataClient(): SupabaseContextClient | null {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL")?.trim();
+  const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")?.trim();
+  if (!supabaseUrl || !supabaseKey) {
+    return null;
+  }
+
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }) as unknown as SupabaseContextClient;
+}
+
 async function loadViewerProfile(supabase: SupabaseContextClient | null) {
   if (!supabase) {
     return { profile: null, text: "Database context is unavailable." };
@@ -113,7 +128,7 @@ async function loadViewerProfile(supabase: SupabaseContextClient | null) {
   if (!user) {
     return {
       profile: null,
-      text: "Viewer is not signed in. Public route guidance and public teacher directory facts are allowed; ratings require login and role permission."
+      text: "Viewer is not signed in. Personal dashboard actions require login, but aggregate teacher ratings from server-side context are allowed when provided."
     };
   }
 
@@ -289,12 +304,98 @@ function summarizeTeacherProfile(payload: Record<string, unknown>) {
   ].filter(Boolean).join("\n");
 }
 
+function averageResponseValue(responses: Record<string, unknown>) {
+  const values = REVIEW_CATEGORIES
+    .map(([key]) => Number(responses?.[key]))
+    .filter((value) => Number.isFinite(value) && value > 0);
+  if (!values.length) {
+    return 0;
+  }
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function buildTeacherStats(feedbacks: Record<string, unknown>[]) {
+  const visibleFeedbacks = feedbacks.filter((feedback) => feedback.status !== "hidden");
+  const categoryBreakdown = REVIEW_CATEGORIES.reduce((accumulator, [key]) => {
+    const values = visibleFeedbacks
+      .map((feedback) => Number((feedback.responses as Record<string, unknown>)?.[key]))
+      .filter((value) => Number.isFinite(value) && value > 0);
+    accumulator[key] = values.length
+      ? Number((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(2))
+      : 0;
+    return accumulator;
+  }, {} as Record<string, number>);
+
+  const averages = visibleFeedbacks
+    .map((feedback) => averageResponseValue((feedback.responses || {}) as Record<string, unknown>))
+    .filter((value) => value > 0);
+
+  return {
+    total_reviews: visibleFeedbacks.length,
+    average_rating: averages.length
+      ? Number((averages.reduce((sum, value) => sum + value, 0) / averages.length).toFixed(2))
+      : 0,
+    category_breakdown: categoryBreakdown
+  };
+}
+
+async function loadTeacherAggregateProfile(
+  supabase: SupabaseContextClient,
+  teacher: TeacherRecord
+) {
+  const [assignmentResult, feedbackResult] = await Promise.all([
+    supabase
+      .from("teacher_assignments")
+      .select("id, course_code, course_title, semester, section, academic_term, is_active")
+      .eq("teacher_directory_id", teacher.id)
+      .order("semester", { ascending: true })
+      .order("section", { ascending: true })
+      .order("course_code", { ascending: true })
+      .limit(30),
+    supabase
+      .from("feedbacks")
+      .select("course_code, course_title, semester, section, responses, comment, status, submitted_at")
+      .eq("teacher_directory_id", teacher.id)
+      .neq("status", "hidden")
+      .order("submitted_at", { ascending: false })
+      .limit(200)
+  ]);
+
+  if (assignmentResult.error || feedbackResult.error) {
+    return [
+      `Matched teacher: ${summarizeTeacherCandidate(teacher)}.`,
+      "Teacher aggregate tables could not be read by the server-side data reader."
+    ].join("\n");
+  }
+
+  const assignments = Array.isArray(assignmentResult.data) ? assignmentResult.data : [];
+  const feedbacks = Array.isArray(feedbackResult.data) ? feedbackResult.data : [];
+  const recentComments = feedbacks
+    .filter((feedback) => compactText(feedback.comment, 140))
+    .slice(0, 6)
+    .map((feedback) => ({
+      comment: compactText(feedback.comment, 140),
+      course_code: feedback.course_code,
+      course_title: feedback.course_title,
+      semester: feedback.semester,
+      section: feedback.section,
+      submitted_at: feedback.submitted_at
+    }));
+
+  return summarizeTeacherProfile({
+    teacher,
+    assignments,
+    stats: buildTeacherStats(feedbacks),
+    recent_comments: recentComments
+  });
+}
+
 async function loadTeacherContext(
   supabase: SupabaseContextClient | null,
   message: string
 ) {
   if (!supabase) {
-    return "";
+    return "Server-side teacher rating reader is not configured. Set SUPABASE_SERVICE_ROLE_KEY for the ai-assistant Edge Function.";
   }
 
   const { data, error } = await supabase
@@ -324,26 +425,25 @@ async function loadTeacherContext(
     return `Teacher name is ambiguous. Candidate matches: ${matches.map((item) => summarizeTeacherCandidate(item.teacher)).join(" | ")}. Ask the user which teacher they mean before giving ratings.`;
   }
 
-  const { data: profilePayload, error: rpcError } = await supabase.rpc("get_teacher_profile", {
-    p_teacher_id: best.teacher.id
-  });
+  const aggregateProfile = await loadTeacherAggregateProfile(supabase, best.teacher);
 
-  if (rpcError || !profilePayload) {
+  if (!aggregateProfile) {
     return [
       `Matched teacher: ${summarizeTeacherCandidate(best.teacher)}.`,
-      "Ratings/profile details are not visible to this viewer right now. The user must be logged in with a role allowed to view that teacher: admin, the same teacher, or an assigned student."
+      "Teacher ratings are unavailable because the server-side data reader is not configured."
     ].join("\n");
   }
 
-  return summarizeTeacherProfile(profilePayload as Record<string, unknown>);
+  return aggregateProfile;
 }
 
 async function buildLiveContext(req: Request, body: Record<string, unknown>, message: string) {
-  const supabase = createSupabaseContextClient(req);
+  const viewerClient = createSupabaseContextClient(req);
+  const dataClient = createSupabaseDataClient();
   const [viewer, snapshot, teacherContext] = await Promise.all([
-    loadViewerProfile(supabase),
-    loadSiteSnapshot(supabase),
-    loadTeacherContext(supabase, message)
+    loadViewerProfile(viewerClient),
+    loadSiteSnapshot(dataClient),
+    loadTeacherContext(dataClient, message)
   ]);
   const pageContext = compactText(body.context, 1200);
 
@@ -429,7 +529,7 @@ serve(async (req) => {
           "Keep replies concise: usually 3-5 short bullets or a short paragraph. " +
           "Do not ask for, store, repeat, or process passwords, OTPs, API keys, or session tokens. If users offer credentials, tell them to use the correct login page and continue after login. " +
           "You can guide users to pages and explain actions, but do not claim you personally logged in, submitted feedback, changed admin settings, or moderated data. " +
-          "For teacher rating questions, use the matched teacher context if present; if ambiguous, ask which teacher they mean; if unauthorized, explain the role-based limit."
+          "For teacher rating questions, use the matched teacher context if present, even when the viewer is not signed in. If ambiguous, ask which teacher they mean. Refuse only when no matched rating context is provided."
       },
       ...safeHistory,
       { role: "user", content: message }
