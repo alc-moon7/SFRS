@@ -6,6 +6,9 @@
   const DEFAULT_TERM = "Spring 2026";
   const SUPER_USER_LOGIN_ALIAS = "super_user";
   const SUPER_USER_AUTH_EMAIL = window.SFRS_SUPER_USER_AUTH_EMAIL || "super_user@moonx.dev";
+  const ADMIN_LOGIN_ALIAS = "admin";
+  const ADMIN_AUTH_EMAIL = window.SFRS_ADMIN_AUTH_EMAIL || "admin@gmail.com";
+  const MIN_PASSWORD_LENGTH = 6;
   const ENABLE_DEMO_AUTH = false;
   const DEMO_SESSION_KEY = "sfrs_demo_session";
   const DEMO_FEEDBACK_KEY = "sfrs_demo_feedbacks";
@@ -13,7 +16,7 @@
   const DEMO_TEACHER_KEY = "sfrs_demo_teachers";
   const DEMO_SETTINGS_KEY = "sfrs_demo_settings";
   const FALLBACK_SETUP_MESSAGE =
-    "Run `supabase/feedback-review-feature.sql` and `supabase/feedback-review-seed.sql` in Supabase, then reload this page.";
+    "Run `supabase/feedback-review-feature.sql`, `supabase/feedback-review-seed.sql` and `supabase/auth-fix.sql` in Supabase, then reload this page.";
   const DASHBOARD_ROUTES = {
     student: "student-dashboard.html",
     teacher: "teacher-dashboard.html",
@@ -268,12 +271,34 @@
     return false;
   }
 
-  function resolveAuthIdentifier(identifier) {
-    const normalized = normalizeLookup(identifier);
-    if (normalized === normalizeLookup(SUPER_USER_LOGIN_ALIAS)) {
-      return normalizeEmail(SUPER_USER_AUTH_EMAIL);
+  function getLoginAliases() {
+    return {
+      [normalizeLookup(SUPER_USER_LOGIN_ALIAS)]: normalizeEmail(SUPER_USER_AUTH_EMAIL),
+      [normalizeLookup(ADMIN_LOGIN_ALIAS)]: normalizeEmail(ADMIN_AUTH_EMAIL)
+    };
+  }
+
+  async function resolveAuthIdentifier(identifier) {
+    const raw = String(identifier || "").trim();
+    if (!raw || isEmail(raw)) {
+      return normalizeIdentifier(raw);
     }
-    return normalizeIdentifier(identifier);
+
+    const alias = getLoginAliases()[normalizeLookup(raw)];
+    if (alias) {
+      return alias;
+    }
+
+    // Fall back to the profiles.username lookup added by supabase/auth-fix.sql.
+    try {
+      const { data, error } = await supabaseClient.rpc("email_for_username", { p_username: raw });
+      if (!error && data) {
+        return normalizeEmail(data);
+      }
+    } catch (lookupError) {
+      // Username lookup is optional; fall through to the raw identifier.
+    }
+    return normalizeIdentifier(raw);
   }
 
   function createDemoId(prefix) {
@@ -638,6 +663,43 @@
       return `${baseMessage} ${FALLBACK_SETUP_MESSAGE}`;
     }
     return baseMessage;
+  }
+
+  // Ask the database whether this signup can succeed, so the form can show a
+  // real reason instead of relying on the auth insert to fail. Returns null
+  // when the RPC is unavailable, in which case signup proceeds as before.
+  async function checkSignupAvailability({ email, role, studentId = null, teacherDirectoryId = null }) {
+    try {
+      const { data, error } = await supabaseClient.rpc("check_signup_availability", {
+        p_email: email,
+        p_role: role,
+        p_student_id: studentId,
+        p_teacher_directory_id: teacherDirectoryId
+      });
+      if (error) {
+        return null;
+      }
+      return data;
+    } catch (rpcError) {
+      return null;
+    }
+  }
+
+  function describeSignupError(error, fallbackMessage) {
+    const message = error?.message || fallbackMessage || "Sign up failed.";
+    if (/database error/i.test(message)) {
+      return `Your account could not be saved. ${FALLBACK_SETUP_MESSAGE}`;
+    }
+    if (/already registered|already exists|duplicate/i.test(message)) {
+      return "An account already exists for this email. Please log in instead.";
+    }
+    if (/rate limit/i.test(message)) {
+      return "Too many signup attempts right now. Wait a few minutes and try again.";
+    }
+    if (/signups? not allowed|signup is disabled/i.test(message)) {
+      return "Signups are disabled for this project. Enable email signups in Supabase Auth settings.";
+    }
+    return message;
   }
 
   function setButtonLoading(button, isLoading, loadingLabel) {
@@ -1902,7 +1964,7 @@
       }
 
       const rawIdentifier = form.querySelector("[name=\"email\"]")?.value || "";
-      const identifier = resolveAuthIdentifier(rawIdentifier);
+      const identifier = await resolveAuthIdentifier(rawIdentifier);
       const password = form.querySelector("[name=\"password\"]")?.value || "";
       const isSuperUserAlias = normalizeLookup(rawIdentifier) === normalizeLookup(SUPER_USER_LOGIN_ALIAS);
 
@@ -1913,7 +1975,7 @@
       }
 
       if (!isEmail(identifier)) {
-        showAlert(alertBox, "warning", "Enter a valid email address or configured super user alias.");
+        showAlert(alertBox, "warning", "Enter a valid email address or a registered username.");
         return;
       }
 
@@ -2111,6 +2173,7 @@
       return;
     }
     const alertBox = document.getElementById("studentSignupAlert");
+    const submitButton = form.querySelector("button[type=\"submit\"]");
     populateStudentSignupOptions(form);
 
     form.addEventListener("submit", async (event) => {
@@ -2118,6 +2181,10 @@
       clearAlert(alertBox);
       if (!form.checkValidity()) {
         form.classList.add("was-validated");
+        return;
+      }
+      if (form.password.value.length < MIN_PASSWORD_LENGTH) {
+        showAlert(alertBox, "warning", `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
         return;
       }
       if (form.password.value !== form.confirmPassword.value) {
@@ -2137,26 +2204,39 @@
         section: extractStudentSectionField(form)
       };
 
-      const { data, error } = await supabaseClient.auth.signUp({
-        email,
-        password: form.password.value,
-        options: { data: metadata }
-      });
-      if (error) {
-        showAlert(alertBox, "danger", error.message);
-        return;
-      }
-
-      if (!data.session) {
-        showAlert(alertBox, "info", "Check your email to confirm your account, then log in.");
-        setTimeout(() => {
-          window.location.href = "student-login.html";
-        }, 1400);
-        return;
-      }
-
+      setButtonLoading(submitButton, true, submitButton?.dataset.loadingLabel || "Creating account...");
       try {
-        await supabaseClient.from("profiles").upsert({
+        const availability = await checkSignupAvailability({
+          email,
+          role: "student",
+          studentId: metadata.student_id
+        });
+        if (availability && availability.available === false) {
+          showAlert(alertBox, "warning", availability.reason || "This account cannot be created.");
+          return;
+        }
+
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password: form.password.value,
+          options: { data: metadata }
+        });
+        if (error) {
+          showAlert(alertBox, "danger", describeSignupError(error, "Unable to create student account."));
+          return;
+        }
+
+        if (!data.session) {
+          showAlert(alertBox, "info", "Check your email to confirm your account, then log in.");
+          setTimeout(() => {
+            window.location.href = "student-login.html";
+          }, 1400);
+          return;
+        }
+
+        // The on_auth_user_created trigger normally writes this row. Repeat it
+        // here so a project without the trigger still ends up with a profile.
+        const { error: profileError } = await supabaseClient.from("profiles").upsert({
           id: data.user.id,
           role: "student",
           full_name: metadata.full_name,
@@ -2167,16 +2247,19 @@
           semester: metadata.semester,
           section: metadata.section
         }, { onConflict: "id" });
-      } catch (profileError) {
-        showAlert(alertBox, "danger", getSetupMessage(profileError, "Unable to create student profile."));
-        return;
-      }
+        if (profileError) {
+          showAlert(alertBox, "danger", getSetupMessage(profileError, "Unable to create student profile."));
+          return;
+        }
 
-      showAlert(alertBox, "success", "Registration complete. Please log in.");
-      await supabaseClient.auth.signOut().catch(() => {});
-      setTimeout(() => {
-        window.location.href = "student-login.html";
-      }, 1200);
+        showAlert(alertBox, "success", "Registration complete. Please log in.");
+        await supabaseClient.auth.signOut().catch(() => {});
+        setTimeout(() => {
+          window.location.href = "student-login.html";
+        }, 1200);
+      } finally {
+        setButtonLoading(submitButton, false);
+      }
     });
   }
 
@@ -2186,6 +2269,7 @@
       return;
     }
     const alertBox = document.getElementById("teacherSignupAlert");
+    const submitButton = form.querySelector("button[type=\"submit\"]");
     const selectEl = document.getElementById("teacherSelect");
     const designationEl = document.getElementById("teacherDesignation");
     const emailEl = document.getElementById("teacherEmail");
@@ -2223,6 +2307,10 @@
         form.classList.add("was-validated");
         return;
       }
+      if (form.password.value.length < MIN_PASSWORD_LENGTH) {
+        showAlert(alertBox, "warning", `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
+        return;
+      }
       if (form.password.value !== form.confirmPassword.value) {
         showAlert(alertBox, "warning", "Passwords do not match.");
         return;
@@ -2248,26 +2336,39 @@
         teacher_directory_id: teacher.id
       };
 
-      const { data, error } = await supabaseClient.auth.signUp({
-        email,
-        password: form.password.value,
-        options: { data: metadata }
-      });
-      if (error) {
-        showAlert(alertBox, "danger", error.message);
-        return;
-      }
-
-      if (!data.session) {
-        showAlert(alertBox, "info", "Check your email to confirm your account, then log in.");
-        setTimeout(() => {
-          window.location.href = "teacher-login.html";
-        }, 1400);
-        return;
-      }
-
+      setButtonLoading(submitButton, true, submitButton?.dataset.loadingLabel || "Creating account...");
       try {
-        await supabaseClient.from("profiles").upsert({
+        const availability = await checkSignupAvailability({
+          email,
+          role: "teacher",
+          teacherDirectoryId: teacher.id
+        });
+        if (availability && availability.available === false) {
+          showAlert(alertBox, "warning", availability.reason || "This account cannot be created.");
+          return;
+        }
+
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password: form.password.value,
+          options: { data: metadata }
+        });
+        if (error) {
+          showAlert(alertBox, "danger", describeSignupError(error, "Unable to create teacher account."));
+          return;
+        }
+
+        if (!data.session) {
+          showAlert(alertBox, "info", "Check your email to confirm your account, then log in.");
+          setTimeout(() => {
+            window.location.href = "teacher-login.html";
+          }, 1400);
+          return;
+        }
+
+        // The on_auth_user_created trigger normally writes this row. Repeat it
+        // here so a project without the trigger still ends up with a profile.
+        const { error: profileError } = await supabaseClient.from("profiles").upsert({
           id: data.user.id,
           role: "teacher",
           full_name: teacher.name,
@@ -2275,16 +2376,19 @@
           designation: teacher.designation,
           teacher_directory_id: teacher.id
         }, { onConflict: "id" });
-      } catch (profileError) {
-        showAlert(alertBox, "danger", getSetupMessage(profileError, "Unable to create teacher profile."));
-        return;
-      }
+        if (profileError) {
+          showAlert(alertBox, "danger", getSetupMessage(profileError, "Unable to create teacher profile."));
+          return;
+        }
 
-      showAlert(alertBox, "success", "Registration complete. Please log in.");
-      await supabaseClient.auth.signOut().catch(() => {});
-      setTimeout(() => {
-        window.location.href = "teacher-login.html";
-      }, 1200);
+        showAlert(alertBox, "success", "Registration complete. Please log in.");
+        await supabaseClient.auth.signOut().catch(() => {});
+        setTimeout(() => {
+          window.location.href = "teacher-login.html";
+        }, 1200);
+      } finally {
+        setButtonLoading(submitButton, false);
+      }
     });
   }
 

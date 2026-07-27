@@ -1,27 +1,29 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
-  --primary: #0f172a;
-  --primary-2: #1e293b;
-  --secondary: #334155;
-  --accent: #2563eb;
-  --accent-dark: #1d4ed8;
-  --success: #10b981;
+  /* Varendra University identity: deep navy + terracotta, sourced from the
+     university's own site (vu/css/style.css: --primary-color / --secondary-color). */
+  --primary: #0c2a42;
+  --primary-2: #163a56;
+  --secondary: #4a4038;
+  --accent: #c9462c;
+  --accent-dark: #a53d21;
+  --success: #0f8b5f;
   --warning: #f59e0b;
-  --danger: #ef4444;
-  --background: #f8fafc;
+  --danger: #d92d20;
+  --background: #f7f4ee;
   --surface: #ffffff;
-  --surface-muted: #f1f5f9;
-  --border: #e2e8f0;
-  --text: #0f172a;
-  --muted: #64748b;
-  --muted-2: #94a3b8;
+  --surface-muted: #f1ece1;
+  --border: #e5dece;
+  --text: #16232c;
+  --muted: #6b6255;
+  --muted-2: #a89b86;
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 20px;
-  --shadow-soft: 0 16px 38px rgba(15, 23, 42, 0.08);
-  --shadow-card: 0 10px 26px rgba(15, 23, 42, 0.07);
-  --shadow-focus: 0 0 0 0.2rem rgba(37, 99, 235, 0.18);
+  --shadow-soft: 0 16px 38px rgba(12, 42, 66, 0.1);
+  --shadow-card: 0 10px 26px rgba(12, 42, 66, 0.08);
+  --shadow-focus: 0 0 0 0.2rem rgba(201, 70, 44, 0.22);
   --nav-height: 82px;
   --primary-color: var(--primary);
   --secondary-color: var(--accent);
@@ -71,7 +73,7 @@ a:focus {
 }
 
 :focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline: 3px solid rgba(201, 70, 44, 0.4);
   outline-offset: 3px;
 }
 
@@ -83,8 +85,8 @@ a:focus {
   min-height: var(--nav-height);
   padding: 0.7rem 0;
   background: rgba(255, 255, 255, 0.96);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.95);
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  border-bottom: 1px solid rgba(229, 222, 206, 0.9);
+  box-shadow: 0 10px 30px rgba(12, 42, 66, 0.08);
   backdrop-filter: blur(18px);
   transition: min-height 0.2s ease, padding 0.2s ease, box-shadow 0.2s ease;
 }
@@ -92,7 +94,7 @@ a:focus {
 .navbar.is-scrolled {
   min-height: 68px;
   padding: 0.45rem 0;
-  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 12px 34px rgba(12, 42, 66, 0.12);
 }
 
 .navbar-brand {
@@ -111,7 +113,7 @@ a:focus {
   border-radius: 14px;
   background: #ffffff url("../images/varendra-logo.png") center/contain no-repeat;
   border: 1px solid var(--border);
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 8px 20px rgba(12, 42, 66, 0.1);
 }
 
 .brand-text {
@@ -149,7 +151,7 @@ a:focus {
 .navbar .nav-link:focus,
 .navbar .nav-link.active {
   color: var(--accent);
-  background: rgba(37, 99, 235, 0.08);
+  background: rgba(201, 70, 44, 0.08);
 }
 
 .navbar-toggler {
@@ -180,7 +182,7 @@ a:focus {
 
 .dropdown-item:hover,
 .dropdown-item:focus {
-  background: rgba(37, 99, 235, 0.08);
+  background: rgba(201, 70, 44, 0.08);
   color: var(--accent);
 }
 
@@ -214,7 +216,7 @@ a:focus {
 }
 
 .section-band-muted {
-  background: #eef4fb;
+  background: #faf5ee;
 }
 
 .hero,
@@ -227,7 +229,7 @@ a:focus {
   padding: 5rem 0 4rem;
   color: #ffffff;
   background:
-    linear-gradient(90deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.72)),
+    linear-gradient(100deg, rgba(8, 28, 45, 0.97) 0%, rgba(8, 28, 45, 0.93) 45%, rgba(8, 28, 45, 0.8) 100%),
     url("../../vu/images/ih-building-designjpg1.jpg") center/cover no-repeat;
 }
 
@@ -236,7 +238,7 @@ a:focus {
   position: absolute;
   inset: auto 0 0;
   height: 128px;
-  background: linear-gradient(180deg, rgba(248, 250, 252, 0), var(--background));
+  background: linear-gradient(180deg, rgba(247, 244, 238, 0), var(--background));
   pointer-events: none;
 }
 
@@ -265,12 +267,14 @@ a:focus {
   font-size: clamp(2.55rem, 5vw, 5.5rem);
   line-height: 1.02;
   font-weight: 700;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
 .hero-copy {
   max-width: 660px;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.88);
   font-size: 1.12rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .hero-actions,
@@ -342,8 +346,8 @@ a:focus {
   border-radius: 16px;
   border: 1px solid var(--border);
   background:
-    linear-gradient(180deg, transparent 0 31px, rgba(226, 232, 240, 0.55) 32px),
-    linear-gradient(90deg, transparent 0 31px, rgba(226, 232, 240, 0.45) 32px);
+    linear-gradient(180deg, transparent 0 31px, rgba(229, 222, 206, 0.6) 32px),
+    linear-gradient(90deg, transparent 0 31px, rgba(229, 222, 206, 0.5) 32px);
   background-size: 100% 32px, 32px 100%;
   position: relative;
   overflow: hidden;
@@ -373,8 +377,8 @@ a:focus {
   min-height: 32px;
   padding: 0.38rem 0.75rem;
   border-radius: 999px;
-  border: 1px solid rgba(37, 99, 235, 0.16);
-  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(201, 70, 44, 0.18);
+  background: rgba(201, 70, 44, 0.08);
   color: var(--accent);
   font-size: 0.86rem;
   font-weight: 700;
@@ -467,6 +471,23 @@ a:focus {
   box-shadow: var(--shadow-card);
 }
 
+/* Institutional accent bar, reserved for standalone panels - excluded from
+   items that repeat in tight lists (rating fields, question cards, pills)
+   where a colored top edge on every row would read as a candy stripe. */
+.card,
+.info-card,
+.stat-card,
+.portal-card,
+.feature-card,
+.benefit-card,
+.activity-card,
+.page-shell,
+.profile-header-card,
+.assignment-summary-card,
+.teacher-assignment-card {
+  border-top: 3px solid var(--accent);
+}
+
 .card {
   overflow: hidden;
 }
@@ -511,7 +532,7 @@ a:focus {
   color: #ffffff;
   font-size: 1rem;
   font-weight: 700;
-  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 12px 26px rgba(12, 42, 66, 0.18);
 }
 
 .portal-feature-list {
@@ -540,7 +561,7 @@ a:focus {
 
 .page-shell {
   padding: 1.35rem;
-  background: linear-gradient(135deg, #ffffff, #eef4ff);
+  background: linear-gradient(135deg, #ffffff, #faf1e9);
 }
 
 .dashboard-heading {
@@ -656,7 +677,7 @@ a:focus {
   padding: 2rem;
   color: #ffffff;
   background:
-    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.84)),
+    linear-gradient(180deg, rgba(12, 42, 66, 0.94), rgba(12, 42, 66, 0.88)),
     url("../../vu/images/3n8a8889-resizejpg.jpg") center/cover no-repeat;
   display: grid;
   align-content: space-between;
@@ -721,7 +742,7 @@ label,
 .form-select {
   min-height: 52px;
   border-radius: 12px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #d9cfc0;
   background-color: #ffffff;
   color: var(--text);
   padding: 0.8rem 0.95rem;
@@ -772,7 +793,7 @@ label,
 
 .password-toggle-btn:hover,
 .password-toggle-btn:focus {
-  background: rgba(37, 99, 235, 0.1);
+  background: rgba(201, 70, 44, 0.1);
   color: var(--accent);
 }
 
@@ -792,7 +813,7 @@ label,
   height: 8px;
   border-radius: 999px;
   overflow: hidden;
-  background: #e2e8f0;
+  background: #e7ded0;
 }
 
 .strength-fill {
@@ -818,7 +839,7 @@ label,
 }
 
 .form-check-input {
-  border-color: #cbd5e1;
+  border-color: #d9cfc0;
 }
 
 .form-check-input:checked {
@@ -867,7 +888,7 @@ label,
 
 .btn-outline-success,
 .btn-outline-primary {
-  border-color: rgba(37, 99, 235, 0.38);
+  border-color: rgba(201, 70, 44, 0.4);
   color: var(--accent);
   background: #ffffff;
 }
@@ -883,7 +904,7 @@ label,
 
 .btn-outline-secondary,
 .btn-secondary {
-  border-color: #cbd5e1;
+  border-color: #d9cfc0;
   color: var(--secondary);
   background: #ffffff;
 }
@@ -893,7 +914,7 @@ label,
 .btn-secondary:hover,
 .btn-secondary:focus {
   background: var(--surface-muted);
-  border-color: #cbd5e1;
+  border-color: #d9cfc0;
   color: var(--primary);
 }
 
@@ -981,7 +1002,7 @@ label,
 }
 
 .table tbody tr:hover {
-  background: rgba(37, 99, 235, 0.04);
+  background: rgba(201, 70, 44, 0.04);
 }
 
 .teacher-grid {
@@ -998,7 +1019,7 @@ label,
 .teacher-assignment-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-soft);
-  border-color: rgba(37, 99, 235, 0.3);
+  border-color: rgba(201, 70, 44, 0.32);
 }
 
 .assignment-code {
@@ -1008,7 +1029,7 @@ label,
 }
 
 .empty-state {
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed #d9cfc0;
   border-radius: 16px;
   padding: 1.35rem;
   background: #ffffff;
@@ -1034,8 +1055,8 @@ label,
 }
 
 .rating-field {
-  border-color: rgba(37, 99, 235, 0.16);
-  background: #f8fbff;
+  border-color: rgba(201, 70, 44, 0.18);
+  background: #fdf8f2;
 }
 
 .rating-breakdown-row {
@@ -1048,7 +1069,7 @@ label,
 .progress {
   height: 0.62rem;
   border-radius: 999px;
-  background: #e2e8f0;
+  background: #e7ded0;
   overflow: hidden;
 }
 
@@ -1056,7 +1077,7 @@ label,
 .progress-bar {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent), var(--success));
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent));
 }
 
 .profile-header-card {
@@ -1117,7 +1138,7 @@ label,
 .profile-scoreboard > div {
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #f8fafc;
+  background: #faf7f2;
   padding: 0.85rem;
 }
 
@@ -1154,20 +1175,20 @@ label,
 }
 
 .status-badge.submitted {
-  background: rgba(37, 99, 235, 0.1);
+  background: rgba(201, 70, 44, 0.1);
   color: var(--accent);
 }
 
 .status-badge.inactive,
 .status-badge.hidden,
 .status-badge.closed {
-  background: rgba(239, 68, 68, 0.1);
-  color: #b91c1c;
+  background: rgba(217, 45, 32, 0.1);
+  color: #9f2418;
 }
 
 .chip-muted {
-  border-color: #cbd5e1;
-  background: #f1f5f9;
+  border-color: #d9cfc0;
+  background: #f1ece1;
   color: var(--muted);
 }
 
@@ -1187,8 +1208,8 @@ label,
 }
 
 .comment-card {
-  border-color: rgba(37, 99, 235, 0.14);
-  background: #f8fbff;
+  border-color: rgba(201, 70, 44, 0.14);
+  background: #fdf8f2;
 }
 
 .comment-meta {
@@ -1208,7 +1229,7 @@ label,
 .modal-header,
 .modal-footer {
   border-color: var(--border);
-  background: #f8fafc;
+  background: #faf7f2;
 }
 
 .modal-title {
@@ -1247,7 +1268,7 @@ label,
 }
 
 .chat-message.assistant {
-  background: #f1f5f9;
+  background: #f1ece1;
   color: var(--text);
 }
 
@@ -1272,7 +1293,7 @@ label,
   border-radius: 999px;
   background: var(--primary);
   color: #ffffff;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22);
+  box-shadow: 0 18px 40px rgba(12, 42, 66, 0.24);
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
@@ -1304,7 +1325,7 @@ label,
   border: 1px solid var(--border);
   border-radius: 18px;
   background: #ffffff;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+  box-shadow: 0 24px 70px rgba(12, 42, 66, 0.26);
   overflow: hidden;
   display: none;
   grid-template-rows: auto 1fr auto;

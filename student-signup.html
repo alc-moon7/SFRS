@@ -126,7 +126,7 @@
                 <div class="col-md-6">
                   <div class="password-field">
                     <div class="form-floating">
-                      <input type="password" class="form-control" id="studentPassword" name="password" placeholder="Password" autocomplete="new-password" required>
+                      <input type="password" class="form-control" id="studentPassword" name="password" placeholder="Password" autocomplete="new-password" minlength="6" required>
                       <label for="studentPassword">Password</label>
                     </div>
                     <button class="password-toggle-btn" type="button" data-password-toggle="#studentPassword" aria-label="Show password">Show</button>
@@ -135,12 +135,12 @@
                     <span class="strength-track"><span class="strength-fill"></span></span>
                     <span class="strength-label">Strength</span>
                   </div>
-                  <div class="invalid-feedback">Please enter a password.</div>
+                  <div class="invalid-feedback">Please enter a password with at least 6 characters.</div>
                 </div>
                 <div class="col-md-6">
                   <div class="password-field">
                     <div class="form-floating">
-                      <input type="password" class="form-control" id="studentConfirmPassword" name="confirmPassword" placeholder="Confirm password" autocomplete="new-password" required>
+                      <input type="password" class="form-control" id="studentConfirmPassword" name="confirmPassword" placeholder="Confirm password" autocomplete="new-password" minlength="6" required>
                       <label for="studentConfirmPassword">Confirm Password</label>
                     </div>
                     <button class="password-toggle-btn" type="button" data-password-toggle="#studentConfirmPassword" aria-label="Show password">Show</button>
