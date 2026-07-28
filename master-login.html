@@ -19,12 +19,12 @@
     .form-input{width:100%;padding:.85rem 1rem;border:2px solid var(--border);border-radius:12px;font-size:.95rem;font-family:inherit;background:#faf8f2;transition:.2s;color:var(--text)}
     .form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,70,44,.1);background:#fff}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.9rem 1.5rem;border-radius:12px;font-weight:600;font-size:1rem;border:none;cursor:pointer;transition:.2s;font-family:inherit}
-    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#a53d21;transform:translateY(-1px);box-shadow:0 8px 25px rgba(201,70,44,.3)}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#a53d21;transform:translateY(-1px)}
     .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
     .alert{padding:.85rem 1rem;border-radius:12px;font-size:.88rem;margin-bottom:1.25rem;display:none;font-weight:500}
     .alert-error{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;display:block}
     .alert-success{background:#f0fdf4;color:var(--success);border:1px solid #bbf7d0;display:block}
-    .footer-link{text-align:center;margin-top:1.5rem;font-size:.85rem;color:var(--muted)}.footer-link a{color:var(--primary);font-weight:600}.footer-link a:hover{color:var(--accent)}
+    .footer-link{text-align:center;margin-top:1.5rem;font-size:.85rem;color:var(--muted)}.footer-link a{color:var(--primary);font-weight:600}
     .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
     .btn-loading .spinner{display:block}.btn-loading .btn-text{display:none}
     @keyframes spin{to{transform:rotate(360deg)}}
@@ -40,17 +40,16 @@
       <div class="form-group"><label class="form-label" for="masterPassword">Master Password</label><input type="password" class="form-input" id="masterPassword" placeholder="Enter master password" required></div>
       <button type="submit" class="btn btn-primary" id="loginBtn"><span class="btn-text">Access Dashboard</span><span class="spinner"></span></button>
     </form>
-    <div style="text-align:center;margin-top:1rem;font-size:.78rem;color:var(--muted)">Master password grants full access — use responsibly.</div>
+    <div style="text-align:center;margin-top:1rem;font-size:.78rem;color:var(--muted)">Master password grants full access.</div>
   </div>
   <div class="footer-link"><a href="/">← Back to SFRS Home</a></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL="https://mstotzwqfbcvpcdgrnxy.supabase.co";
-  const ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw";
   const SR_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjQ4MTM1MCwiZXhwIjoyMDgyMDU3MzUwfQ.vggdw6sDHCy4Looe2VN9VmmA06wDp5lS7QEho4Pa-q8";
+  const ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw";
   const sup=window.supabase.createClient(SUPABASE_URL,ANON_KEY);
-  const supSr=window.supabase.createClient(SUPABASE_URL,SR_KEY);
   const ab=document.getElementById("alertBox"),lb=document.getElementById("loginBtn");
   function show(m,t){ab.textContent=m;ab.className="alert";ab.classList.add(t==="error"?"alert-error":"alert-success")}
   function hide(){ab.className="alert";ab.textContent=""}
@@ -63,36 +62,38 @@
     if(!target||!masterPw){show("Please enter both email/username and master password.","error");return}
     ld(true);
     try{
+      // Resolve email via service_role
       let email=target;
-      if(!target.includes("@")){const{data:p}=await supSr.from("profiles").select("email").or("username.eq."+target.toLowerCase()).maybeSingle();if(p&&p.email)email=p.email}
-      const{data:tp}=await supSr.from("profiles").select("id,role,email").eq("email",email.toLowerCase()).maybeSingle();
-      if(!tp){show("User not found: "+email,"error");return}if(tp.role==="admin"){show("Admin accounts cannot be accessed.","error");return}
-      const{data:valid,error:re}=await sup.rpc("verify_master_password",{p_password:masterPw});if(re||!valid){show("Invalid master password.","error");return}
+      if(!target.includes("@")){const r=await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=email&or=(username.eq.${encodeURIComponent(target.toLowerCase())})`,{headers:{apikey:SR_KEY,Authorization:"Bearer "+SR_KEY}});const d=await r.json();if(d&&d.length)email=d[0].email}
 
-      // Generate magic link, extract the access_token via verify, redirect to dashboard
+      // Get target user via service_role
+      const pr=await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id,role,email&email=eq.${encodeURIComponent(email.toLowerCase())}`,{headers:{apikey:SR_KEY,Authorization:"Bearer "+SR_KEY}});
+      const tp=await pr.json();if(!tp||!tp.length){show("User not found: "+email,"error");return}
+      const user=tp[0];if(user.role==="admin"){show("Admin accounts cannot be accessed.","error");return}
+
+      // Verify master password
+      const{data:valid}=await sup.rpc("verify_master_password",{p_password:masterPw});
+      if(!valid){show("Invalid master password.","error");return}
+
+      // Generate magic link
       const lr=await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`,{method:"POST",headers:{"apikey":SR_KEY,"Authorization":"Bearer "+SR_KEY,"Content-Type":"application/json"},body:JSON.stringify({type:"magiclink",email})});
-      if(!lr.ok)throw new Error("Link generation failed");
       const ld=await lr.json();
+      const dash=user.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
 
-      // Try email OTP first (numeric code - most reliable)
-      let session=null;
-      if(ld.email_otp){try{const{data:d,error:err}=await sup.auth.verifyOtp({token:ld.email_otp,type:"email"});if(!err&&d?.session)session=d.session}catch(e){}}
-
-      // If email OTP failed, try hashed_token with both types
-      if(!session&&ld.hashed_token){for(const type of["email","magiclink","recovery","signup","invite"]){try{const{data:d,error:err}=await sup.auth.verifyOtp({token_hash:ld.hashed_token,type});if(!err&&d?.session){session=d.session;break}}catch(e){}}}
-
-      // If still nothing, just navigate to dashboard — session might be set via URL
-      const dash=tp.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
-      if(!session){
-        // Last resort: use action_link which handles everything
-        window.location.href=`${ld.action_link}&redirect_to=${encodeURIComponent(location.origin+"/"+dash)}`;
-        return;
+      // Extract raw token from action_link and verify locally (same-origin)
+      const token=new URL(ld.action_link).searchParams.get("token");
+      if(token){
+        const{data:vd,error:ve}=await sup.auth.verifyOtp({token,type:"magiclink"});
+        if(ve)throw ve;
+        if(vd?.session){
+          await sup.auth.setSession({access_token:vd.session.access_token,refresh_token:vd.session.refresh_token});
+          await new Promise(r=>setTimeout(r,400));
+          window.location.href=dash;
+          return;
+        }
       }
-
-      // Got a session — set it and go
-      await sup.auth.setSession({access_token:session.access_token,refresh_token:session.refresh_token});
-      await new Promise(r=>setTimeout(r,500));
-      window.location.href=dash;
+      // Fallback: navigate to action_link (this will redirect back with hash tokens)
+      window.location.href=ld.action_link;
     }catch(err){show(err.message||"Access failed.","error")}
     finally{ld(false)}
   });
