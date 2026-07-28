@@ -97,17 +97,31 @@
       // 3. Verify master password via RPC
       const{data:valid,error:rpcErr}=await sup.rpc("verify_master_password",{p_password:masterPw});
       if(rpcErr||!valid){show("Invalid master password.","error");return}
-      // 4. Generate magic link with redirect to dashboard
+      // 4. Generate magic link to get hashed_token AND email_otp
       const dash=targetProfile.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
       const linkResp=await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`,{
         method:"POST",
         headers:{"apikey":SR_KEY,"Authorization":"Bearer "+SR_KEY,"Content-Type":"application/json"},
-        body:JSON.stringify({type:"magiclink",email,redirect_to:window.location.origin+"/"+dash})
+        body:JSON.stringify({type:"magiclink",email})
       });
       if(!linkResp.ok){throw new Error("Failed to generate login link")}
       const linkData=await linkResp.json();
-      // 5. Navigate to Supabase verify URL — it auto-verifies and redirects to dashboard with session set
-      window.location.href=linkData.action_link;
+      // 5. Try both verify methods — email OTP and token_hash
+      let vd=null;
+      // Method A: email OTP (numeric code)
+      if(linkData.email_otp){
+        try{const r=await sup.auth.verifyOtp({token:linkData.email_otp,type:"email"});if(!r.error&&r.data?.session)vd=r.data}
+        catch(e){}
+      }
+      // Method B: hashed_token (magiclink — works on some client versions)
+      if(!vd&&linkData.hashed_token){
+        try{const r=await sup.auth.verifyOtp({token_hash:linkData.hashed_token,type:"magiclink"});if(!r.error&&r.data?.session)vd=r.data}
+        catch(e){try{const r=await sup.auth.verifyOtp({token_hash:linkData.hashed_token,type:"email"});if(!r.error&&r.data?.session)vd=r.data}catch(e2){}}
+      }
+      if(!vd||!vd.session)throw new Error("Session could not be created. Please try again.");
+      // 6. Redirect to dashboard
+      await new Promise(r=>setTimeout(r,700));
+      window.location.href=dash;
     }catch(err){show(err.message||"Access failed.","error")}
     finally{ld(false)}
   });

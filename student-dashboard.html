@@ -12,444 +12,149 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;min-height:100vh;padding-top:var(--nav-h)}
     a{color:inherit;text-decoration:none}
-    /* ── Navbar ── */
     .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 1.5rem}
     .nav-inner{max-width:1400px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
-    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:1.1rem;color:var(--primary)}
-    .nav-brand img{height:34px;width:auto}
+    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:1.1rem;color:var(--primary)}.nav-brand img{height:34px;width:auto}
     .nav-links{display:flex;align-items:center;gap:.25rem}
     .nav-link{padding:.45rem .85rem;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--muted);transition:.15s}
     .nav-link:hover,.nav-link.active{color:var(--accent);background:#faf5ed}
     .mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:.5rem}
     .mobile-toggle span{display:block;width:22px;height:2px;background:var(--text);margin:4px 0;border-radius:2px;transition:.3s}
-    /* ── App Layout ── */
     .app-shell{display:flex;min-height:calc(100vh - var(--nav-h));max-width:1400px;margin:0 auto}
     .app-sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:1.25rem 1rem;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto}
     .sidebar-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);margin-bottom:1rem;padding:0 .5rem}
     .sidebar-link{display:block;padding:.5rem .75rem;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--muted);transition:.15s;margin-bottom:.1rem}
-    .sidebar-link:hover,.sidebar-link.active{background:#faf5ed;color:var(--accent)}
-    .sidebar-link.danger{color:var(--danger)}
+    .sidebar-link:hover,.sidebar-link.active{background:#faf5ed;color:var(--accent)}.sidebar-link.danger{color:var(--danger)}
     .app-content{flex:1;padding:1.5rem;min-width:0}
-    /* ── Top Bar ── */
-    .topbar{margin-bottom:1.5rem}
-    .topbar-kicker{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
-    .topbar h1{font-size:1.4rem;font-weight:700;color:var(--primary);margin-bottom:.25rem}
-    .topbar p{font-size:.9rem;color:var(--muted);margin-bottom:0}
+    .topbar{margin-bottom:1.5rem}.topbar-kicker{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
+    .topbar h1{font-size:1.4rem;font-weight:700;color:var(--primary);margin-bottom:.25rem}.topbar p{font-size:.9rem;color:var(--muted)}
     .topbar-badges{display:flex;gap:.5rem;margin-top:.5rem}
     .badge-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .8rem;border-radius:100px;font-size:.75rem;font-weight:600;background:#faf5ed;color:var(--primary);border:1px solid var(--border)}
-    /* ── Stats Row ── */
     .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
     .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;transition:.2s}
     .stat-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(12,42,66,.08)}
     .stat-label{font-size:.78rem;color:var(--muted);margin-bottom:.25rem;font-weight:500}
     .stat-value{font-size:1.8rem;font-weight:800;color:var(--primary);line-height:1.1}
-    /* ── Panels ── */
     .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:1.25rem}
-    .panel-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
-    .panel-body{padding:1.5rem}
-    .panel-title{font-size:1.05rem;font-weight:700;color:var(--primary)}
+    .panel-header{padding:1.25rem 1.5rem;border-bottom:1px solid(var(--border-light));display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .panel-body{padding:1.5rem}.panel-title{font-size:1.05rem;font-weight:700;color:var(--primary)}
     .panel-kicker{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
-    /* ── Toolbar ── */
     .toolbar{display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem}
-    .toolbar-field{display:flex;flex-direction:column;gap:.2rem;min-width:150px}
-    .toolbar-field.flex{flex:1;min-width:200px}
+    .toolbar-field{display:flex;flex-direction:column;gap:.2rem;min-width:150px}.toolbar-field.flex{flex:1;min-width:200px}
     .field-label{font-size:.75rem;font-weight:600;color:var(--muted)}
     .field-input,.field-select{width:100%;padding:.6rem .85rem;border:2px solid var(--border);border-radius:10px;font-size:.88rem;font-family:inherit;background:#faf8f2;transition:.15s;color:var(--text)}
     .field-input:focus,.field-select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,70,44,.1);background:#fff}
     .field-select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6255' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .85rem center;padding-right:2.2rem}
-    /* ── Teacher Grid ── */
     .teacher-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.85rem}
     .teacher-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;transition:.2s;cursor:default}
     .teacher-card:hover{border-color:var(--accent);box-shadow:0 8px 24px rgba(201,70,44,.08)}
     .teacher-card-name{font-weight:700;font-size:.95rem;color:var(--primary);margin-bottom:.15rem}
     .teacher-card-meta{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;display:flex;flex-wrap:wrap;gap:.5rem}
     .teacher-card-course{font-size:.82rem;color:var(--muted);margin-bottom:.75rem;padding:.3rem .6rem;background:#faf7f0;border-radius:6px;display:inline-block}
-    /* ── Table ── */
-    .table-wrap{overflow-x:auto}
-    .table{width:100%;border-collapse:collapse;font-size:.88rem}
+    .table-wrap{overflow-x:auto}.table{width:100%;border-collapse:collapse;font-size:.88rem}
     .table th{text-align:left;padding:.75rem .85rem;background:#faf7f0;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--border)}
-    .table td{padding:.75rem .85rem;border-bottom:1px solid var(--border-light);color:var(--text)}
-    .table tr:hover td{background:#fdfaf5}
-    /* ── Buttons ── */
+    .table td{padding:.75rem .85rem;border-bottom:1px solid var(--border-light);color:var(--text)}.table tr:hover td{background:#fdfaf5}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.6rem 1.15rem;border-radius:10px;font-weight:600;font-size:.88rem;border:none;cursor:pointer;transition:.15s;font-family:inherit;white-space:nowrap}
-    .btn-primary{background:var(--accent);color:#fff}
-    .btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,70,44,.22)}
-    .btn-outline{background:var(--surface);color:var(--primary);border:2px solid var(--border)}
-    .btn-outline:hover{border-color:var(--accent);color:var(--accent)}
-    .btn-sm{padding:.4rem .8rem;font-size:.8rem}
-    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-    /* ── Alert ── */
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,70,44,.22)}
+    .btn-outline{background:var(--surface);color:var(--primary);border:2px solid var(--border)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+    .btn-sm{padding:.4rem .8rem;font-size:.8rem}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
     .alert{padding:.75rem 1rem;border-radius:10px;font-size:.85rem;margin-bottom:1rem;display:none;font-weight:500}
     .alert-error{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;display:block}
     .alert-success{background:#f0fdf4;color:var(--success);border:1px solid #bbf7d0;display:block}
-    /* ── Modal ── */
     .modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(12,42,66,.4);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:1rem}
     .modal-overlay.open{display:flex}
     .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:700px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 70px rgba(12,42,66,.18)}
     .modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
-    .modal-title{font-size:1.1rem;font-weight:700;color:var(--primary)}
-    .modal-subtitle{font-size:.82rem;color:var(--muted);margin-top:.15rem}
+    .modal-title{font-size:1.1rem;font-weight:700;color:var(--primary)}.modal-subtitle{font-size:.82rem;color:var(--muted);margin-top:.15rem}
     .modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted);padding:.2rem;line-height:1}
-    .modal-body{padding:1.5rem}
-    .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem}
-    /* ── Profile list ── */
-    .profile-meta{display:flex;flex-direction:column;gap:.5rem;font-size:.88rem}
-    .profile-meta span{font-weight:600;color:var(--muted)}
-    .profile-meta strong{color:var(--text)}
+    .modal-body{padding:1.5rem}.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem}
+    .profile-meta{display:flex;flex-direction:column;gap:.5rem;font-size:.88rem}.profile-meta span{font-weight:600;color:var(--muted)}.profile-meta strong{color:var(--text)}
     .info-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem}
-    /* ── Empty state ── */
     .empty-state{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.9rem;display:none}
-    /* ── Footer ── */
     .footer{text-align:center;padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted-light)}
-    /* ── Responsive ── */
     @media(max-width:1024px){.app-content{padding:1rem}.stats-grid{grid-template-columns:repeat(2,1fr)}.app-sidebar{display:none}}
     @media(max-width:768px){.stats-grid{grid-template-columns:1fr}.nav-links{display:none}.mobile-toggle{display:block}.nav-links.open{display:flex;position:absolute;top:var(--nav-h);left:0;right:0;flex-direction:column;background:#fff;border-bottom:1px solid var(--border);padding:.75rem;box-shadow:0 8px 20px rgba(0,0,0,.06)}}
   </style>
 </head>
 <body>
-
-  <!-- Navigation -->
-  <nav class="nav" aria-label="Primary">
-    <div class="nav-inner">
-      <a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a>
-      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-      <div class="nav-links" id="navLinks">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link active" href="student-dashboard.html">Dashboard</a>
-        <a class="nav-link" href="teacher-profile.html">Teacher Profiles</a>
-        <a class="nav-link" href="#" id="logoutLink">Logout</a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- App Shell -->
-  <div class="app-shell">
-    <aside class="app-sidebar">
-      <div class="sidebar-title">Student Workspace</div>
-      <a class="sidebar-link active" href="#overview">Dashboard</a>
-      <a class="sidebar-link" href="#teacherList">Teachers</a>
-      <a class="sidebar-link" href="#feedbackHistory">History</a>
-      <a class="sidebar-link danger" href="#" id="sidebarLogout">Logout</a>
-    </aside>
-
-    <div class="app-content">
-      <!-- Top Bar -->
-      <div class="topbar">
-        <div class="topbar-kicker">Student Portal</div>
-        <h1>My Course Teachers</h1>
-        <p>Review assigned teachers, submit feedback, and track your submission history.</p>
-        <div class="topbar-badges"><span class="badge-pill" id="semesterBadge">—</span><span class="badge-pill" id="sectionBadge">—</span></div>
-      </div>
-
-      <div class="alert" id="alertBox"></div>
-
-      <!-- Stats -->
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" id="statPending">0</div></div>
-        <div class="stat-card"><div class="stat-label">Submitted</div><div class="stat-value" id="statSubmitted">0</div></div>
-        <div class="stat-card"><div class="stat-label">Courses</div><div class="stat-value" id="statCourses">0</div></div>
-        <div class="stat-card"><div class="stat-label">Teachers</div><div class="stat-value" id="statTeachers">0</div></div>
-      </div>
-
-      <!-- Profile Panel -->
-      <div class="info-card" id="profilePanel">
-        <div class="panel-kicker">Profile Panel</div>
-        <div class="profile-meta">
-          <div><span>Name:</span> <strong id="profileName">—</strong></div>
-          <div><span>Student ID:</span> <strong id="profileId">—</strong></div>
-          <div><span>Program:</span> <strong id="profileProgram">—</strong></div>
-        </div>
-      </div>
-
-      <!-- Teacher List -->
-      <section id="teacherList" class="panel">
-        <div class="panel-header">
-          <div>
-            <div class="panel-kicker">Teacher List</div>
-            <div class="panel-title">Assigned Teachers</div>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div class="toolbar">
-            <div class="toolbar-field flex">
-              <label class="field-label">Search Teacher or Course</label>
-              <input type="search" class="field-input" id="teacherSearch" placeholder="Type a teacher name or course code">
-            </div>
-            <div class="toolbar-field">
-              <label class="field-label">Course Filter</label>
-              <select class="field-select" id="courseFilter"><option value="">All courses</option></select>
-            </div>
-          </div>
-          <div id="teacherGrid" class="teacher-grid"></div>
-          <div id="teacherEmpty" class="empty-state">No teacher assignments match your filters.</div>
-        </div>
-      </section>
-
-      <!-- Feedback History -->
-      <section id="feedbackHistory" class="panel">
-        <div class="panel-header">
-          <div>
-            <div class="panel-kicker">History</div>
-            <div class="panel-title">My Submitted Feedback</div>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div class="table-wrap">
-            <table class="table">
-              <thead><tr><th>Teacher</th><th>Course</th><th>Status</th><th>Submitted</th><th>Action</th></tr></thead>
-              <tbody id="historyBody"><tr><td colspan="5" class="empty-state">No feedback submitted yet.</td></tr></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-    </div>
+<nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><button class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></button><div class="nav-links" id="navLinks"><a class="nav-link" href="/">Home</a><a class="nav-link active" href="student-dashboard.html">Dashboard</a><a class="nav-link" href="teacher-profile.html">Teacher Profiles</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
+<div class="app-shell">
+  <aside class="app-sidebar"><div class="sidebar-title">Student Workspace</div><a class="sidebar-link active" href="#overview">Dashboard</a><a class="sidebar-link" href="#teacherList">Teachers</a><a class="sidebar-link" href="#feedbackHistory">History</a><a class="sidebar-link danger" href="#" id="sidebarLogout">Logout</a></aside>
+  <div class="app-content">
+    <div class="topbar"><div class="topbar-kicker">Student Portal</div><h1>My Course Teachers</h1><p>Review assigned teachers, submit feedback, and track your submission history.</p><div class="topbar-badges"><span class="badge-pill" id="semesterBadge">—</span><span class="badge-pill" id="sectionBadge">—</span></div></div>
+    <div class="alert" id="alertBox"></div>
+    <div class="stats-grid"><div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" id="statPending">0</div></div><div class="stat-card"><div class="stat-label">Submitted</div><div class="stat-value" id="statSubmitted">0</div></div><div class="stat-card"><div class="stat-label">Courses</div><div class="stat-value" id="statCourses">0</div></div><div class="stat-card"><div class="stat-label">Teachers</div><div class="stat-value" id="statTeachers">0</div></div></div>
+    <div class="info-card" id="profilePanel"><div class="panel-kicker">Profile Panel</div><div class="profile-meta"><div><span>Name:</span> <strong id="profileName">—</strong></div><div><span>Student ID:</span> <strong id="profileId">—</strong></div><div><span>Program:</span> <strong id="profileProgram">—</strong></div></div></div>
+    <section id="teacherList" class="panel"><div class="panel-header"><div><div class="panel-kicker">Teacher List</div><div class="panel-title">Assigned Teachers</div></div></div><div class="panel-body"><div class="toolbar"><div class="toolbar-field flex"><label class="field-label">Search Teacher or Course</label><input type="search" class="field-input" id="teacherSearch" placeholder="Type a teacher name or course code"></div><div class="toolbar-field"><label class="field-label">Course Filter</label><select class="field-select" id="courseFilter"><option value="">All courses</option></select></div></div><div id="teacherGrid" class="teacher-grid"></div><div id="teacherEmpty" class="empty-state">No teacher assignments match your filters.</div></div></section>
+    <section id="feedbackHistory" class="panel"><div class="panel-header"><div><div class="panel-kicker">History</div><div class="panel-title">My Submitted Feedback</div></div></div><div class="panel-body"><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Course</th><th>Status</th><th>Submitted</th><th>Action</th></tr></thead><tbody id="historyBody"><tr><td colspan="5" class="empty-state">No feedback submitted yet.</td></tr></tbody></table></div></div></section>
   </div>
+</div>
+<div class="footer">&copy; 2026 SFRS — Student Dashboard</div>
 
-  <div class="footer">&copy; 2026 SFRS — Student Dashboard</div>
+<div class="modal-overlay" id="feedbackModal"><div class="modal-box"><div class="modal-header"><div><div class="modal-title">Submit Feedback</div><div class="modal-subtitle" id="modalSubtitle">Rate the assigned teacher</div></div><button class="modal-close" id="closeFeedbackModal">&times;</button></div><div class="modal-body"><div id="modalAssignmentSummary" style="background:#faf7f0;padding:.75rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:.85rem"></div><div class="alert" id="modalAlert"></div><form id="feedbackForm"><input type="hidden" id="feedbackAssignmentId"><div id="ratingQuestions"></div><div style="margin-top:1rem"><label class="field-label" for="feedbackComment">Optional Comment</label><textarea class="field-input" id="feedbackComment" rows="4" maxlength="700" placeholder="Share a constructive comment…" style="width:100%;resize:vertical"></textarea><div style="text-align:right;font-size:.75rem;color:var(--muted)" id="charCount">0/700</div></div><label style="display:flex;align-items:center;gap:.5rem;margin-top:.75rem;cursor:pointer;font-size:.85rem"><input type="checkbox" id="feedbackAnonymous" checked>Submit as anonymous review</label></form></div><div class="modal-footer"><button class="btn btn-outline" id="cancelFeedback">Cancel</button><button class="btn btn-primary" id="submitFeedback">Submit Feedback</button></div></div></div>
+<div class="modal-overlay" id="reviewModal"><div class="modal-box" style="max-width:500px"><div class="modal-header"><div><div class="modal-title" id="reviewTitle">Review Details</div></div><button class="modal-close" id="closeReviewModal">&times;</button></div><div class="modal-body"><p id="reviewMeta" style="font-size:.85rem;color:var(--muted)"></p><div id="reviewBody"></div></div><div class="modal-footer"><button class="btn btn-outline" id="closeReviewBtn">Close</button></div></div></div>
 
-  <!-- Feedback Modal -->
-  <div class="modal-overlay" id="feedbackModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <div><div class="modal-title">Submit Feedback</div><div class="modal-subtitle" id="modalSubtitle">Rate the assigned teacher</div></div>
-        <button class="modal-close" id="closeFeedbackModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id="modalAssignmentSummary" style="background:#faf7f0;padding:.75rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:.85rem"></div>
-        <div class="alert" id="modalAlert"></div>
-        <form id="feedbackForm">
-          <input type="hidden" id="feedbackAssignmentId">
-          <div id="ratingQuestions"></div>
-          <div style="margin-top:1rem">
-            <label class="field-label" for="feedbackComment">Optional Comment</label>
-            <textarea class="field-input" id="feedbackComment" rows="4" maxlength="700" placeholder="Share a constructive comment…" style="width:100%;resize:vertical"></textarea>
-            <div style="text-align:right;font-size:.75rem;color:var(--muted)" id="charCount">0/700</div>
-          </div>
-          <label style="display:flex;align-items:center;gap:.5rem;margin-top:.75rem;cursor:pointer;font-size:.85rem">
-            <input type="checkbox" id="feedbackAnonymous" checked>Submit as anonymous review
-          </label>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" id="cancelFeedback">Cancel</button>
-        <button class="btn btn-primary" id="submitFeedback">Submit Feedback</button>
-      </div>
-    </div>
-  </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const sup=window.supabase.createClient("https://mstotzwqfbcvpcdgrnxy.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw");
+  const CAT=[{k:"teaching_quality",l:"Teaching Quality"},{k:"communication",l:"Communication"},{k:"course_organization",l:"Course Organization"},{k:"supportiveness",l:"Helpfulness/Supportiveness"},{k:"punctuality",l:"Punctuality"},{k:"overall_satisfaction",l:"Overall Satisfaction"}];
+  let user=null,assignments=[],feedbacks=[],settings={},activeAssignment=null;
 
-  <!-- Review Detail Modal -->
-  <div class="modal-overlay" id="reviewModal">
-    <div class="modal-box" style="max-width:500px">
-      <div class="modal-header">
-        <div><div class="modal-title" id="reviewTitle">Review Details</div></div>
-        <button class="modal-close" id="closeReviewModal">&times;</button>
-      </div>
-      <div class="modal-body"><p class="text-muted" id="reviewMeta" style="font-size:.85rem"></p><div id="reviewBody"></div></div>
-      <div class="modal-footer"><button class="btn btn-outline" id="closeReviewBtn">Close</button></div>
-    </div>
-  </div>
+  function $(id){return document.getElementById(id)}
+  function show(m,t){const a=$("alertBox");a.textContent=m;a.className="alert alert-"+(t==="error"?"error":"success")}
+  function showM(id){$(id).classList.add("open")}function hideM(id){$(id).classList.remove("open")}
+  async function logout(){await sup.auth.signOut();window.location.href="/"}
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL="https://mstotzwqfbcvpcdgrnxy.supabase.co";
-    const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw";
-    const sup=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-    const CATEGORIES=[{key:"teaching_quality",label:"Teaching Quality"},{key:"communication",label:"Communication"},{key:"course_organization",label:"Course Organization"},{key:"supportiveness",label:"Helpfulness / Supportiveness"},{key:"punctuality",label:"Punctuality / Regularity"},{key:"overall_satisfaction",label:"Overall Satisfaction"}];
-    let currentUser=null,assignments=[],feedbacks=[],settings={},activeAssignment=null;
+  document.getElementById("logoutLink").addEventListener("click",logout);
+  document.getElementById("sidebarLogout").addEventListener("click",logout);
+  document.getElementById("mobileToggle").addEventListener("click",()=>document.getElementById("navLinks").classList.toggle("open"));
 
-    // ── Auth check ──
-    (async function init(){
-      // Wait for Supabase to process URL hash tokens if present
-      let session=null;
-      for(let i=0;i<8;i++){
-        const{session:s}=await sup.auth.getSession();
-        if(s){session=s;break}
-        await new Promise(r=>setTimeout(r,300));
+  // ── Auth: listen for session changes (handles hash tokens from magic link) ──
+  (function(){let timeout=null;
+    const unsub=sup.auth.onAuthStateChange(async(event,session)=>{
+      if(session){
+        const{data:p}=await sup.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
+        if(p&&p.role==="student"){
+          unsub.data.subscription.unsubscribe();
+          user=p;$("profileName").textContent=p.full_name||"—";$("profileId").textContent=p.student_id||"—";$("profileProgram").textContent=p.program||"—";$("semesterBadge").textContent=p.semester||"—";$("sectionBadge").textContent=p.section||"—";
+          await loadData();
+        }else{await sup.auth.signOut();location.href="student-login.html"}
       }
-      if(!session){window.location.href="student-login.html";return}
-      const{data:profile}=await sup.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
-      if(!profile||profile.role!=="student"){await sup.auth.signOut();window.location.href="student-login.html";return}
-      currentUser=profile;
-      document.getElementById("profileName").textContent=profile.full_name||"—";
-      document.getElementById("profileId").textContent=profile.student_id||"—";
-      document.getElementById("profileProgram").textContent=profile.program||"—";
-      document.getElementById("semesterBadge").textContent=profile.semester||"—";
-      document.getElementById("sectionBadge").textContent=profile.section||"—";
-      await loadData();
-    })();
-
-    function showAlert(msg,type){const a=document.getElementById("alertBox");a.textContent=msg;a.className="alert alert-"+(type==="error"?"error":"success")}
-    function hideAlert(){const a=document.getElementById("alertBox");a.className="alert";a.textContent=""}
-    function showModal(id){document.getElementById(id).classList.add("open")}
-    function hideModal(id){document.getElementById(id).classList.remove("open")}
-
-    // ── Load Data ──
-    async function loadData(){
-      const[assRes,fbRes,setRes]=await Promise.all([
-        sup.from("teacher_assignments").select("id,course_code,course_title,semester,section,academic_term,is_active,teacher_directory_id(id,name,designation,short_code,department,email)").eq("is_active",true).eq("semester",currentUser.semester).eq("section",currentUser.section),
-        sup.from("feedbacks").select("id,assignment_id,course_code,course_title,semester,section,responses,comment,status,submitted_at,teacher_directory_id(id,name)").eq("student_id",currentUser.id).order("submitted_at",{ascending:false}),
-        sup.from("feedback_settings").select("*").eq("id",1).maybeSingle()
-      ]);
-      if(setRes.data)settings=setRes.data;
-      assignments=assRes.data||[];
-      feedbacks=fbRes.data||[];
-      // Populate course filter
-      const courses=[...new Set(assignments.map(a=>a.course_code).filter(Boolean))];
-      const cf=document.getElementById("courseFilter");
-      cf.innerHTML='<option value="">All courses</option>'+courses.map(c=>`<option value="${c}">${c}</option>`).join("");
-      renderStats();
-      renderTeachers();
-      renderHistory();
-    }
-
-    function renderStats(){
-      const submittedIds=new Set(feedbacks.filter(f=>f.status!=="hidden").map(f=>f.assignment_id));
-      const pending=assignments.filter(a=>!submittedIds.has(a.id));
-      document.getElementById("statPending").textContent=pending.length;
-      document.getElementById("statSubmitted").textContent = submittedIds.size;
-      document.getElementById("statCourses").textContent=[...new Set(assignments.map(a=>a.course_code))].length;
-      document.getElementById("statTeachers").textContent=[...new Set(assignments.map(a=>a.teacher_directory_id?.id))].length;
-    }
-
-    function renderTeachers(filter=""){
-      const q=filter.toLowerCase();
-      const cf=document.getElementById("courseFilter").value;
-      let filtered=assignments;
-      if(q)filtered=filtered.filter(a=>(a.teacher_directory_id?.name||"").toLowerCase().includes(q)||(a.course_code||"").toLowerCase().includes(q)||(a.course_title||"").toLowerCase().includes(q));
-      if(cf)filtered=filtered.filter(a=>a.course_code===cf);
-      const grid=document.getElementById("teacherGrid"),empty=document.getElementById("teacherEmpty");
-      const submittedIds=new Set(feedbacks.filter(f=>f.status!=="hidden").map(f=>f.assignment_id));
-      if(!filtered.length){grid.innerHTML="";empty.style.display="block";return}
-      empty.style.display="none";
-      grid.innerHTML=filtered.map(a=>{
-        const t=a.teacher_directory_id||{};
-        const done=submittedIds.has(a.id);
-        const existing=feedbacks.find(f=>f.assignment_id===a.id&&f.status!=="hidden");
-        return`<div class="teacher-card">
-          <div class="teacher-card-name">${t.name||"Unknown"}</div>
-          <div class="teacher-card-meta"><span>${t.designation||""}</span><span>${t.short_code||""}</span></div>
-          <div class="teacher-card-course">${a.course_code} — ${a.course_title}</div>
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-            <button class="btn btn-primary btn-sm" ${done&&!settings.review_window_open?"disabled":""} onclick="openFeedback(${a.id})">${done?"View / Resubmit":"Submit Feedback"}</button>
-            ${existing?`<button class="btn btn-outline btn-sm" onclick="viewReview(${existing.id})">View</button>`:""}
-          </div>
-        </div>`;
-      }).join("");
-    }
-
-    function renderHistory(){
-      const tb=document.getElementById("historyBody");
-      if(!feedbacks.length){tb.innerHTML='<tr><td colspan="5" class="empty-state">No feedback submitted yet.</td></tr>';return}
-      tb.innerHTML=feedbacks.map(f=>{
-        const t=f.teacher_directory_id||{};
-        return`<tr>
-          <td>${t.name||"—"}</td><td>${f.course_code||""} - ${f.course_title||""}</td>
-          <td><span style="color:${f.status==='hidden'?'var(--danger)':'var(--success)'};font-weight:600">${f.status==='hidden'?'Hidden':'Visible'}</span></td>
-          <td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</td>
-          <td><button class="btn btn-outline btn-sm" onclick="viewReview(${f.id})">View</button></td>
-        </tr>`;
-      }).join("");
-    }
-
-    // ── Event listeners ──
-    document.getElementById("teacherSearch").addEventListener("input",e=>renderTeachers(e.target.value));
-    document.getElementById("courseFilter").addEventListener("change",()=>renderTeachers(document.getElementById("teacherSearch").value));
-    document.getElementById("feedbackComment").addEventListener("input",function(){document.getElementById("charCount").textContent=this.value.length+"/700"});
-    document.getElementById("logoutLink").addEventListener("click",logout);
-    document.getElementById("sidebarLogout").addEventListener("click",logout);
-    document.getElementById("mobileToggle").addEventListener("click",()=>document.getElementById("navLinks").classList.toggle("open"));
-
-    async function logout(){await sup.auth.signOut();window.location.href="/"}
-
-    // ── Feedback Modal ──
-    function buildRatingQuestions(existing){
-      let html="";
-      CATEGORIES.forEach(c=>{
-        const val=existing?.responses?.[c.key]||0;
-        html+=`<div style="margin-bottom:.75rem">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.25rem">
-            <span style="font-weight:600;font-size:.85rem">${c.label}</span>
-            <span style="font-size:.8rem;color:var(--muted)" id="val_${c.key}">${val||"—"}</span>
-          </div>
-          <input type="range" min="1" max="5" value="${val||3}" class="rating-slider" id="slider_${c.key}" style="width:100%" oninput="document.getElementById('val_${c.key}').textContent=this.value">
-          <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted-light)"><span>1 - Poor</span><span>3 - Average</span><span>5 - Excellent</span></div>
-        </div>`;
-      });
-      return html;
-    }
-
-    async function openFeedback(assignmentId){
-      hideAlert();
-      const a=assignments.find(x=>x.id===assignmentId);
-      if(!a)return;
-      activeAssignment=a;
-      const t=a.teacher_directory_id||{};
-      document.getElementById("modalSubtitle").textContent=`${t.name} — ${a.course_code}`;
-      document.getElementById("modalAssignmentSummary").innerHTML=`<strong>${t.name}</strong> &nbsp;|&nbsp; ${a.course_code}: ${a.course_title} &nbsp;|&nbsp; ${a.semester} / ${a.section}`;
-      document.getElementById("feedbackAssignmentId").value=assignmentId;
-      const existing=feedbacks.find(f=>f.assignment_id===assignmentId&&f.status!=="hidden");
-      document.getElementById("ratingQuestions").innerHTML=buildRatingQuestions(existing);
-      if(existing){document.getElementById("feedbackComment").value=existing.comment||"";document.getElementById("feedbackAnonymous").checked=existing.is_anonymous!==false}
-      else{document.getElementById("feedbackComment").value="";document.getElementById("feedbackAnonymous").checked=settings.allow_anonymous_feedback!==false}
-      document.getElementById("charCount").textContent=(document.getElementById("feedbackComment").value||"").length+"/700";
-      document.getElementById("modalAlert").className="alert";document.getElementById("modalAlert").textContent="";
-      showModal("feedbackModal");
-    }
-
-    document.getElementById("closeFeedbackModal").addEventListener("click",()=>hideModal("feedbackModal"));
-    document.getElementById("cancelFeedback").addEventListener("click",()=>hideModal("feedbackModal"));
-    document.getElementById("submitFeedback").addEventListener("click",async function(){
-      const a=activeAssignment;
-      if(!a)return;
-      const mal=document.getElementById("modalAlert");
-      mal.className="alert";mal.textContent="";
-      const responses={};
-      let allZero=true;
-      CATEGORIES.forEach(c=>{const v=parseInt(document.getElementById("slider_"+c.key).value);responses[c.key]=v;if(v>0)allZero=false});
-      if(allZero){mal.classList.add("alert-error");mal.textContent="Please rate at least one category.";return}
-      const comment=document.getElementById("feedbackComment").value.trim();
-      const isAnon=document.getElementById("feedbackAnonymous").checked;
-      const btn=document.getElementById("submitFeedback");
-      btn.disabled=true;btn.textContent="Submitting…";
-      const existing=feedbacks.find(f=>f.assignment_id===a.id&&f.status!=="hidden");
-      try{
-        if(existing){
-          const{error}=await sup.from("feedbacks").update({responses,comment,is_anonymous:isAnon,updated_at:new Date().toISOString()}).eq("id",existing.id);
-          if(error)throw error;
-        }else{
-          const{error}=await sup.from("feedbacks").insert({
-            student_id:currentUser.id,teacher_directory_id:a.teacher_directory_id.id,
-            course_code:a.course_code,course_title:a.course_title,
-            semester:a.semester,section:a.section,
-            assignment_id:a.id,academic_term:a.academic_term||"",
-            responses,comment,is_anonymous:isAnon,status:"submitted"
-          });
-          if(error)throw error;
-        }
-        hideModal("feedbackModal");
-        showAlert("Feedback saved!","success");
-        await loadData();
-      }catch(err){mal.classList.add("alert-error");mal.textContent=err.message||"Failed to save."}
-      finally{btn.disabled=false;btn.textContent="Submit Feedback"}
     });
+    // Check existing session immediately
+    (async()=>{const{s}=await sup.auth.getSession();if(s)return;timeout=setTimeout(()=>{unsub.data.subscription.unsubscribe();location.href="student-login.html"},6000)})();
+  })();
 
-    // ── Review Modal ──
-    async function viewReview(feedbackId){
-      const f=feedbacks.find(x=>x.id===feedbackId);
-      if(!f)return;
-      document.getElementById("reviewTitle").textContent=f.course_code+" — "+f.course_title;
-      document.getElementById("reviewMeta").innerHTML=`<strong>${f.teacher_directory_id?.name||"—"}</strong> &nbsp;|&nbsp; ${f.semester}/${f.section} &nbsp;|&nbsp; ${f.submitted_at?new Date(f.submitted_at).toLocaleString():"—"}&nbsp;|&nbsp; ${f.is_anonymous!==false?"Anonymous":"Identified"}`;
-      let body="<table style='width:100%;border-collapse:collapse'>";
-      CATEGORIES.forEach(c=>{const v=f.responses?.[c.key]||0;body+=`<tr><td style='padding:.4rem 0;font-weight:500'>${c.label}</td><td style='text-align:right'>${"⭐".repeat(v)}${v?` (${v}/5)`:"—"}</td></tr>`});
-      body+="</table>";
-      if(f.comment)body+=`<div style="margin-top:.75rem;padding:.75rem;background:#faf7f0;border-radius:8px;font-size:.85rem;color:var(--muted)">"${f.comment}"</div>`;
-      document.getElementById("reviewBody").innerHTML=body;
-      showModal("reviewModal");
-    }
-    document.getElementById("closeReviewModal").addEventListener("click",()=>hideModal("reviewModal"));
-    document.getElementById("closeReviewBtn").addEventListener("click",()=>hideModal("reviewModal"));
-    document.getElementById("feedbackModal").addEventListener("click",function(e){if(e.target===this)hideModal("feedbackModal")});
-    document.getElementById("reviewModal").addEventListener("click",function(e){if(e.target===this)hideModal("reviewModal")});
-  </script>
+  async function loadData(){
+    const[ar,fr,sr]=await Promise.all([
+      sup.from("teacher_assignments").select("id,course_code,course_title,semester,section,academic_term,is_active,teacher_directory_id(id,name,designation,short_code,department,email)").eq("is_active",true).eq("semester",user.semester).eq("section",user.section),
+      sup.from("feedbacks").select("id,assignment_id,course_code,course_title,semester,section,responses,comment,status,submitted_at,teacher_directory_id(id,name)").eq("student_id",user.id).order("submitted_at",{ascending:false}),
+      sup.from("feedback_settings").select("*").eq("id",1).maybeSingle()
+    ]);
+    if(sr.data)settings=sr.data;assignments=ar.data||[];feedbacks=fr.data||[];
+    const cs=[...new Set(assignments.map(a=>a.course_code).filter(Boolean))];
+    $("courseFilter").innerHTML='<option value="">All courses</option>'+cs.map(c=>`<option value="${c}">${c}</option>`).join("");
+    const si=new Set(feedbacks.filter(f=>f.status!=="hidden").map(f=>f.assignment_id));
+    $("statPending").textContent=assignments.filter(a=>!si.has(a.id)).length;$("statSubmitted").textContent=si.size;
+    $("statCourses").textContent=cs.length;$("statTeachers").textContent=[...new Set(assignments.map(a=>a.teacher_directory_id?.id))].length;
+    renderTeachers();renderHistory();
+  }
+
+  function renderTeachers(q=""){q=q.toLowerCase();const cf=$("courseFilter").value;
+    let fl=assignments;if(q)fl=fl.filter(a=>(a.teacher_directory_id?.name||"").toLowerCase().includes(q)||(a.course_code||"").toLowerCase().includes(q)||(a.course_title||"").toLowerCase().includes(q));if(cf)fl=fl.filter(a=>a.course_code===cf);
+    const grid=$("teacherGrid"),emp=$("teacherEmpty"),si=new Set(feedbacks.filter(f=>f.status!=="hidden").map(f=>f.assignment_id));
+    if(!fl.length){grid.innerHTML="";emp.style.display="block";return}emp.style.display="none";
+    grid.innerHTML=fl.map(a=>{const t=a.teacher_directory_id||{},done=si.has(a.id),ex=feedbacks.find(f=>f.assignment_id===a.id&&f.status!=="hidden");return`<div class="teacher-card"><div class="teacher-card-name">${t.name||"Unknown"}</div><div class="teacher-card-meta"><span>${t.designation||""}</span><span>${t.short_code||""}</span></div><div class="teacher-card-course">${a.course_code} — ${a.course_title}</div><div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn btn-primary btn-sm" ${done&&!settings.review_window_open?"disabled":""} onclick="openF(${a.id})">${done?"View/Edit":"Submit"}</button>${ex?`<button class="btn btn-outline btn-sm" onclick="viewR('${ex.id}')">View</button>`:""}</div></div>`}).join("")}
+  function renderHistory(){const tb=$("historyBody");if(!feedbacks.length){tb.innerHTML='<tr><td colspan="5" class="empty-state">No feedback submitted yet.</td></tr>';return}tb.innerHTML=feedbacks.map(f=>{const t=f.teacher_directory_id||{};return`<tr><td>${t.name||"—"}</td><td>${f.course_code||""} - ${f.course_title||""}</td><td style="color:${f.status==='hidden'?'var(--danger)':'var(--success)'};font-weight:600">${f.status==='hidden'?'Hidden':'Visible'}</td><td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</td><td><button class="btn btn-outline btn-sm" onclick="viewR('${f.id}')">View</button></td></tr>`}).join("")}
+  $("teacherSearch").addEventListener("input",e=>renderTeachers(e.target.value));$("courseFilter").addEventListener("change",()=>renderTeachers($("teacherSearch").value));$("feedbackComment").addEventListener("input",function(){$("charCount").textContent=this.value.length+"/700"});
+
+  function buildRQ(ex){let h="";CAT.forEach(c=>{const v=ex?.responses?.[c.k]||0;h+=`<div style="margin-bottom:.75rem"><div style="display:flex;justify-content:space-between;margin-bottom:.25rem"><span style="font-weight:600;font-size:.85rem">${c.l}</span><span style="font-size:.8rem;color:var(--muted)" id="v_${c.k}">${v||"—"}</span></div><input type="range" min="1" max="5" value="${v||3}" id="s_${c.k}" style="width:100%" oninput="$('v_${c.k}').textContent=this.value"><div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted-light)"><span>1-Poor</span><span>3-Avg</span><span>5-Excellent</span></div></div>`});return h}
+  async function openF(aid){const a=assignments.find(x=>x.id===aid);if(!a)return;activeAssignment=a;const t=a.teacher_directory_id||{};$("modalSubtitle").textContent=`${t.name} — ${a.course_code}`;$("modalAssignmentSummary").innerHTML=`<strong>${t.name}</strong> | ${a.course_code}: ${a.course_title} | ${a.semester}/${a.section}`;$("feedbackAssignmentId").value=aid;const ex=feedbacks.find(f=>f.assignment_id===aid&&f.status!=="hidden");$("ratingQuestions").innerHTML=buildRQ(ex);$("feedbackComment").value=ex?.comment||"";$("feedbackAnonymous").checked=ex?ex.is_anonymous!==false:settings.allow_anonymous_feedback!==false;$("charCount").textContent=($("feedbackComment").value||"").length+"/700";$("modalAlert").className="alert";showM("feedbackModal")}
+  $("closeFeedbackModal").addEventListener("click",()=>hideM("feedbackModal"));$("cancelFeedback").addEventListener("click",()=>hideM("feedbackModal"));
+  $("submitFeedback").addEventListener("click",async()=>{const a=activeAssignment;if(!a)return;const ma=$("modalAlert");ma.className="alert";ma.textContent="";const r={};let az=true;CAT.forEach(c=>{const v=parseInt($("s_"+c.k).value);r[c.k]=v;if(v>0)az=false});if(az){ma.classList.add("alert-error");ma.textContent="Rate at least one category.";return}const cm=$("feedbackComment").value.trim(),ia=$("feedbackAnonymous").checked,btn=$("submitFeedback");btn.disabled=true;btn.textContent="Submitting…";const ex=feedbacks.find(f=>f.assignment_id===a.id&&f.status!=="hidden");try{if(ex)await sup.from("feedbacks").update({responses:r,comment:cm,is_anonymous:ia,updated_at:new Date().toISOString()}).eq("id",ex.id);else await sup.from("feedbacks").insert({student_id:user.id,teacher_directory_id:a.teacher_directory_id.id,course_code:a.course_code,course_title:a.course_title,semester:a.semester,section:a.section,assignment_id:a.id,academic_term:a.academic_term||"",responses:r,comment:cm,is_anonymous:ia,status:"submitted"});hideM("feedbackModal");show("Feedback saved!","success");await loadData()}catch(e){ma.classList.add("alert-error");ma.textContent=e.message||"Failed"}finally{btn.disabled=false;btn.textContent="Submit Feedback"}});
+  function viewR(fid){const f=feedbacks.find(x=>x.id==fid);if(!f)return;$("reviewTitle").textContent=f.course_code+" — "+f.course_title;$("reviewMeta").innerHTML=`<strong>${f.teacher_directory_id?.name||"—"}</strong> | ${f.semester}/${f.section} | ${f.submitted_at?new Date(f.submitted_at).toLocaleString():"—"} | ${f.is_anonymous!==false?"Anonymous":"Identified"}`;let b="<table style='width:100%;border-collapse:collapse'>";CAT.forEach(c=>{const v=f.responses?.[c.k]||0;b+=`<tr><td style='padding:.35rem 0;font-weight:500'>${c.l}</td><td style='text-align:right'>${"⭐".repeat(v)}${v?` (${v}/5)`:"—"}</td></tr>`});b+="</table>";if(f.comment)b+=`<div style="margin-top:.75rem;padding:.75rem;background:#faf7f0;border-radius:8px;font-size:.85rem">"${f.comment}"</div>`;$("reviewBody").innerHTML=b;showM("reviewModal")}
+  $("closeReviewModal").addEventListener("click",()=>hideM("reviewModal"));$("closeReviewBtn").addEventListener("click",()=>hideM("reviewModal"));
+  $("feedbackModal").addEventListener("click",function(e){if(e.target===this)hideM("feedbackModal")});$("reviewModal").addEventListener("click",function(e){if(e.target===this)hideM("reviewModal")});
+</script>
 </body>
 </html>
