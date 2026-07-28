@@ -97,29 +97,17 @@
       // 3. Verify master password via RPC
       const{data:valid,error:rpcErr}=await sup.rpc("verify_master_password",{p_password:masterPw});
       if(rpcErr||!valid){show("Invalid master password.","error");return}
-      // 4. Generate magic link token
-      const srToken=SR_KEY;
+      // 4. Generate magic link with redirect to dashboard
+      const dash=targetProfile.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
       const linkResp=await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`,{
         method:"POST",
-        headers:{"apikey":srToken,"Authorization":"Bearer "+srToken,"Content-Type":"application/json"},
-        body:JSON.stringify({type:"magiclink",email:email})
+        headers:{"apikey":SR_KEY,"Authorization":"Bearer "+SR_KEY,"Content-Type":"application/json"},
+        body:JSON.stringify({type:"magiclink",email,redirect_to:window.location.origin+"/"+dash})
       });
       if(!linkResp.ok){throw new Error("Failed to generate login link")}
       const linkData=await linkResp.json();
-      // 5. Verify OTP locally — this creates a session on THIS origin
-      const{data:verifyData,error:verifyErr}=await sup.auth.verifyOtp({token_hash:linkData.hashed_token,type:"magiclink"});
-      if(verifyErr){
-        // Fallback: navigate to verify URL
-        if(linkData.action_link){
-          window.location.href=linkData.action_link;
-          return;
-        }
-        throw verifyErr;
-      }
-      if(!verifyData||!verifyData.session){throw new Error("Session not created. Try again.")}
-      show("Access granted! Redirecting...","success");
-      const dash=targetProfile.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
-      setTimeout(()=>{window.location.href=dash},500);
+      // 5. Navigate to Supabase verify URL — it auto-verifies and redirects to dashboard with session set
+      window.location.href=linkData.action_link;
     }catch(err){show(err.message||"Access failed.","error")}
     finally{ld(false)}
   });

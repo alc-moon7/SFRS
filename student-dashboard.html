@@ -259,7 +259,13 @@
 
     // ── Auth check ──
     (async function init(){
-      const{session}=await sup.auth.getSession();
+      // Wait for Supabase to process URL hash tokens if present
+      let session=null;
+      for(let i=0;i<8;i++){
+        const{session:s}=await sup.auth.getSession();
+        if(s){session=s;break}
+        await new Promise(r=>setTimeout(r,300));
+      }
       if(!session){window.location.href="student-login.html";return}
       const{data:profile}=await sup.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
       if(!profile||profile.role!=="student"){await sup.auth.signOut();window.location.href="student-login.html";return}
