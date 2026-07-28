@@ -103,12 +103,15 @@
     typing.style.display = "block";
     sendBtn.disabled = true;
 
-    // Guard: students cannot access analytics
-    if (role === "student" && /rating|score|analytics|summary|breakdown|average|performance|department|all teacher/i.test(msg)) {
-      add("I can only help with your own course feedback. For detailed analytics, ask your teacher or admin.", "s");
-      typing.style.display = "none";
-      sendBtn.disabled = false;
-      return;
+    // Guard: students can only ask about their own courses/feedback
+    if (role === "student") {
+      const blocked = /rating|score|analytics|summary|summery|breakdown|average|performance|teacher|sir\b|mam\b|maam\b|madam\b|prof/i;
+      if (blocked.test(msg)) {
+        add("🔒 I can only help with your own course feedback and general SFRS guidance. Teacher analytics are not available to students.", "s");
+        typing.style.display = "none";
+        sendBtn.disabled = false;
+        return;
+      }
     }
 
     try {
