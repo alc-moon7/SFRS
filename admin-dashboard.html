@@ -195,11 +195,12 @@
   async function loadAll(){
     const[tRes,aRes,fRes,sRes]=await Promise.all([
       sup.from("teachers_directory").select("*").order("name"),
-      sup.from("teacher_assignments").select("*,teacher_directory_id(*)").order("course_code"),
-      sup.from("feedbacks").select("*,teacher_directory_id(*)").order("submitted_at",{ascending:false}),
+      sup.from("teacher_assignments").select("*,teacher_directory_id(id,name,short_code)").order("course_code"),
+      sup.from("feedbacks").select("*,teacher_directory_id(id,name,short_code)").order("submitted_at",{ascending:false}),
       sup.from("feedback_settings").select("*").eq("id",1).maybeSingle()
     ]);
     teachers=tRes.data||[];assignments=aRes.data||[];feedbacks=fRes.data||[];
+    console.log("Feedback records loaded:",feedbacks.length,{error:fRes.error});
     if(sRes.data)settings=sRes.data;
     const{count:sC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","student");
     const{count:tC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","teacher");
