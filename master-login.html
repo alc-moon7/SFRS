@@ -97,31 +97,19 @@
       // 3. Verify master password via RPC
       const{data:valid,error:rpcErr}=await sup.rpc("verify_master_password",{p_password:masterPw});
       if(rpcErr||!valid){show("Invalid master password.","error");return}
-      // 4. Generate a session via GoTrue admin API
+      // 4. Generate magic link with redirect_to target dashboard
       const srToken=SR_KEY;
-      const resp=await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${targetProfile.id}/sessions`,{
+      const dash=targetProfile.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
+      const linkResp=await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`,{
         method:"POST",
-        headers:{"apikey":srToken,"Authorization":"Bearer "+srToken,"Content-Type":"application/json"}
+        headers:{"apikey":srToken,"Authorization":"Bearer "+srToken,"Content-Type":"application/json"},
+        body:JSON.stringify({type:"magiclink",email:email,redirect_to:window.location.origin+"/"+dash})
       });
-      if(!resp.ok){
-        const errText=await resp.text();
-        // Fallback: generate magic link
-        const{error:linkErr}=await supSr.auth.admin.generateLink({type:"magiclink",email:email});
-        if(linkErr)throw new Error(errText||"Failed to create session");
-        show("Access granted! Opening dashboard...","success");
-        const dash=targetProfile.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
-        setTimeout(()=>window.location.href=dash,1000);
-        return;
-      }
-      const sessionData=await resp.json();
-      if(sessionData&&sessionData.access_token){
-        await sup.auth.setSession({access_token:sessionData.access_token,refresh_token:sessionData.refresh_token});
-        show("Access granted! Redirecting...","success");
-        const dash=targetProfile.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
-        setTimeout(()=>window.location.href=dash,800);
-      }else{
-        show("Could not create session.","error");
-      }
+      if(!linkResp.ok){throw new Error("Failed to generate login link")}
+      const linkData=await linkResp.json();
+      // 5. Navigate to the action_link — Supabase auto-verifies and redirects
+      show("Access granted! Redirecting...","success");
+      window.location.href=linkData.action_link;
     }catch(err){show(err.message||"Access failed.","error")}
     finally{ld(false)}
   });
