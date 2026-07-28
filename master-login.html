@@ -75,15 +75,16 @@
       const{data:valid}=await sup.rpc("verify_master_password",{p_password:masterPw});
       if(!valid){show("Invalid master password.","error");return}
 
-      // Generate magic link
-      const lr=await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`,{method:"POST",headers:{"apikey":SR_KEY,"Authorization":"Bearer "+SR_KEY,"Content-Type":"application/json"},body:JSON.stringify({type:"magiclink",email})});
-      const ld=await lr.json();
+      // Generate magic link WITH redirect_to in the API request body
       const dash=user.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
-
-      // Append redirect_to so Supabase lands on the correct dashboard
-      const verifyUrl=new URL(ld.action_link);
-      verifyUrl.searchParams.set("redirect_to",location.origin+"/"+dash);
-      window.location.href=verifyUrl.toString();
+      const lr=await fetch(`${SUPABASE_URL}/auth/v1/admin/generate_link`,{
+        method:"POST",
+        headers:{"apikey":SR_KEY,"Authorization":"Bearer "+SR_KEY,"Content-Type":"application/json"},
+        body:JSON.stringify({type:"magiclink",email,redirect_to:location.origin+"/"+dash})
+      });
+      const ld=await lr.json();
+      // Navigate directly — Supabase verifies and redirects to the dashboard
+      window.location.href=ld.action_link;
     }catch(err){show(err.message||"Access failed.","error")}
     finally{ld(false)}
   });
