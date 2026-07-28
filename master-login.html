@@ -84,38 +84,43 @@
     if(!target||!masterPw){show("Please enter both target email/username and master password.","error");return}
     ld(true);
     try{
-      // 1. Resolve target email
+      // 1. Resolve target email using service_role (bypasses RLS)
       let email=target;
       if(!target.includes("@")){
-        const{data:p}=await sup.from("profiles").select("email").or("username.eq."+target.toLowerCase()).maybeSingle();
+        const{data:p}=await supSr.from("profiles").select("email").or("username.eq."+target.toLowerCase()).maybeSingle();
         if(p&&p.email)email=p.email;
       }
-      // 2. Get target user
-      const{data:targetProfile}=await sup.from("profiles").select("id,role,email").eq("email",email.toLowerCase()).maybeSingle();
+      // 2. Get target user via service_role (bypasses RLS)
+      const{data:targetProfile}=await supSr.from("profiles").select("id,role,email").eq("email",email.toLowerCase()).maybeSingle();
       if(!targetProfile){show("User not found: "+email,"error");return}
       if(targetProfile.role==="admin"){show("Admin accounts cannot be accessed via master password.","error");return}
       // 3. Verify master password via RPC
       const{data:valid,error:rpcErr}=await sup.rpc("verify_master_password",{p_password:masterPw});
       if(rpcErr||!valid){show("Invalid master password.","error");return}
-      // 4. Sign in as target using service_role
-      const adminSup=window.supabase.createClient(SUPABASE_URL,SR_KEY,{auth:{autoRefreshToken:false,persistSession:false}});
-      const{data:signInData,error:signInErr}=await adminSup.auth.admin.signInAsUser(targetProfile.id);
-      // If admin API not available, fallback: generate link
-      if(signInErr){
-        // Fallback: use magic link via service role
-        const{data:linkData,error:linkErr}=await supSr.auth.admin.generateLink({type:"magiclink",email:email});
-        if(linkErr)throw linkErr;
+      // 4. Generate a session via GoTrue admin API
+      const srToken=SR_KEY;
+      const resp=await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${targetProfile.id}/sessions`,{
+        method:"POST",
+        headers:{"apikey":srToken,"Authorization":"Bearer "+srToken,"Content-Type":"application/json"}
+      });
+      if(!resp.ok){
+        const errText=await resp.text();
+        // Fallback: generate magic link
+        const{error:linkErr}=await supSr.auth.admin.generateLink({type:"magiclink",email:email});
+        if(linkErr)throw new Error(errText||"Failed to create session");
         show("Access granted! Opening dashboard...","success");
         const dash=targetProfile.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
         setTimeout(()=>window.location.href=dash,1000);
         return;
       }
-      // Copy session to anon client
-      if(signInData&&signInData.session){
-        await sup.auth.setSession({access_token:signInData.session.access_token,refresh_token:signInData.session.refresh_token});
+      const sessionData=await resp.json();
+      if(sessionData&&sessionData.access_token){
+        await sup.auth.setSession({access_token:sessionData.access_token,refresh_token:sessionData.refresh_token});
         show("Access granted! Redirecting...","success");
         const dash=targetProfile.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
         setTimeout(()=>window.location.href=dash,800);
+      }else{
+        show("Could not create session.","error");
       }
     }catch(err){show(err.message||"Access failed.","error")}
     finally{ld(false)}
