@@ -3,119 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Student Login - SFRS</title>
+  <title>Student Login — SFRS</title>
+  <meta name="description" content="SFRS Student Portal — Submit course feedback securely.">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+    :root { --primary:#0c2a42;--primary-light:#163a56;--accent:#c9462c;--accent-hover:#a53d21;--bg:#f7f4ee;--surface:#fff;--border:#e5dece;--text:#16232c;--muted:#6b6255;--danger:#d92d20;--success:#0f8b5f; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    .auth-page{min-height:100vh;display:flex}
+    .auth-brand{flex:1;background:linear-gradient(170deg,#0e2f4a 0%,#163a56 60%,#0c2a42 100%);display:flex;flex-direction:column;justify-content:space-between;padding:3rem;color:#fff;position:relative;overflow:hidden}
+    .auth-brand::before{content:"";position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(201,70,44,0.15) 0%,transparent 70%)}
+    .auth-brand::after{content:"";position:absolute;bottom:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.04) 0%,transparent 70%)}
+    .auth-brand-top{position:relative;z-index:1}
+    .auth-brand-logo{display:inline-flex;align-items:center;gap:.5rem;margin-bottom:2.5rem}
+    .auth-brand-logo img{height:40px;width:auto;filter:brightness(10)}
+    .auth-brand-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(59,130,246,.2);color:#93c5fd;font-size:.78rem;font-weight:700;padding:.3rem .9rem;border-radius:100px;letter-spacing:.04em;margin-bottom:1.5rem}
+    .auth-brand h1{font-size:2rem;font-weight:800;line-height:1.2;margin-bottom:1rem;position:relative;z-index:1}
+    .auth-brand p{color:rgba(255,255,255,.65);font-size:1rem;line-height:1.7;max-width:380px;position:relative;z-index:1}
+    .auth-brand-features{position:relative;z-index:1;display:flex;flex-direction:column;gap:.75rem}
+    .auth-brand-feature{display:flex;align-items:center;gap:.75rem;font-size:.88rem;color:rgba(255,255,255,.55);padding:.6rem 0}
+    .auth-brand-feature::before{content:"✓";display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(16,185,129,.2);color:#34d399;font-weight:700;font-size:.75rem;flex-shrink:0}
+    .auth-form{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
+    .auth-form-inner{width:100%;max-width:420px}
+    .auth-form-header{text-align:center;margin-bottom:2rem}
+    .auth-form-header img{height:44px;width:auto;margin:0 auto 1rem}
+    .auth-form-header .kicker{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.25rem}
+    .auth-form-header h2{font-size:1.5rem;font-weight:700;color:var(--primary)}
+    .auth-form-header p{font-size:.88rem;color:var(--muted);margin-top:.25rem}
+    .auth-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;box-shadow:0 20px 50px rgba(12,42,66,.1)}
+    .form-group{margin-bottom:1.25rem}
+    .form-label{display:block;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:.35rem}
+    .form-input{width:100%;padding:.85rem 1rem;border:2px solid var(--border);border-radius:12px;font-size:.95rem;font-family:inherit;background:#faf8f2;transition:all .2s;color:var(--text)}
+    .form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,70,44,.1);background:#fff}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.9rem 1.5rem;border-radius:12px;font-weight:600;font-size:1rem;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 8px 25px rgba(201,70,44,.3)}
+    .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .alert{padding:.85rem 1rem;border-radius:12px;font-size:.88rem;margin-bottom:1.25rem;display:none;font-weight:500}
+    .alert-error{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;display:block}
+    .alert-success{background:#f0fdf4;color:var(--success);border:1px solid #bbf7d0;display:block}
+    .link-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;font-size:.85rem}
+    .link-row a{color:var(--muted);font-weight:500}
+    .link-row a:hover{color:var(--accent)}
+    .auth-footer{text-align:center;margin-top:1.5rem;font-size:.85rem;color:var(--muted)}
+    .auth-footer a{color:var(--primary);font-weight:600}
+    .auth-footer a:hover{color:var(--accent)}
+    .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
+    .btn-loading .spinner{display:block}
+    .btn-loading .btn-text{display:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:768px){.auth-page{flex-direction:column}.auth-brand{padding:2.5rem 1.5rem;min-height:auto}.auth-brand h1{font-size:1.5rem}.auth-form{padding:1.5rem}}
+  </style>
 </head>
-<body data-page="student-login">
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" aria-label="Primary">
-    <div class="container">
-      <a class="navbar-brand" href="/feedback/">
-        <span class="logo-mark" aria-hidden="true"></span>
-        <span class="brand-text">
-          <span class="brand-title">SFRS</span>
-          <span class="brand-subtitle">Student Feedback Review System</span>
-        </span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav mx-lg-auto">
-          <li class="nav-item"><a class="nav-link" href="/feedback/">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/feedback/#features">Features</a></li>
-          <li class="nav-item"><a class="nav-link" href="/feedback/#about">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="/feedback/#contact">Contact</a></li>
-        </ul>
-        <ul class="navbar-nav ms-lg-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Authentication</a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><h6 class="dropdown-header">Login</h6></li>
-              <li><a class="dropdown-item" href="admin-login.html">Admin</a></li>
-              <li><a class="dropdown-item" href="student-login.html">Student</a></li>
-              <li><a class="dropdown-item" href="teacher-login.html">Teacher</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><h6 class="dropdown-header">Register</h6></li>
-              <li><a class="dropdown-item" href="student-signup.html">Student</a></li>
-              <li><a class="dropdown-item" href="teacher-signup.html">Teacher</a></li>
-            </ul>
-          </li>
-        </ul>
+<body>
+  <div class="auth-page">
+    <div class="auth-brand">
+      <div class="auth-brand-top">
+        <div class="auth-brand-logo"><img src="assets/images/sfrs.png" alt="SFRS"></div>
+        <div class="auth-brand-badge">🎓 Student Portal</div>
+        <h1>Submit course feedback with confidence.</h1>
+        <p>Access your assigned teachers, structured rating categories, and submission history in a secure workspace.</p>
+      </div>
+      <div class="auth-brand-features">
+        <div class="auth-brand-feature">Semester- and section-matched access</div>
+        <div class="auth-brand-feature">Anonymous-ready feedback workflow</div>
+        <div class="auth-brand-feature">Secure Supabase authentication</div>
       </div>
     </div>
-  </nav>
-
-  <main class="auth-main">
-    <div class="container">
-      <div class="auth-layout">
-        <aside class="auth-brand-panel">
-          <div>
-            <div class="auth-brand-logo mb-4" aria-hidden="true"></div>
-            <span class="hero-badge mb-3">Student Portal</span>
-            <h1>Submit course feedback with confidence.</h1>
-            <p class="mb-0">Access assigned teachers, structured rating categories, and submission history in a secure academic workspace.</p>
-          </div>
-          <div class="auth-proof-grid">
-            <div class="auth-proof-item">Semester and section matched access</div>
-            <div class="auth-proof-item">Anonymous-ready feedback workflow</div>
-            <div class="auth-proof-item">Official Supabase authentication</div>
-          </div>
-        </aside>
-        <section class="auth-form-panel">
-          <div class="form-shell">
-            <img class="logo-image" src="assets/images/varendra-logo.png" alt="Varendra University logo">
-            <div class="section-eyebrow">Secure Login</div>
-            <h2 class="section-title mb-2">Student Login</h2>
-            <p class="section-lead mb-4">Access your feedback submission portal using your registered email and password.</p>
-            <div id="studentLoginAlert"></div>
-            <form id="studentLoginForm" class="needs-validation" novalidate>
-              <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="studentEmail" name="email" placeholder="Email or username" autocomplete="username" required>
-                <label for="studentEmail">Email or Username</label>
-                <div class="invalid-feedback">Please enter your email or username.</div>
-              </div>
-              <div class="mb-3">
-                <div class="password-field">
-                  <div class="form-floating">
-                    <input type="password" class="form-control" id="studentPassword" name="password" placeholder="Password" autocomplete="current-password" required>
-                    <label for="studentPassword">Password</label>
-                  </div>
-                  <button class="password-toggle-btn" type="button" data-password-toggle="#studentPassword" aria-label="Show password">Show</button>
-                </div>
-                <div class="invalid-feedback">Please enter your password.</div>
-              </div>
-              <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-4">
-                <div class="form-check mb-0">
-                  <input class="form-check-input" type="checkbox" id="studentRemember">
-                  <label class="form-check-label" for="studentRemember">Remember me</label>
-                </div>
-                <a class="link-muted fw-semibold" href="password-reset.html">Forgot password?</a>
-              </div>
-              <button type="submit" class="btn btn-primary w-100" data-loading-label="Signing in...">Login</button>
-            </form>
-            <div class="mt-4 text-center">
-              <span class="text-muted">New student?</span>
-              <a class="link-muted fw-semibold" href="student-signup.html">Create an account</a>
+    <div class="auth-form">
+      <div class="auth-form-inner">
+        <div class="auth-form-header">
+          <img src="assets/images/sfrs.png" alt="SFRS">
+          <div class="kicker">Secure Login</div>
+          <h2>Student Login</h2>
+          <p>Access your feedback submission portal</p>
+        </div>
+        <div class="auth-card">
+          <div class="alert" id="alertBox"></div>
+          <form id="loginForm" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="emailInput">Email or Username</label>
+              <input type="text" class="form-input" id="emailInput" placeholder="student@example.com" autocomplete="username" autofocus required>
             </div>
-          </div>
-        </section>
+            <div class="form-group">
+              <label class="form-label" for="passwordInput">Password</label>
+              <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" autocomplete="current-password" required>
+            </div>
+            <div class="link-row">
+              <label style="display:flex;align-items:center;gap:.35rem;cursor:pointer;font-size:.85rem;color:var(--muted)">
+                <input type="checkbox" id="rememberCheck">Remember me
+              </label>
+              <a href="password-reset.html">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn btn-primary" id="loginBtn">
+              <span class="btn-text">Sign In</span><span class="spinner"></span>
+            </button>
+          </form>
+        </div>
+        <div class="auth-footer">
+          New student? <a href="student-signup.html">Create an account</a>
+        </div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <footer>
-    <div class="container">
-      <div class="footer-note">SFRS - Student login. For academic use only.</div>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/supabase-config.js"></script>
-  <script src="assets/js/questions.js"></script>
-  <script src="assets/js/review-data.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script>
+    const supabaseUrl="https://mstotzwqfbcvpcdgrnxy.supabase.co";
+    const supabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw";
+    const sup=window.supabase.createClient(supabaseUrl,supabaseKey);
+    const alertBox=document.getElementById("alertBox"),loginBtn=document.getElementById("loginBtn");
+    function show(msg,t){alertBox.textContent=msg;alertBox.className="alert";alertBox.classList.add(t==="error"?"alert-error":"alert-success")}
+    function hide(){alertBox.className="alert";alertBox.textContent=""}
+    function loading(v){if(v){loginBtn.classList.add("btn-loading");loginBtn.disabled=true}else{loginBtn.classList.remove("btn-loading");loginBtn.disabled=false}}
+
+    (async()=>{const{session}=await sup.auth.getSession();if(session){const{data}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();if(data&&data.role==="student")window.location.href="student-dashboard.html";else await sup.auth.signOut()}})();
+
+    document.getElementById("loginForm").addEventListener("submit",async e=>{
+      e.preventDefault();hide();
+      const login=document.getElementById("emailInput").value.trim(),pw=document.getElementById("passwordInput").value;
+      if(!login||!pw){show("Please enter both email/username and password.","error");return}
+      loading(true);
+      try{
+        let email=login;
+        if(!login.includes("@")){const{data:p}=await sup.from("profiles").select("email").or("username.eq."+login.toLowerCase()).maybeSingle();if(p&&p.email)email=p.email}
+        const{data,error}=await sup.auth.signInWithPassword({email,pw});
+        if(error)throw error;
+        const{data:profile}=await sup.from("profiles").select("role").eq("id",data.user.id).maybeSingle();
+        if(!profile||profile.role!=="student"){await sup.auth.signOut();show("Access denied. Student account required.","error");return}
+        window.location.href="student-dashboard.html";
+      }catch(err){show(err.message||"Login failed.","error")}
+      finally{loading(false)}
+    });
+  </script>
 </body>
 </html>
