@@ -115,6 +115,7 @@
       if(session){
         const{data:p}=await sup.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
         if(p&&p.role==="student"){
+          clearTimeout(timeout);
           unsub.data.subscription.unsubscribe();
           user=p;$("profileName").textContent=p.full_name||"—";$("profileId").textContent=p.student_id||"—";$("profileProgram").textContent=p.program||"—";$("semesterBadge").textContent=p.semester||"—";$("sectionBadge").textContent=p.section||"—";
           await loadData();
@@ -122,7 +123,7 @@
       }
     });
     // Check existing session immediately
-    (async()=>{const{s}=await sup.auth.getSession();if(s)return;timeout=setTimeout(()=>{unsub.data.subscription.unsubscribe();location.href="student-login.html"},6000)})();
+    (async()=>{const{data:{session}}=await sup.auth.getSession();if(session)return;timeout=setTimeout(()=>{unsub.data.subscription.unsubscribe();location.href="student-login.html"},6000)})();
   })();
 
   async function loadData(){
