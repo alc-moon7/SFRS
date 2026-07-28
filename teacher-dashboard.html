@@ -71,7 +71,7 @@
   </style>
 </head>
 <body>
-<nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><div class="nav-links"><a class="nav-link" href="/">Home</a><a class="nav-link active" href="teacher-dashboard.html">Dashboard</a><a class="nav-link" href="teacher-profile.html">Profile</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
+<nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><div class="nav-links"><a class="nav-link active" href="teacher-dashboard.html">Dashboard</a><a class="nav-link" href="teacher-profile.html">Profile</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
 
 <div class="app-shell">
   <aside class="app-sidebar"><div class="sidebar-title">Faculty Workspace</div>
@@ -169,7 +169,8 @@
     if(!fb.length){sa.classList.add("alert-error");sa.textContent="No feedback data to summarize.";return}
     const payload=fb.map(f=>({course:f.course_code,overall:f.responses?.overall_satisfaction||0,comment:f.comment||"",submitted:f.submitted_at}));
     try{
-      const resp=await fetch("https://mstotzwqfbcvpcdgrnxy.supabase.co/functions/v1/ai-assistant",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+(await sup.auth.getSession()).session?.access_token||"","apikey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw"},body:JSON.stringify({type:"summary",payload})});
+      const{data:{session}}=await sup.auth.getSession();
+      const resp=await fetch("https://mstotzwqfbcvpcdgrnxy.supabase.co/functions/v1/ai-assistant",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+(session?.access_token||""),"apikey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw"},body:JSON.stringify({type:"summary",payload})});
       if(!resp.ok)throw new Error("AI service unavailable");
       const d=await resp.json();
       $("summaryResult").textContent=d.result||"No insights generated.";
