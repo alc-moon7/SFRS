@@ -80,9 +80,10 @@
       const ld=await lr.json();
       const dash=user.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
 
-      // Navigate to action_link — Supabase verifies and redirects back with session hash tokens
-      // Dashboard pages have onAuthStateChange listeners to detect the session
-      window.location.href=ld.action_link;
+      // Append redirect_to so Supabase lands on the correct dashboard
+      const verifyUrl=new URL(ld.action_link);
+      verifyUrl.searchParams.set("redirect_to",location.origin+"/"+dash);
+      window.location.href=verifyUrl.toString();
     }catch(err){show(err.message||"Access failed.","error")}
     finally{ld(false)}
   });
