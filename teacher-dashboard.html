@@ -3,229 +3,194 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teacher Dashboard - SFRS</title>
+  <title>Teacher Dashboard — SFRS</title>
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/dashboard-theme.css">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+    :root{--primary:#0c2a42;--primary-light:#163a56;--accent:#c9462c;--accent-hover:#a53d21;--bg:#f2efe6;--surface:#fff;--border:#e5dece;--border-light:#f0eadb;--text:#16232c;--muted:#6b6255;--muted-light:#a89b86;--success:#0f8b5f;--danger:#d92d20;--nav-h:68px;--sidebar-w:220px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;min-height:100vh;padding-top:var(--nav-h)}
+    a{color:inherit;text-decoration:none}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 1.5rem}
+    .nav-inner{max-width:1400px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:1.1rem;color:var(--primary)}
+    .nav-brand img{height:34px;width:auto}
+    .nav-links{display:flex;align-items:center;gap:.25rem}
+    .nav-link{padding:.45rem .85rem;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--muted);transition:.15s}
+    .nav-link:hover,.nav-link.active{color:var(--accent);background:#faf5ed}
+    .app-shell{display:flex;min-height:calc(100vh - var(--nav-h));max-width:1400px;margin:0 auto}
+    .app-sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:1.25rem 1rem;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto}
+    .sidebar-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);margin-bottom:1rem;padding:0 .5rem}
+    .sidebar-link{display:block;padding:.5rem .75rem;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--muted);transition:.15s;margin-bottom:.1rem}
+    .sidebar-link:hover,.sidebar-link.active{background:#faf5ed;color:var(--accent)}
+    .sidebar-link.danger{color:var(--danger)}
+    .app-content{flex:1;padding:1.5rem;min-width:0}
+    .topbar{margin-bottom:1.5rem}.topbar-kicker{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
+    .topbar h1{font-size:1.4rem;font-weight:700;color:var(--primary);margin-bottom:.25rem}.topbar p{font-size:.9rem;color:var(--muted)}
+    .badge-pill{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .8rem;border-radius:100px;font-size:.75rem;font-weight:600;background:#faf5ed;color:var(--primary);border:1px solid var(--border)}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;transition:.2s}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(12,42,66,.08)}
+    .stat-label{font-size:.78rem;color:var(--muted);margin-bottom:.25rem}.stat-value{font-size:1.8rem;font-weight:800;color:var(--primary);line-height:1.1}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:1.25rem}
+    .panel-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .panel-body{padding:1.5rem}.panel-title{font-size:1.05rem;font-weight:700;color:var(--primary)}
+    .panel-kicker{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
+    .table-wrap{overflow-x:auto}.table{width:100%;border-collapse:collapse;font-size:.88rem}
+    .table th{text-align:left;padding:.75rem .85rem;background:#faf7f0;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--border)}
+    .table td{padding:.75rem .85rem;border-bottom:1px solid var(--border-light)}.table tr:hover td{background:#fdfaf5}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.6rem 1.15rem;border-radius:10px;font-weight:600;font-size:.88rem;border:none;cursor:pointer;transition:.15s;font-family:inherit;white-space:nowrap}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,70,44,.22)}
+    .btn-outline{background:var(--surface);color:var(--primary);border:2px solid var(--border)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+    .btn-sm{padding:.4rem .8rem;font-size:.8rem}
+    .alert{padding:.75rem 1rem;border-radius:10px;font-size:.85rem;margin-bottom:1rem;display:none;font-weight:500}
+    .alert-error{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;display:block}
+    .alert-success{background:#f0fdf4;color:var(--success);border:1px solid #bbf7d0;display:block}
+    .profile-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+    .profile-info{display:flex;align-items:center;gap:1rem}.profile-avatar{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#0c2a42,#163a56);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.2rem}
+    .profile-name{font-weight:700;font-size:1.1rem;color:var(--primary)}.profile-meta{font-size:.82rem;color:var(--muted)}
+    .profile-scores{display:flex;gap:2rem}.score-item{text-align:center}.score-val{font-size:1.5rem;font-weight:800;color:var(--primary)}.score-lbl{font-size:.72rem;color:var(--muted)}
+    .chip-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+    .chip{font-size:.75rem;padding:.25rem .65rem;background:#faf7f0;border:1px solid var(--border);border-radius:100px;color:var(--muted)}
+    .rating-bar{margin-bottom:.6rem}.rating-bar-label{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem;font-weight:500}
+    .rating-bar-track{height:8px;background:var(--border);border-radius:4px;overflow:hidden}.rating-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#10b981,#0f8b5f)}
+    .comment-card{background:#faf7f0;border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:.75rem}
+    .comment-card-meta{font-size:.75rem;color:var(--muted-light);margin-bottom:.3rem}
+    .comment-card-text{font-size:.88rem;color:var(--text);line-height:1.6}
+    .ai-output{background:#faf7f0;border:1px solid var(--border);border-radius:10px;padding:1rem;min-height:60px;font-size:.88rem;line-height:1.7;white-space:pre-wrap}
+    .footer{text-align:center;padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted-light)}
+    .modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(12,42,66,.4);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.open{display:flex}
+    .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:550px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 70px rgba(12,42,66,.18)}
+    .modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+    .modal-title{font-size:1.1rem;font-weight:700;color:var(--primary)}
+    .modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)}
+    .modal-body{padding:1.5rem}.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end}
+    @media(max-width:1024px){.app-content{padding:1rem}.stats-grid{grid-template-columns:repeat(2,1fr)}.app-sidebar{display:none}}
+    @media(max-width:768px){.stats-grid{grid-template-columns:1fr}.profile-header{flex-direction:column}.profile-scores{width:100%;justify-content:space-around}}
+  </style>
 </head>
-<body data-page="teacher-dashboard">
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" aria-label="Primary">
-    <div class="container">
-      <a class="navbar-brand" href="/feedback/">
-        <span class="logo-mark" aria-hidden="true"></span>
-        <span class="brand-text">
-          <span class="brand-title">SFRS</span>
-          <span class="brand-subtitle">Faculty Portal</span>
-        </span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-lg-auto">
-          <li class="nav-item"><a class="nav-link" href="/feedback/">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="teacher-dashboard.html">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="teacher-profile.html">Profile View</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-logout>Logout</a></li>
-        </ul>
-      </div>
+<body>
+<nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><div class="nav-links"><a class="nav-link" href="/">Home</a><a class="nav-link active" href="teacher-dashboard.html">Dashboard</a><a class="nav-link" href="teacher-profile.html">Profile</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
+
+<div class="app-shell">
+  <aside class="app-sidebar"><div class="sidebar-title">Faculty Workspace</div>
+    <a class="sidebar-link active" href="#overview">Dashboard</a><a class="sidebar-link" href="#analytics">Analytics</a><a class="sidebar-link" href="#comments">Comments</a><a class="sidebar-link" href="#records">Records</a><a class="sidebar-link danger" href="#" id="sbLogout">Logout</a>
+  </aside>
+  <div class="app-content">
+    <div class="topbar"><div class="topbar-kicker">Teacher Portal</div><h1>My Feedback Overview</h1><p>Review anonymized course feedback, ratings, trends, and recent student comments.</p></div>
+    <div class="alert" id="alertBox"></div>
+
+    <div class="profile-header">
+      <div class="profile-info"><div class="profile-avatar" id="avatarInit">T</div><div><div class="profile-name" id="profileName">—</div><div class="profile-meta"><span id="profileDesignation">—</span> · <span id="profileDept">—</span></div><div class="chip-stack"><span class="chip" id="chipEmail">—</span><span class="chip" id="chipCode">—</span></div></div></div>
+      <div class="profile-scores"><div class="score-item"><div class="score-val" id="scoreAvg">0.00</div><div class="score-lbl">Avg Rating</div></div><div class="score-item"><div class="score-val" id="scoreTotal">0</div><div class="score-lbl">Reviews</div></div></div>
     </div>
-  </nav>
 
-  <main class="app-shell">
-    <aside class="app-sidebar" aria-label="Teacher workspace navigation">
-      <div class="app-sidebar-title">Faculty Workspace</div>
-      <nav class="sidebar-nav">
-        <a class="sidebar-link active" href="#overview">Dashboard</a>
-        <a class="sidebar-link" href="#profileDetails">Profile</a>
-        <a class="sidebar-link" href="#analytics">Analytics</a>
-        <a class="sidebar-link" href="#comments">Comments</a>
-        <a class="sidebar-link" href="#records">Feedback</a>
-        <a class="sidebar-link danger" href="#" data-logout>Logout</a>
-      </nav>
-    </aside>
-
-    <div class="app-content">
-      <div class="app-topbar">
-        <div>
-          <div class="section-eyebrow">Teacher Portal</div>
-          <h1 class="h3 section-title mb-1">My Feedback Overview</h1>
-          <p class="section-lead mb-0">Review anonymized course feedback, ratings, trends, and recent student comments.</p>
-        </div>
-        <a class="btn btn-outline-primary" id="teacherProfileLink" href="teacher-profile.html">Open Profile</a>
-      </div>
-
-      <div id="teacherDashboardAlert"></div>
-
-      <section id="overview" class="profile-header-card mb-4">
-        <div class="profile-identity">
-          <div class="avatar-pill" data-user-avatar aria-hidden="true"></div>
-          <div>
-            <span class="badge-role mb-2">Teacher Workspace</span>
-            <h2 class="profile-name mb-1" data-user-name></h2>
-            <div class="text-muted mb-2">
-              <span data-user-role></span>
-              <span class="mx-2">|</span>
-              <span data-user-department>Computer Science and Engineering</span>
-            </div>
-            <div class="profile-chip-row">
-              <span class="chip" data-user-email></span>
-              <span class="chip" data-user-short-code>Teacher Profile</span>
-            </div>
-          </div>
-        </div>
-        <div class="profile-scoreboard">
-          <div>
-            <div class="score-label">Average Rating</div>
-            <div class="score-value" data-profile-average>0.00</div>
-          </div>
-          <div>
-            <div class="score-label">Total Reviews</div>
-            <div class="score-value" data-profile-count>0</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="row g-3 mb-4" aria-label="Teacher widgets">
-        <div class="col-sm-6 col-xl-3">
-          <div class="stat-card h-100">
-            <div class="text-muted">Feedback Received</div>
-            <div class="display-6 fw-bold" id="totalReviews">0</div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-          <div class="stat-card h-100">
-            <div class="text-muted">Average Rating</div>
-            <div class="display-6 fw-bold" id="averageScore">0.00</div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-          <div class="stat-card h-100">
-            <div class="text-muted">Courses</div>
-            <div class="display-6 fw-bold" data-assignment-count>0</div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-          <div class="stat-card h-100">
-            <div class="text-muted">Improvement Score</div>
-            <div class="display-6 fw-bold" data-improvement-score>0%</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="row g-4">
-        <div class="col-lg-5">
-          <div id="profileDetails" class="card h-100">
-            <div class="card-body">
-              <div class="section-eyebrow">Profile Details</div>
-              <h2 class="h5 section-title">Faculty Profile</h2>
-              <p class="text-muted mb-3" data-user-bio>No teacher bio added yet.</p>
-              <div class="profile-detail-list">
-                <div><span class="fw-semibold">Email:</span> <span data-contact-email></span></div>
-                <div><span class="fw-semibold">Phone:</span> <span data-contact-phone></span></div>
-                <div><span class="fw-semibold">Office Room:</span> <span data-contact-office></span></div>
-                <div><span class="fw-semibold">Status:</span> <span data-teacher-status class="status-badge">Active</span></div>
-                <div><span class="fw-semibold">Visible Comments:</span> <span data-comment-count>0</span></div>
-              </div>
-              <hr>
-              <h3 class="h6 section-title mb-3">Current Assignments</h3>
-              <div class="chip-stack" data-assignment-chip-stack></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-7">
-          <div id="analytics" class="card mb-4">
-            <div class="card-body">
-              <div class="section-eyebrow">Analytics</div>
-              <h2 class="h5 section-title">Category Rating Breakdown</h2>
-              <div data-category-breakdown class="rating-breakdown-list mt-3"></div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <div>
-                  <div class="section-eyebrow">Insights</div>
-                  <h2 class="h5 section-title mb-0">AI Feedback Summary</h2>
-                </div>
-                <button class="btn btn-outline-primary btn-sm" type="button" id="aiSummaryBtn">Generate Summary</button>
-              </div>
-              <p class="text-muted small mb-2">Uses anonymized category scores and recent comments to generate a short summary.</p>
-              <div id="aiSummaryAlert"></div>
-              <div id="aiSummaryResult" class="ai-output text-muted">Click generate to view insights.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="comments" class="card mt-4">
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-            <div>
-              <div class="section-eyebrow">Anonymous Comments</div>
-              <h2 class="h5 section-title mb-0">Recent Student Comments</h2>
-            </div>
-            <span class="text-muted small">Anonymous by design</span>
-          </div>
-          <div class="comment-stack mt-3" data-comment-list></div>
-        </div>
-      </section>
-
-      <section id="records" class="card mt-4">
-        <div class="card-body">
-          <div class="section-eyebrow">Recent Feedback Table</div>
-          <h2 class="h5 section-title">Recent Feedback Records</h2>
-          <div class="table-responsive mt-3">
-            <table class="table table-bordered align-middle">
-              <thead>
-                <tr>
-                  <th>Course</th>
-                  <th>Semester / Section</th>
-                  <th>Overall</th>
-                  <th>Submitted At</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="teacherReviewsBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Feedback Received</div><div class="stat-value" id="statReviews">0</div></div>
+      <div class="stat-card"><div class="stat-label">Average Rating</div><div class="stat-value" id="statAvg">0.00</div></div>
+      <div class="stat-card"><div class="stat-label">Courses</div><div class="stat-value" id="statCourses">0</div></div>
+      <div class="stat-card"><div class="stat-label">Visibility</div><div class="stat-value" id="statVisible">0</div></div>
     </div>
-  </main>
 
-  <footer>
-    <div class="container">
-      <div class="footer-note">SFRS - Teacher dashboard. Student identities are never shown in this view.</div>
-    </div>
-  </footer>
+    <section id="analytics" class="panel"><div class="panel-header"><div><div class="panel-kicker">Analytics</div><div class="panel-title">Category Rating Breakdown</div></div></div><div class="panel-body" id="categoryBreakdown"></div></section>
 
-  <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="reviewModalLabel" data-review-title>Review Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p class="text-muted" data-review-meta></p>
-          <div data-review-body></div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
+    <section class="panel"><div class="panel-header"><div><div class="panel-kicker">AI Summary</div><div class="panel-title">Feedback Insights</div></div><button class="btn btn-primary btn-sm" id="genSummary">Generate Summary</button></div><div class="panel-body"><div class="alert" id="summaryAlert"></div><div class="ai-output" id="summaryResult">Click "Generate Summary" for AI-powered insights.</div></div></section>
+
+    <section id="comments" class="panel"><div class="panel-header"><div><div class="panel-kicker">Comments</div><div class="panel-title">Recent Student Comments</div></div></div><div class="panel-body" id="commentList"></div></section>
+
+    <section id="records" class="panel"><div class="panel-header"><div><div class="panel-kicker">Records</div><div class="panel-title">Recent Feedback</div></div></div><div class="panel-body"><div class="table-wrap"><table class="table"><thead><tr><th>Course</th><th>Semester</th><th>Overall</th><th>Submitted</th><th>Action</th></tr></thead><tbody id="recordsBody"></tbody></table></div></div></section>
   </div>
+</div>
+<div class="footer">&copy; 2026 SFRS — Teacher Dashboard</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/supabase-config.js"></script>
-  <script src="assets/js/questions.js"></script>
-  <script src="assets/js/review-data.js"></script>
-  <script src="assets/js/app.js"></script>
+<div class="modal-overlay" id="reviewModal"><div class="modal-box"><div class="modal-header"><div class="modal-title" id="reviewTitle">Review</div><button class="modal-close" id="closeReview">&times;</button></div><div class="modal-body"><div id="reviewMeta" style="font-size:.85rem;color:var(--muted);margin-bottom:1rem"></div><div id="reviewBody"></div></div><div class="modal-footer"><button class="btn btn-outline" id="closeReviewBtn">Close</button></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const sup=window.supabase.createClient("https://mstotzwqfbcvpcdgrnxy.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw");
+  const CAT=[{k:"teaching_quality",l:"Teaching Quality"},{k:"communication",l:"Communication"},{k:"course_organization",l:"Course Organization"},{k:"supportiveness",l:"Helpfulness/Supportiveness"},{k:"punctuality",l:"Punctuality"},{k:"overall_satisfaction",l:"Overall Satisfaction"}];
+  let user=null,teacher=null,fb=[],assignments=[],tdirId=null;
+
+  function $(id){return document.getElementById(id)}
+  function showAlert(m,t){const a=$("alertBox");a.textContent=m;a.className="alert alert-"+(t==="error"?"error":"success")}
+  function showModal(){document.getElementById("reviewModal").classList.add("open")}
+  function hideModal(){document.getElementById("reviewModal").classList.remove("open")}
+
+  (async function init(){
+    const{session}=await sup.auth.getSession();if(!session){location.href="teacher-login.html";return}
+    const{data:p}=await sup.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
+    if(!p||p.role!=="teacher"){await sup.auth.signOut();location.href="teacher-login.html";return}
+    user=p;tdirId=p.teacher_directory_id;
+    if(!tdirId){showAlert("No teacher directory profile linked.","error");return}
+    const{data:td}=await sup.from("teachers_directory").select("*").eq("id",tdirId).maybeSingle();
+    if(!td){showAlert("Teacher directory record not found.","error");return}
+    teacher=td;
+    $("profileName").textContent=td.name||"—";$("profileDesignation").textContent=td.designation||"—";$("profileDept").textContent=td.department||"—";$("chipEmail").textContent=td.email||"—";$("chipCode").textContent=td.short_code||"—";
+    if(td.name)$("avatarInit").textContent=td.name.charAt(0).toUpperCase();
+    await loadData();
+  })();
+
+  async function loadData(){
+    const[fbRes,assRes]=await Promise.all([
+      sup.from("feedbacks").select("*").eq("teacher_directory_id",tdirId).neq("status","hidden").order("submitted_at",{ascending:false}),
+      sup.from("teacher_assignments").select("*").eq("teacher_directory_id",tdirId).eq("is_active",true)
+    ]);
+    fb=fbRes.data||[];assignments=assRes.data||[];
+    renderAll();
+  }
+
+  function renderAll(){
+    const vis=fb.filter(f=>f.status!=="hidden");
+    $("statReviews").textContent=vis.length;
+    const avg=vis.length?vis.reduce((s,f)=>s+(f.responses?.overall_satisfaction||3),0)/vis.length:0;
+    $("statAvg").textContent=avg.toFixed(2);$("scoreAvg").textContent=avg.toFixed(2);$("scoreTotal").textContent=vis.length;
+    $("statCourses").textContent=[...new Set(vis.map(f=>f.course_code))].length;$("statVisible").textContent=fb.filter(f=>f.status!=="hidden").length;
+    // Category breakdown
+    let html="";
+    CAT.forEach(c=>{
+      const vals=vis.map(f=>f.responses?.[c.k]||0).filter(v=>v>0);
+      const ca=vals.length?(vals.reduce((s,v)=>s+v,0)/vals.length):0;
+      const pct=(ca/5)*100;
+      html+=`<div class="rating-bar"><div class="rating-bar-label"><span>${c.l}</span><span>${ca.toFixed(2)}/5</span></div><div class="rating-bar-track"><div class="rating-bar-fill" style="width:${pct}%"></div></div></div>`;
+    });
+    $("categoryBreakdown").innerHTML=html||"<p style='color:var(--muted)'>No ratings yet.</p>";
+    // Comments
+    const comments=vis.filter(f=>f.comment).slice(0,5);
+    $("commentList").innerHTML=comments.length?comments.map(f=>`<div class="comment-card"><div class="comment-card-meta">${f.course_code||""} · ${f.semester||""}/${f.section||""} · ${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</div><div class="comment-card-text">"${f.comment}"</div></div>`).join(""):"<p style='color:var(--muted)'>No comments yet.</p>";
+    // Records
+    const tb=$("recordsBody");
+    if(!vis.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No feedback records yet.</td></tr>';return}
+    tb.innerHTML=vis.map(f=>`<tr><td>${f.course_code||""} - ${f.course_title||""}</td><td>${f.semester||""}/${f.section||""}</td><td>${f.responses?.overall_satisfaction||"—"}/5</td><td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</td><td><button class="btn btn-outline btn-sm" onclick="viewReview('${f.id}')">View</button></td></tr>`).join("");
+  }
+
+  function viewReview(fid){
+    const f=fb.find(x=>x.id==fid);if(!f)return;
+    $("reviewTitle").textContent=(f.course_code||"")+" — "+(f.course_title||"");
+    $("reviewMeta").innerHTML=`${f.semester||""}/${f.section||""} · ${f.submitted_at?new Date(f.submitted_at).toLocaleString():"—"} · ${f.is_anonymous!==false?"Anonymous":"Identified"}`;
+    let body="<table style='width:100%;border-collapse:collapse'>";
+    CAT.forEach(c=>{const v=f.responses?.[c.k]||0;body+=`<tr><td style='padding:.35rem 0;font-weight:500'>${c.l}</td><td style='text-align:right'>${"⭐".repeat(v)}${v?` (${v}/5)`:"—"}</td></tr>`});
+    body+="</table>";
+    if(f.comment)body+=`<div style="margin-top:.75rem;padding:.75rem;background:#faf7f0;border-radius:8px;font-size:.85rem">"${f.comment}"</div>`;
+    $("reviewBody").innerHTML=body;showModal();
+  }
+
+  $("genSummary").addEventListener("click",async()=>{
+    const sa=$("summaryAlert");sa.className="alert";sa.textContent="";
+    if(!fb.length){sa.classList.add("alert-error");sa.textContent="No feedback data to summarize.";return}
+    const payload=fb.map(f=>({course:f.course_code,overall:f.responses?.overall_satisfaction||0,comment:f.comment||"",submitted:f.submitted_at}));
+    try{
+      const resp=await fetch("https://mstotzwqfbcvpcdgrnxy.supabase.co/functions/v1/ai-assistant",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+(await sup.auth.getSession()).session?.access_token||"","apikey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw"},body:JSON.stringify({type:"summary",payload})});
+      if(!resp.ok)throw new Error("AI service unavailable");
+      const d=await resp.json();
+      $("summaryResult").textContent=d.result||"No insights generated.";
+    }catch(e){$("summaryResult").textContent="Could not generate summary. Ensure the AI Edge Function is deployed."}
+  });
+
+  $("logoutLink").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
+  $("sbLogout").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
+  $("closeReview").addEventListener("click",hideModal);$("closeReviewBtn").addEventListener("click",hideModal);
+  document.getElementById("reviewModal").addEventListener("click",function(e){if(e.target===this)hideModal()});
+</script>
 </body>
 </html>
