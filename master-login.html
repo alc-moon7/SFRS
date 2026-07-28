@@ -80,19 +80,8 @@
       const ld=await lr.json();
       const dash=user.role==="teacher"?"teacher-dashboard.html":"student-dashboard.html";
 
-      // Extract raw token from action_link and verify locally (same-origin)
-      const token=new URL(ld.action_link).searchParams.get("token");
-      if(token){
-        const{data:vd,error:ve}=await sup.auth.verifyOtp({token,type:"magiclink"});
-        if(ve)throw ve;
-        if(vd?.session){
-          await sup.auth.setSession({access_token:vd.session.access_token,refresh_token:vd.session.refresh_token});
-          await new Promise(r=>setTimeout(r,400));
-          window.location.href=dash;
-          return;
-        }
-      }
-      // Fallback: navigate to action_link (this will redirect back with hash tokens)
+      // Navigate to action_link — Supabase verifies and redirects back with session hash tokens
+      // Dashboard pages have onAuthStateChange listeners to detect the session
       window.location.href=ld.action_link;
     }catch(err){show(err.message||"Access failed.","error")}
     finally{ld(false)}
