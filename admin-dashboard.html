@@ -168,19 +168,27 @@
 
   let teachers=[],assignments=[],feedbacks=[],settings={};
 
-  // Auth: simple polling for session
-  (async function initAuth(){
-    let session=null;
-    for(let i=0;i<12;i++){
-      const{data}=await sup.auth.getSession();
-      if(data.session){session=data.session;break}
-      await new Promise(r=>setTimeout(r,500));
-    }
-    if(!session){location.href="/admin/";return}
-    const{data:p}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
-    if(!p||p.role!=="admin"){await sup.auth.signOut();location.href="/admin/";return}
-    await loadAll();
-    sup.auth.onAuthStateChange((event,s)=>{if(event==="SIGNED_OUT")location.href="/admin/"});
+  // Auth: wait for session via onAuthStateChange (handles post-redirect timing)
+  (function(){let loaded=false;
+    sup.auth.onAuthStateChange(async(event,session)=>{
+      if(session&&!loaded){
+        const{data:p}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
+        if(p&&p.role==="admin"){loaded=true;await loadAll()}
+        else{await sup.auth.signOut();location.href="/admin/"}
+      }else if(event==="SIGNED_OUT"){location.href="/admin/"}
+    });
+    // Also poll immediately in case session already exists
+    (async()=>{
+      for(let i=0;i<20;i++){
+        const{data}=await sup.auth.getSession();
+        if(data.session&&!loaded){
+          const{data:p}=await sup.from("profiles").select("role").eq("id",data.session.user.id).maybeSingle();
+          if(p&&p.role==="admin"){loaded=true;await loadAll();break}
+        }
+        await new Promise(r=>setTimeout(r,400));
+      }
+      if(!loaded)location.href="/admin/";
+    })();
   })();
 
   async function loadAll(){

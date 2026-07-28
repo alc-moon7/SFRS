@@ -4,221 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin Login — SFRS</title>
-  <meta name="description" content="SFRS Admin Panel — Manage faculty, assignments, feedback windows, and analytics.">
   <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
-
-    :root {
-      --primary: #0c2a42;
-      --primary-light: #163a56;
-      --accent: #c9462c;
-      --accent-hover: #a53d21;
-      --bg: #f7f4ee;
-      --surface: #ffffff;
-      --border: #e5dece;
-      --text: #16232c;
-      --muted: #6b6255;
-      --danger: #d92d20;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: "Inter", system-ui, -apple-system, sans-serif;
-      color: var(--text);
-      background: linear-gradient(170deg, #f0ece4 0%, #e8dfcc 60%, #ddd4bc 100%);
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 1.5rem;
-    }
-
-    .login-wrapper { width: 100%; max-width: 440px; }
-
-    .login-header { text-align: center; margin-bottom: 2rem; }
-    .login-header-logo { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
-    .login-header-logo img { height: 44px; width: auto; }
-    .login-header h1 { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
-    .login-header p { font-size: 0.9rem; color: var(--muted); margin-top: 0.35rem; }
-    .login-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: #fee2e2; color: #b91c1c; font-size: 0.78rem; font-weight: 700;
-      padding: 0.3rem 0.9rem; border-radius: 100px; letter-spacing: 0.04em;
-      margin-bottom: 0.75rem;
-    }
-
-    .login-card {
-      background: #fff; border: 1px solid var(--border); border-radius: 20px;
-      padding: 2.5rem 2rem; box-shadow: 0 20px 50px rgba(12,42,66,0.1);
-    }
-
-    .form-group { margin-bottom: 1.25rem; }
-    .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
-    .form-input {
-      width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--border); border-radius: 12px;
-      font-size: 0.95rem; font-family: inherit; background: #faf8f2;
-      transition: all 0.2s; color: var(--text);
-    }
-    .form-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(201,70,44,0.1); background: #fff; }
-
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-      width: 100%; padding: 0.9rem 1.5rem; border-radius: 12px; font-weight: 600;
-      font-size: 1rem; border: none; cursor: pointer; transition: all 0.2s; font-family: inherit;
-    }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 8px 25px rgba(201,70,44,0.3); }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-    .alert {
-      padding: 0.85rem 1rem; border-radius: 12px; font-size: 0.88rem; margin-bottom: 1.25rem;
-      display: none; font-weight: 500;
-    }
-    .alert-error { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; display: block; }
-    .alert-success { background: #f0fdf4; color: #0f8b5f; border: 1px solid #bbf7d0; display: block; }
-
-    .login-extra { text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--muted); }
-    .login-extra a { color: var(--primary); font-weight: 600; text-decoration: underline; }
-    .login-extra a:hover { color: var(--accent); }
-
-    .divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0; color: var(--muted-light); font-size: 0.78rem; font-weight: 600; }
-    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-
-    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; display: none; }
-    .btn-loading .spinner { display: block; }
-    .btn-loading .btn-text { display: none; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    :root{--primary:#0c2a42;--accent:#c9462c;--accent-hover:#a53d21;--bg:#f7f4ee;--surface:#fff;--border:#e5dece;--text:#16232c;--muted:#6b6255;--danger:#d92d20}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:linear-gradient(170deg,#f0ece4,#e8dfcc 60%,#ddd4bc);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem}
+    .wrapper{width:100%;max-width:440px}
+    .header{text-align:center;margin-bottom:2rem}.header img{height:44px;width:auto;margin-bottom:.75rem}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;background:#fee2e2;color:#b91c1c;font-size:.78rem;font-weight:700;padding:.3rem .9rem;border-radius:100px;margin-bottom:.75rem}
+    .header h1{font-size:1.4rem;font-weight:700;color:var(--primary)}.header p{font-size:.88rem;color:var(--muted);margin-top:.25rem}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;box-shadow:0 20px 50px rgba(12,42,66,.1)}
+    .form-group{margin-bottom:1.25rem}.form-label{display:block;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:.35rem}
+    .form-input{width:100%;padding:.85rem 1rem;border:2px solid var(--border);border-radius:12px;font-size:.95rem;font-family:inherit;background:#faf8f2;transition:.2s;color:var(--text)}
+    .form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,70,44,.1);background:#fff}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.9rem 1.5rem;border-radius:12px;font-weight:600;font-size:1rem;border:none;cursor:pointer;transition:.2s;font-family:inherit}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px)}
+    .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .alert{padding:.85rem 1rem;border-radius:12px;font-size:.88rem;margin-bottom:1.25rem;display:none;font-weight:500}
+    .alert-error{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;display:block}
+    .alert-success{background:#f0fdf4;color:#0f8b5f;border:1px solid #bbf7d0;display:block}
+    .divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0;color:var(--muted);font-size:.78rem;font-weight:600;opacity:.5}
+    .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--border)}
+    .back-link{display:block;text-align:center;color:var(--muted);font-size:.85rem;text-decoration:underline;transition:.15s}
+    .back-link:hover{color:var(--accent)}
+    .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
+    .btn-loading .spinner{display:block}.btn-loading .btn-text{display:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
-  <div class="login-wrapper">
-    <div class="login-header">
-      <div class="login-header-logo">
-        <img src="../assets/images/sfrs.png" alt="SFRS">
-      </div>
-      <div class="login-badge">&#x1F512; Administrator Access</div>
-      <h1>Admin Panel</h1>
-      <p>Student Feedback Review System</p>
-    </div>
-
-    <div class="login-card">
-      <div class="alert" id="alertBox"></div>
-
-      <div class="form-group">
-        <label class="form-label" for="emailInput">Email or Username</label>
-        <input type="text" class="form-input" id="emailInput" placeholder="admin@gmail.com" autocomplete="username" autofocus>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="passwordInput">Password</label>
-        <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')document.getElementById('loginBtn').click()">
-      </div>
-      <button class="btn btn-primary" id="loginBtn" onclick="handleLogin()">
-        <span class="btn-text">Sign In</span>
-        <span class="spinner"></span>
-      </button>
-
-      <div class="divider">or</div>
-      <a href="/" style="display:block;text-align:center;color:var(--muted);font-size:0.85rem;text-decoration:underline;">← Back to SFRS Home</a>
-    </div>
+<div class="wrapper">
+  <div class="header"><img src="../assets/images/sfrs.png" alt="SFRS"><div class="badge">&#x1F512; Administrator Access</div><h1>Admin Panel</h1><p>Student Feedback Review System</p></div>
+  <div class="card">
+    <div class="alert" id="alertBox"></div>
+    <div class="form-group"><label class="form-label" for="emailInput">Email or Username</label><input type="text" class="form-input" id="emailInput" placeholder="admin@gmail.com" autocomplete="username" autofocus></div>
+    <div class="form-group"><label class="form-label" for="passwordInput">Password</label><input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" autocomplete="current-password"></div>
+    <button class="btn btn-primary" id="loginBtn"><span class="btn-text">Sign In</span><span class="spinner"></span></button>
+    <div class="divider">or</div>
+    <a class="back-link" href="/">← Back to SFRS Home</a>
   </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const sup=window.supabase.createClient("https://mstotzwqfbcvpcdgrnxy.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw");
+  const ab=document.getElementById("alertBox"),lb=document.getElementById("loginBtn"),ei=document.getElementById("emailInput"),pi=document.getElementById("passwordInput");
+  function show(m,t){ab.textContent=m;ab.className="alert";ab.classList.add(t==="error"?"alert-error":"alert-success")}
+  function hide(){ab.className="alert";ab.textContent=""}
+  function ld(v){if(v){lb.classList.add("btn-loading");lb.disabled=true}else{lb.classList.remove("btn-loading");lb.disabled=false}}
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const supabase = window.supabase.createClient(
-      "https://mstotzwqfbcvpcdgrnxy.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw"
-    );
+  // Enter key login
+  [ei,pi].forEach(el=>el.addEventListener("keydown",e=>{if(e.key==="Enter")doLogin()}));
+  lb.addEventListener("click",doLogin);
 
-    const alertBox = document.getElementById('alertBox');
-    const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
-    const emailInput = document.getElementById('emailInput');
-    const passwordInput = document.getElementById('passwordInput');
-
-    function showAlert(msg, type) {
-      alertBox.textContent = msg;
-      alertBox.className = 'alert';
-      if (type === 'error') alertBox.classList.add('alert-error');
-      else alertBox.classList.add('alert-success');
-    }
-
-    function hideAlert() {
-      alertBox.className = 'alert';
-      alertBox.textContent = '';
-    }
-
-    function setLoading(loading) {
-      if (loading) {
-        loginBtn.classList.add('btn-loading');
-        loginBtn.disabled = true;
-      } else {
-        loginBtn.classList.remove('btn-loading');
-        loginBtn.disabled = false;
-      }
-    }
-
-    // No auto-redirect — let the user always see the login form
-
-    loginBtn.addEventListener('click', async function() {
-      hideAlert();
-
-      const login = emailInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!login || !password) {
-        showAlert('Please enter both email/username and password.', 'error');
-        return;
-      }
-
-      setLoading(true);
-
-      try {
-        let email = login;
-
-        // If it's a username, resolve to email
-        if (!login.includes('@')) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('email')
-            .or(`username.eq.${login.toLowerCase()}`)
-            .maybeSingle();
-
-          if (profile && profile.email) {
-            email = profile.email;
-          } else {
-            // Try calling the RPC
-            const { data: rpcEmail } = await supabase.rpc('email_for_username', { p_username: login });
-            if (rpcEmail) email = rpcEmail;
-          }
-        }
-
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
-
-        if (error) throw error;
-
-        // Check if admin
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', data.user.id)
-          .maybeSingle();
-
-        if (profileError || !profile || profile.role !== 'admin') {
-          await supabase.auth.signOut();
-          showAlert('Access denied. Admin account required.', 'error');
-          return;
-        }
-
-        window.location.href = '../admin-dashboard.html';
-      } catch (err) {
-        showAlert(err.message || 'Login failed. Please try again.', 'error');
-      } finally {
-        setLoading(false);
-      }
-    });
-  </script>
+  async function doLogin(){
+    hide();
+    const login=ei.value.trim(),pw=pi.value;
+    if(!login||!pw){show("Please enter both email/username and password.","error");return}
+    ld(true);
+    try{
+      let email=login;
+      if(!login.includes("@")){const{data:p}=await sup.from("profiles").select("email").or("username.eq."+login.toLowerCase()).maybeSingle();if(p&&p.email)email=p.email;else{const{data:r}=await sup.rpc("email_for_username",{p_username:login});if(r)email=r}}
+      const{data,error}=await sup.auth.signInWithPassword({email,password:pw});
+      if(error)throw error;
+      const{data:profile}=await sup.from("profiles").select("role").eq("id",data.user.id).maybeSingle();
+      if(!profile||profile.role!=="admin"){await sup.auth.signOut();show("Access denied. Admin account required.","error");return}
+      // Set timeout to ensure session is stored before navigation
+      await new Promise(r=>setTimeout(r,300));
+      window.location.href="../admin-dashboard.html";
+    }catch(err){show(err.message||"Login failed.","error")}
+    finally{ld(false)}
+  }
+</script>
 </body>
 </html>
