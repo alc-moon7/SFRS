@@ -112,7 +112,15 @@
     }
 
     try {
-      const hdrs = { "Content-Type": "application/json", apikey: KEY, Authorization: `Bearer ${KEY}` };
+      // Use actual user session token so edge function knows the role
+      let authToken = KEY;
+      if (sup) {
+        try {
+          const { data: { session } } = await sup.auth.getSession();
+          if (session?.access_token) authToken = session.access_token;
+        } catch (e) {}
+      }
+      const hdrs = { "Content-Type": "application/json", apikey: KEY, Authorization: `Bearer ${authToken}` };
       const resp = await fetch(EDGE, { method: "POST", headers: hdrs, body: JSON.stringify({ type: "chat", message: msg, history: history.slice(-6), context: location.pathname }) });
       if (!resp.ok) throw new Error("Status " + resp.status);
       const data = await resp.json();
