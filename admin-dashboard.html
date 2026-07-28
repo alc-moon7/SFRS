@@ -3,478 +3,310 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard - SFRS</title>
+  <title>Admin Dashboard — SFRS</title>
+  <meta name="description" content="SFRS Admin Panel — Manage teachers, assignments, feedback, and analytics.">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/dashboard-theme.css">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+    :root{--primary:#0c2a42;--primary-light:#163a56;--accent:#c9462c;--accent-hover:#a53d21;--bg:#f2efe6;--surface:#fff;--border:#e5dece;--border-light:#f0eadb;--text:#16232c;--muted:#6b6255;--muted-light:#a89b86;--success:#0f8b5f;--danger:#d92d20;--nav-h:68px;--sidebar-w:230px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;min-height:100vh;padding-top:var(--nav-h)}
+    a{color:inherit;text-decoration:none}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 1.5rem}
+    .nav-inner{max-width:1400px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:1.1rem;color:var(--primary)}
+    .nav-brand img{height:34px;width:auto}
+    .nav-links{display:flex;align-items:center;gap:.25rem}
+    .nav-link{padding:.45rem .85rem;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--muted);transition:.15s}
+    .nav-link:hover,.nav-link.active{color:var(--accent);background:#faf5ed}
+    .app-shell{display:flex;min-height:calc(100vh - var(--nav-h));max-width:1400px;margin:0 auto}
+    .app-sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:1.25rem 1rem;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto}
+    .sidebar-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);margin-bottom:1rem;padding:0 .5rem}
+    .sidebar-link{display:block;padding:.5rem .75rem;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--muted);transition:.15s;margin-bottom:.1rem}
+    .sidebar-link:hover,.sidebar-link.active{background:#faf5ed;color:var(--accent)}
+    .sidebar-link.danger{color:var(--danger)}
+    .app-content{flex:1;padding:1.5rem;min-width:0}
+    .topbar{margin-bottom:1.5rem}
+    .topbar-kicker{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
+    .topbar h1{font-size:1.4rem;font-weight:700;color:var(--primary);margin-bottom:.25rem}
+    .topbar p{font-size:.9rem;color:var(--muted)}
+    .badge-pill{display:inline-flex;gap:.35rem;padding:.3rem .8rem;border-radius:100px;font-size:.75rem;font-weight:600;background:#faf5ed;color:var(--primary);border:1px solid var(--border)}
+    .badge-red{background:#fee2e2;color:#b91c1c;border:1px solid #fecaca}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;transition:.2s}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(12,42,66,.08)}
+    .stat-label{font-size:.78rem;color:var(--muted);margin-bottom:.25rem}
+    .stat-value{font-size:1.8rem;font-weight:800;color:var(--primary);line-height:1.1}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:1.25rem}
+    .panel-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+    .panel-body{padding:1.5rem}
+    .panel-title{font-size:1.05rem;font-weight:700;color:var(--primary)}
+    .panel-kicker{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
+    .toolbar{display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem}
+    .toolbar-field{display:flex;flex-direction:column;gap:.2rem;min-width:140px}
+    .toolbar-field.flex{flex:1;min-width:180px}
+    .field-label{font-size:.75rem;font-weight:600;color:var(--muted)}
+    .field-input,.field-select{width:100%;padding:.6rem .85rem;border:2px solid var(--border);border-radius:10px;font-size:.88rem;font-family:inherit;background:#faf8f2;transition:.15s;color:var(--text)}
+    .field-input:focus,.field-select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,70,44,.1);background:#fff}
+    .field-select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6255' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .85rem center;padding-right:2.2rem}
+    .table-wrap{overflow-x:auto}.table{width:100%;border-collapse:collapse;font-size:.88rem}
+    .table th{text-align:left;padding:.75rem .85rem;background:#faf7f0;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--border)}
+    .table td{padding:.75rem .85rem;border-bottom:1px solid var(--border-light);vertical-align:middle}
+    .table tr:hover td{background:#fdfaf5}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.6rem 1.15rem;border-radius:10px;font-weight:600;font-size:.88rem;border:none;cursor:pointer;transition:.15s;font-family:inherit;white-space:nowrap}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,70,44,.22)}
+    .btn-outline{background:var(--surface);color:var(--primary);border:2px solid var(--border)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+    .btn-sm{padding:.4rem .8rem;font-size:.78rem}.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{opacity:.9}
+    .btn-success{background:var(--success);color:#fff}
+    .alert{padding:.75rem 1rem;border-radius:10px;font-size:.85rem;margin-bottom:1rem;display:none;font-weight:500}
+    .alert-error{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;display:block}
+    .alert-success{background:#f0fdf4;color:var(--success);border:1px solid #bbf7d0;display:block}
+    .switch-row{display:flex;align-items:center;gap:.75rem}
+    .switch{position:relative;width:44px;height:24px}.switch input{opacity:0;width:0;height:0}
+    .switch-track{position:absolute;inset:0;background:var(--border);border-radius:12px;cursor:pointer;transition:.2s}.switch input:checked+.switch-track{background:var(--accent)}
+    .switch-track::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s}.switch input:checked+.switch-track::after{transform:translateX(20px)}
+    .analytics-pill{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;text-align:center}
+    .analytics-pill strong{display:block;font-size:1.6rem;color:var(--primary);font-weight:800}
+    .analytics-pill span{font-size:.8rem;color:var(--muted)}
+    .modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(12,42,66,.4);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.open{display:flex}
+    .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:650px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 70px rgba(12,42,66,.18)}
+    .modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+    .modal-title{font-size:1.1rem;font-weight:700;color:var(--primary)}
+    .modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)}
+    .modal-body{padding:1.5rem}.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+    .form-group{margin-bottom:1rem}
+    .info-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+    .footer{text-align:center;padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted-light)}
+    .pill-green{color:var(--success);font-weight:600}.pill-red{color:var(--danger);font-weight:600}
+    @media(max-width:1024px){.app-content{padding:1rem}.stats-grid{grid-template-columns:repeat(2,1fr)}.app-sidebar{display:none}}
+    @media(max-width:768px){.stats-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
+  </style>
 </head>
-<body data-page="admin-dashboard">
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" aria-label="Primary">
-    <div class="container">
-      <a class="navbar-brand" href="/feedback/">
-        <span class="logo-mark" aria-hidden="true"></span>
-        <span class="brand-text">
-          <span class="brand-title">SFRS</span>
-          <span class="brand-subtitle">Admin Panel</span>
-        </span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-lg-auto">
-          <li class="nav-item"><a class="nav-link" href="/feedback/">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="admin-dashboard.html">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="#teacherManagement">Teachers</a></li>
-          <li class="nav-item"><a class="nav-link" href="#assignmentManagement">Assignments</a></li>
-          <li class="nav-item"><a class="nav-link" href="#feedbackAnalytics">Analytics</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-logout>Logout</a></li>
-        </ul>
+<body>
+<nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><div class="nav-links"><a class="nav-link" href="/">Home</a><a class="nav-link active" href="admin-dashboard.html">Dashboard</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
+
+<div class="app-shell">
+  <aside class="app-sidebar"><div class="sidebar-title">Admin Workspace</div>
+    <a class="sidebar-link active" href="#overview">Dashboard</a><a class="sidebar-link" href="#teachers">Teachers</a><a class="sidebar-link" href="#assignments">Assignments</a><a class="sidebar-link" href="#analytics">Analytics</a><a class="sidebar-link" href="#settings">Settings</a><a class="sidebar-link danger" href="#" id="sbLogout">Logout</a>
+  </aside>
+  <div class="app-content">
+    <div class="topbar"><div class="topbar-kicker">Admin Panel</div><h1>Feedback Review Management</h1><p>Manage users, teacher profiles, assignments, review windows, analytics, and moderation.</p></div>
+    <div class="alert" id="alertBox"></div>
+
+    <div id="overview" class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Total Students</div><div class="stat-value" id="sStudents">0</div></div>
+      <div class="stat-card"><div class="stat-label">Total Teachers</div><div class="stat-value" id="sTeachers">0</div></div>
+      <div class="stat-card"><div class="stat-label">Total Feedback</div><div class="stat-value" id="sFeedback">0</div></div>
+      <div class="stat-card"><div class="stat-label">Active Users</div><div class="stat-value" id="sActive">0</div></div>
+    </div>
+
+    <!-- Settings -->
+    <section id="settings" class="panel"><div class="panel-header"><div><div class="panel-kicker">Settings</div><div class="panel-title">Feedback Window Settings</div></div></div>
+      <div class="panel-body">
+        <div class="form-row">
+          <div class="form-group"><label class="field-label">Active Term</label><input type="text" class="field-input" id="activeTerm" placeholder="Spring 2026"></div>
+          <div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="reviewWindow"><span class="switch-track"></span></label><span class="field-label">Allow student submissions</span></div></div>
+        </div>
+        <div class="switch-row" style="margin-bottom:1rem"><label class="switch"><input type="checkbox" id="anonymousToggle"><span class="switch-track"></span></label><span class="field-label">Allow anonymous toggle for students</span></div>
+        <button class="btn btn-primary" id="saveSettings">Save Settings</button>
       </div>
-    </div>
-  </nav>
+    </section>
 
-  <main class="app-shell">
-    <aside class="app-sidebar" aria-label="Admin workspace navigation">
-      <div class="app-sidebar-title">Admin Workspace</div>
-      <nav class="sidebar-nav">
-        <a class="sidebar-link active" href="#overview">Dashboard</a>
-        <a class="sidebar-link" href="#users">Users</a>
-        <a class="sidebar-link" href="#users">Students</a>
-        <a class="sidebar-link" href="#teacherManagement">Teachers</a>
-        <a class="sidebar-link" href="#assignmentManagement">Departments</a>
-        <a class="sidebar-link" href="#feedbackAnalytics">Feedback</a>
-        <a class="sidebar-link" href="#feedbackAnalytics">Analytics</a>
-        <a class="sidebar-link" href="#settings">Settings</a>
-        <a class="sidebar-link danger" href="#" data-logout>Logout</a>
-      </nav>
-    </aside>
+    <!-- Teachers -->
+    <section id="teachers" class="panel"><div class="panel-header"><div><div class="panel-kicker">Teachers</div><div class="panel-title">Teacher Management</div></div><button class="btn btn-primary btn-sm" id="openTeacherModal">Add Teacher</button></div>
+      <div class="panel-body"><div class="toolbar"><div class="toolbar-field flex"><label class="field-label">Search</label><input type="search" class="field-input" id="teacherSearch" placeholder="Name, code, or email"></div><div class="toolbar-field"><label class="field-label">Status</label><select class="field-select" id="teacherStatusFilter"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option></select></div></div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Contact</th><th>Status</th><th>Assignments</th><th>Actions</th></tr></thead><tbody id="teacherBody"></tbody></table></div></div>
+    </section>
 
-    <div class="app-content">
-      <div class="app-topbar">
-        <div>
-          <div class="section-eyebrow">Admin Panel</div>
-          <h1 class="h3 section-title mb-1">Feedback Review Management</h1>
-          <p class="section-lead mb-0">Manage users, teacher profiles, assignments, review windows, analytics, and moderation.</p>
-        </div>
-        <div class="dashboard-badges">
-          <span class="badge-role" data-admin-active-term>Current Session</span>
-          <span class="badge-role"><span data-admin-hidden-feedback>0</span> hidden</span>
-        </div>
+    <!-- Assignments -->
+    <section id="assignments" class="panel"><div class="panel-header"><div><div class="panel-kicker">Departments</div><div class="panel-title">Assignment Management</div></div><button class="btn btn-primary btn-sm" id="openAssignmentModal">Add Assignment</button></div>
+      <div class="panel-body"><div class="toolbar"><div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="assSemesterF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="assSectionF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="assTeacherF"><option value="">All</option></select></div><div class="toolbar-field flex"><label class="field-label">Course Code</label><input type="search" class="field-input" id="assCourseF" placeholder="Search course code"></div></div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Course</th><th>Semester/Section</th><th>Term</th><th>Status</th><th>Actions</th></tr></thead><tbody id="assignmentBody"></tbody></table></div></div>
+    </section>
+
+    <!-- Analytics -->
+    <section id="analytics" class="panel"><div class="panel-header"><div><div class="panel-kicker">Analytics</div><div class="panel-title">Feedback Analytics</div></div><button class="btn btn-outline btn-sm" id="exportCSV">Export CSV</button></div>
+      <div class="panel-body"><div class="toolbar"><div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="anaTeacherF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="anaSemesterF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="anaSectionF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Status</label><select class="field-select" id="anaStatusF"><option value="">All</option><option value="submitted">Visible</option><option value="hidden">Hidden</option></select></div><div class="toolbar-field flex"><label class="field-label">Course</label><input type="search" class="field-input" id="anaCourseF" placeholder="Course code/title"></div></div>
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="analytics-pill"><span>Filtered Reviews</span><strong id="anaTotal">0</strong></div>
+        <div class="analytics-pill"><span>Avg Rating</span><strong id="anaAvg">0.00</strong></div>
+        <div class="analytics-pill"><span>Visible Comments</span><strong id="anaComments">0</strong></div>
       </div>
-
-      <div id="adminDashboardAlert" class="mb-4"></div>
-
-      <section id="overview" class="row g-3 mb-4" aria-label="Admin dashboard widgets">
-        <div class="col-sm-6 col-xl-3">
-          <div class="stat-card h-100">
-            <div class="text-muted">Total Students</div>
-            <div class="display-6 fw-bold" data-admin-total-students>0</div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-          <div class="stat-card h-100">
-            <div class="text-muted">Total Teachers</div>
-            <div class="display-6 fw-bold" data-admin-total-teachers>0</div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-          <div class="stat-card h-100">
-            <div class="text-muted">Total Feedback</div>
-            <div class="display-6 fw-bold" data-admin-total-feedback>0</div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-          <div class="stat-card h-100">
-            <div class="text-muted">Active Users</div>
-            <div class="display-6 fw-bold" data-admin-active-users>0</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="users" class="page-shell mb-4">
-        <div class="dashboard-heading">
-          <div>
-            <span class="badge-role mb-2 d-inline-block">Recent Activity Feed</span>
-            <h2 class="page-title mb-1">Academic operations overview</h2>
-            <p class="section-lead mb-0">Monitor assignments, teacher availability, feedback volume, and visibility decisions.</p>
-          </div>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#teacherManagement">Teacher Directory</a>
-            <a class="btn btn-outline-primary" href="#assignmentManagement">Assignment Matrix</a>
-          </div>
-        </div>
-      </section>
-
-      <section id="settings" class="card mb-4">
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-            <div>
-              <div class="section-eyebrow">Settings</div>
-              <h2 class="h5 section-title mb-1">Feedback Window Settings</h2>
-            </div>
-            <span class="text-muted small">Controls affect student submission availability.</span>
-          </div>
-          <form id="feedbackSettingsForm" class="row g-3 mt-2">
-            <div class="col-md-4">
-              <label class="form-label" for="activeTermInput">Active Term / Session</label>
-              <input type="text" class="form-control" id="activeTermInput" name="activeTerm" placeholder="Spring 2026">
-            </div>
-            <div class="col-md-4">
-              <label class="form-label d-block">Review Window</label>
-              <div class="form-check form-switch mt-2">
-                <input class="form-check-input" type="checkbox" role="switch" id="reviewWindowSwitch" name="reviewWindow">
-                <label class="form-check-label" for="reviewWindowSwitch">Allow student submissions</label>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label d-block">Anonymous Comments</label>
-              <div class="form-check form-switch mt-2">
-                <input class="form-check-input" type="checkbox" role="switch" id="anonymousSwitch" name="anonymous">
-                <label class="form-check-label" for="anonymousSwitch">Allow anonymous toggle for students</label>
-              </div>
-            </div>
-            <div class="col-12">
-              <button type="submit" class="btn btn-primary">Save Settings</button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <section id="teacherManagement" class="card mb-4">
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div>
-              <div class="section-eyebrow">Teachers</div>
-              <h2 class="h5 section-title mb-1">Teacher Management</h2>
-              <p class="text-muted small mb-0">Create, update, activate, deactivate, and review each teacher profile.</p>
-            </div>
-            <button class="btn btn-primary" type="button" id="openTeacherModalBtn">Add Teacher</button>
-          </div>
-          <div class="toolbar-row mb-3">
-            <div class="toolbar-field flex-grow-1">
-              <label class="form-label" for="teacherSearchFilter">Search Teacher</label>
-              <input type="search" class="form-control" id="teacherSearchFilter" placeholder="Search by name, code, or email">
-            </div>
-            <div class="toolbar-field">
-              <label class="form-label" for="teacherStatusFilter">Status</label>
-              <select class="form-select" id="teacherStatusFilter">
-                <option value="">All</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-              <thead>
-                <tr>
-                  <th>Teacher</th>
-                  <th>Contact</th>
-                  <th>Profile Status</th>
-                  <th>Assignments</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminTeacherBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="assignmentManagement" class="card mb-4">
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div>
-              <div class="section-eyebrow">Departments</div>
-              <h2 class="h5 section-title mb-1">Assignment Management</h2>
-              <p class="text-muted small mb-0">Control exactly which teacher can be reviewed by each semester and section.</p>
-            </div>
-            <button class="btn btn-primary" type="button" id="openAssignmentModalBtn">Add Assignment</button>
-          </div>
-          <div class="toolbar-row mb-3">
-            <div class="toolbar-field">
-              <label class="form-label" for="assignmentSemesterFilter">Semester</label>
-              <select class="form-select" id="assignmentSemesterFilter">
-                <option value="">All semesters</option>
-              </select>
-            </div>
-            <div class="toolbar-field">
-              <label class="form-label" for="assignmentSectionFilter">Section</label>
-              <select class="form-select" id="assignmentSectionFilter">
-                <option value="">All sections</option>
-              </select>
-            </div>
-            <div class="toolbar-field">
-              <label class="form-label" for="assignmentTeacherFilter">Teacher</label>
-              <select class="form-select" id="assignmentTeacherFilter">
-                <option value="">All teachers</option>
-              </select>
-            </div>
-            <div class="toolbar-field flex-grow-1">
-              <label class="form-label" for="assignmentCourseFilter">Course Code</label>
-              <input type="search" class="form-control" id="assignmentCourseFilter" placeholder="Search course code">
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-              <thead>
-                <tr>
-                  <th>Teacher</th>
-                  <th>Course</th>
-                  <th>Semester / Section</th>
-                  <th>Term</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminAssignmentBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section id="feedbackAnalytics" class="card">
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-            <div>
-              <div class="section-eyebrow">Analytics</div>
-              <h2 class="h5 section-title mb-1">Feedback Analytics</h2>
-              <p class="text-muted small mb-0">Filter by teacher, course, semester, section, and moderate comments when needed.</p>
-            </div>
-            <button class="btn btn-outline-primary" type="button" id="exportFeedbackBtn">Export CSV</button>
-          </div>
-
-          <div class="toolbar-row mb-3">
-            <div class="toolbar-field">
-              <label class="form-label" for="analyticsTeacherFilter">Teacher</label>
-              <select class="form-select" id="analyticsTeacherFilter">
-                <option value="">All teachers</option>
-              </select>
-            </div>
-            <div class="toolbar-field">
-              <label class="form-label" for="analyticsSemesterFilter">Semester</label>
-              <select class="form-select" id="analyticsSemesterFilter">
-                <option value="">All semesters</option>
-              </select>
-            </div>
-            <div class="toolbar-field">
-              <label class="form-label" for="analyticsSectionFilter">Section</label>
-              <select class="form-select" id="analyticsSectionFilter">
-                <option value="">All sections</option>
-              </select>
-            </div>
-            <div class="toolbar-field">
-              <label class="form-label" for="analyticsStatusFilter">Comment Status</label>
-              <select class="form-select" id="analyticsStatusFilter">
-                <option value="">All</option>
-                <option value="submitted">Visible</option>
-                <option value="hidden">Hidden</option>
-              </select>
-            </div>
-            <div class="toolbar-field flex-grow-1">
-              <label class="form-label" for="analyticsCourseFilter">Course Filter</label>
-              <input type="search" class="form-control" id="analyticsCourseFilter" placeholder="Search by course code or title">
-            </div>
-          </div>
-
-          <div class="row g-3 mb-3">
-            <div class="col-md-4">
-              <div class="analytics-pill">
-                <span class="text-muted">Filtered Reviews</span>
-                <strong data-analytics-total>0</strong>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="analytics-pill">
-                <span class="text-muted">Average Overall Rating</span>
-                <strong data-analytics-average>0.00</strong>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="analytics-pill">
-                <span class="text-muted">Visible Comments</span>
-                <strong data-analytics-comments>0</strong>
-              </div>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-              <thead>
-                <tr>
-                  <th>Teacher</th>
-                  <th>Course</th>
-                  <th>Semester / Section</th>
-                  <th>Overall</th>
-                  <th>Comment</th>
-                  <th>Submitted</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminFeedbackBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-note">SFRS - Admin dashboard. Use the filters to maintain the assignment matrix and moderate comment visibility.</div>
-    </div>
-  </footer>
-
-  <div class="modal fade" id="teacherModal" tabindex="-1" aria-labelledby="teacherModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="teacherModalLabel">Teacher Profile</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div id="teacherFormAlert"></div>
-          <form id="teacherForm" class="row g-3 needs-validation" novalidate>
-            <input type="hidden" id="teacherRecordId" name="teacherId">
-            <div class="col-md-6">
-              <label class="form-label" for="teacherNameInput">Full Name</label>
-              <input class="form-control" id="teacherNameInput" name="name" required>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="teacherCodeInput">Teacher Code / Short Code</label>
-              <input class="form-control" id="teacherCodeInput" name="shortCode" placeholder="CSE-T-001">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="teacherDesignationInput">Designation</label>
-              <input class="form-control" id="teacherDesignationInput" name="designation" placeholder="Lecturer">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="teacherDepartmentInput">Department</label>
-              <input class="form-control" id="teacherDepartmentInput" name="department" value="Computer Science and Engineering">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="teacherEmailInput">Email</label>
-              <input type="email" class="form-control" id="teacherEmailInput" name="email">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="teacherPhoneInput">Phone</label>
-              <input class="form-control" id="teacherPhoneInput" name="phone">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="teacherOfficeInput">Office Room</label>
-              <input class="form-control" id="teacherOfficeInput" name="officeRoom">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="teacherAvatarInput">Avatar / Photo URL</label>
-              <input class="form-control" id="teacherAvatarInput" name="avatarUrl" placeholder="https://...">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="teacherStatusInput">Status</label>
-              <select class="form-select" id="teacherStatusInput" name="status">
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label d-block">Public Email</label>
-              <div class="form-check form-switch mt-2">
-                <input class="form-check-input" type="checkbox" role="switch" id="teacherEmailPublicInput" name="isEmailPublic">
-                <label class="form-check-label" for="teacherEmailPublicInput">Visible on teacher profile</label>
-              </div>
-            </div>
-            <div class="col-12">
-              <label class="form-label" for="teacherBioInput">Short Bio / About</label>
-              <textarea class="form-control" id="teacherBioInput" name="bio" rows="4" placeholder="Briefly describe this teacher profile."></textarea>
-            </div>
-            <div class="col-12 d-flex justify-content-end gap-2 flex-wrap">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save Teacher</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Course</th><th>Sem/Sec</th><th>Overall</th><th>Comment</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody id="analyticsBody"></tbody></table></div></div>
+    </section>
   </div>
+</div>
+<div class="footer">&copy; 2026 SFRS — Admin Dashboard</div>
 
-  <div class="modal fade" id="assignmentModal" tabindex="-1" aria-labelledby="assignmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="assignmentModalLabel">Teacher Assignment</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div id="assignmentFormAlert"></div>
-          <form id="assignmentForm" class="row g-3 needs-validation" novalidate>
-            <input type="hidden" id="assignmentRecordId" name="assignmentId">
-            <div class="col-md-6">
-              <label class="form-label" for="assignmentTeacherInput">Teacher</label>
-              <select class="form-select" id="assignmentTeacherInput" name="teacherId" required></select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="assignmentCourseCodeInput">Course Code</label>
-              <input class="form-control" id="assignmentCourseCodeInput" name="courseCode" required placeholder="CSE 423" list="courseCodeList">
-              <datalist id="courseCodeList"></datalist>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="assignmentCourseTitleInput">Course Title</label>
-              <input class="form-control" id="assignmentCourseTitleInput" name="courseTitle" required placeholder="Course title">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label" for="assignmentSemesterInput">Semester</label>
-              <select class="form-select" id="assignmentSemesterInput" name="semester" required></select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label" for="assignmentSectionInput">Section</label>
-              <select class="form-select" id="assignmentSectionInput" name="section" required></select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="assignmentTermInput">Academic Term</label>
-              <input class="form-control" id="assignmentTermInput" name="academicTerm" placeholder="Spring 2026">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label d-block">Assignment Status</label>
-              <div class="form-check form-switch mt-2">
-                <input class="form-check-input" type="checkbox" role="switch" id="assignmentActiveInput" name="isActive" checked>
-                <label class="form-check-label" for="assignmentActiveInput">Active assignment</label>
-              </div>
-            </div>
-            <div class="col-12 d-flex justify-content-end gap-2 flex-wrap">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save Assignment</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- Teacher Modal -->
+<div class="modal-overlay" id="teacherModal"><div class="modal-box"><div class="modal-header"><div class="modal-title" id="tModalTitle">Teacher Profile</div><button class="modal-close" id="closeTeacherModal">&times;</button></div>
+<div class="modal-body"><div class="alert" id="tAlert"></div><form id="tForm"><input type="hidden" id="tId">
+<div class="form-row"><div class="form-group"><label class="field-label">Full Name</label><input class="field-input" id="tName" required></div><div class="form-group"><label class="field-label">Short Code</label><input class="field-input" id="tCode" placeholder="CSE-T-001"></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Designation</label><input class="field-input" id="tDesignation" placeholder="Lecturer"></div><div class="form-group"><label class="field-label">Department</label><input class="field-input" id="tDept" value="Computer Science and Engineering"></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Email</label><input type="email" class="field-input" id="tEmail"></div><div class="form-group"><label class="field-label">Phone</label><input class="field-input" id="tPhone"></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Office Room</label><input class="field-input" id="tOffice"></div><div class="form-group"><label class="field-label">Avatar URL</label><input class="field-input" id="tAvatar" placeholder="https://..."></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Status</label><select class="field-select" id="tStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select></div><div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="tEmailPublic"><span class="switch-track"></span></label><span class="field-label">Public Email</span></div></div></div>
+<div class="form-group"><label class="field-label">Bio</label><textarea class="field-input" id="tBio" rows="3" style="width:100%;resize:vertical" placeholder="Brief description"></textarea></div>
+</form></div>
+<div class="modal-footer"><button class="btn btn-outline" id="cancelTeacher">Cancel</button><button class="btn btn-primary" id="saveTeacher">Save Teacher</button></div></div></div>
 
-  <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="reviewModalLabel" data-review-title>Review Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p class="text-muted" data-review-meta></p>
-          <div data-review-body></div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- Assignment Modal -->
+<div class="modal-overlay" id="assignmentModal"><div class="modal-box"><div class="modal-header"><div class="modal-title">Teacher Assignment</div><button class="modal-close" id="closeAssignmentModal">&times;</button></div>
+<div class="modal-body"><div class="alert" id="aAlert"></div><form id="aForm"><input type="hidden" id="aId">
+<div class="form-row"><div class="form-group"><label class="field-label">Teacher</label><select class="field-select" id="aTeacher" required></select></div><div class="form-group"><label class="field-label">Course Code</label><input class="field-input" id="aCourseCode" placeholder="CSE 423" required></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Course Title</label><input class="field-input" id="aCourseTitle" placeholder="Course title" required></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Semester</label><select class="field-select" id="aSemester" required></select></div><div class="form-group"><label class="field-label">Section</label><select class="field-select" id="aSection" required></select></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Academic Term</label><input class="field-input" id="aTerm" placeholder="Spring 2026"></div><div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="aActive" checked><span class="switch-track"></span></label><span class="field-label">Active</span></div></div></div>
+</form></div>
+<div class="modal-footer"><button class="btn btn-outline" id="cancelAssignment">Cancel</button><button class="btn btn-primary" id="saveAssignment">Save Assignment</button></div></div></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/supabase-config.js"></script>
-  <script src="assets/js/questions.js"></script>
-  <script src="assets/js/review-data.js"></script>
-  <script src="assets/js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const sup=window.supabase.createClient("https://mstotzwqfbcvpcdgrnxy.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw");
+  const SEM=["1st Semester","2nd Semester","3rd Semester","4th Semester","5th Semester","6th Semester","7th Semester","8th Semester","9th Semester"];
+  const SEC=["A","B","C","General"];
+  function $(id){return document.getElementById(id)}
+  function show(m,t){const a=$("alertBox");a.textContent=m;a.className="alert alert-"+(t==="error"?"error":"success")}
+  function showM(id){document.getElementById(id).classList.add("open")}
+  function hideM(id){document.getElementById(id).classList.remove("open")}
+
+  let teachers=[],assignments=[],feedbacks=[],settings={};
+
+  (async function init(){
+    const{session}=await sup.auth.getSession();if(!session){location.href="/admin/";return}
+    const{data:p}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
+    if(!p||p.role!=="admin"){await sup.auth.signOut();location.href="/admin/";return}
+    await loadAll();
+  })();
+
+  async function loadAll(){
+    const[tRes,aRes,fRes,sRes]=await Promise.all([
+      sup.from("teachers_directory").select("*").order("name"),
+      sup.from("teacher_assignments").select("*,teacher_directory_id(*)").order("course_code"),
+      sup.from("feedbacks").select("*,teacher_directory_id(*)").order("submitted_at",{ascending:false}),
+      sup.from("feedback_settings").select("*").eq("id",1).maybeSingle()
+    ]);
+    teachers=tRes.data||[];assignments=aRes.data||[];feedbacks=fRes.data||[];
+    if(sRes.data)settings=sRes.data;
+    // Stats
+    const{count:sC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","student");
+    const{count:tC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","teacher");
+    $("sStudents").textContent=sC||0;$("sTeachers").textContent=tC||0;$("sFeedback").textContent=feedbacks.length;$("sActive").textContent=(sC||0)+(tC||0);
+    // Settings
+    if(settings.review_window_open!==undefined)$("reviewWindow").checked=settings.review_window_open;
+    if(settings.allow_anonymous_feedback!==undefined)$("anonymousToggle").checked=settings.allow_anonymous_feedback;
+    $("activeTerm").value=settings.active_term||"";
+    renderTeachers();renderAssignments();renderAnalytics();
+    // Populate filters
+    popSelect("assSemesterF",SEM);popSelect("assSectionF",SEC);popSelect("anaSemesterF",SEM);popSelect("anaSectionF",SEC);
+    const tOpts=teachers.map(t=>`<option value="${t.id}">${t.name}</option>`).join("");
+    ["assTeacherF","anaTeacherF","aTeacher"].forEach(id=>{const s=$(id);if(s){s.innerHTML='<option value="">All</option>'+tOpts;if(id==="assTeacherF"||id==="anaTeacherF")s.firstElementChild.textContent="All"}});
+  }
+
+  function popSelect(id,arr){const s=$(id);if(s)s.innerHTML='<option value="">All</option>'+arr.map(v=>`<option>${v}</option>`).join("")}
+
+  function renderTeachers(){
+    const q=($("teacherSearch").value||"").toLowerCase(),sf=$("teacherStatusFilter").value;
+    let filtered=teachers;
+    if(q)filtered=filtered.filter(t=>(t.name||"").toLowerCase().includes(q)||(t.short_code||"").toLowerCase().includes(q)||(t.email||"").toLowerCase().includes(q));
+    if(sf)filtered=filtered.filter(t=>t.status===sf);
+    const ac=assignments.reduce((m,a)=>{const k=a.teacher_directory_id;if(!m[k])m[k]=0;m[k]++;return m},{});
+    $("teacherBody").innerHTML=filtered.map(t=>`<tr>
+      <td><strong>${t.name||"—"}</strong><br><span style="font-size:.75rem;color:var(--muted)">${t.designation||""}${t.short_code?" · "+t.short_code:""}</span></td>
+      <td style="font-size:.82rem">${t.email||"—"}<br>${t.phone||""}</td>
+      <td><span class="${t.status==='active'?'pill-green':'pill-red'}">${t.status||"—"}</span></td>
+      <td>${ac[t.id]||0}</td>
+      <td><div style="display:flex;gap:.35rem;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" onclick="editTeacher(${t.id})">Edit</button>
+        <button class="btn btn-sm ${t.status==='active'?'btn-danger':'btn-success'}" onclick="toggleTeacherStatus(${t.id},'${t.status==='active'?'inactive':'active'}')">${t.status==='active'?'Deactivate':'Activate'}</button>
+      </div></td>
+    </tr>`).join("")||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No teachers found.</td></tr>';
+  }
+
+  function renderAssignments(){
+    const sf=$("assSemesterF").value,ss=$("assSectionF").value,tf=$("assTeacherF").value,cf=($("assCourseF").value||"").toLowerCase();
+    let filtered=assignments;
+    if(sf)filtered=filtered.filter(a=>a.semester===sf);if(ss)filtered=filtered.filter(a=>a.section===ss);if(tf)filtered=filtered.filter(a=>a.teacher_directory_id===parseInt(tf));if(cf)filtered=filtered.filter(a=>(a.course_code||"").toLowerCase().includes(cf));
+    $("assignmentBody").innerHTML=filtered.map(a=>{const t=a.teacher_directory_id||{};return`<tr>
+      <td><strong>${t.name||"—"}</strong></td><td>${a.course_code||""} - ${a.course_title||""}</td>
+      <td>${a.semester||""}/${a.section||""}</td><td>${a.academic_term||"—"}</td>
+      <td><span class="${a.is_active?'pill-green':'pill-red'}">${a.is_active?'Active':'Inactive'}</span></td>
+      <td><div style="display:flex;gap:.35rem">
+        <button class="btn btn-outline btn-sm" onclick="editAssignment(${a.id})">Edit</button>
+        <button class="btn btn-sm ${a.is_active?'btn-danger':'btn-success'}" onclick="toggleAssignment(${a.id},${!a.is_active})">${a.is_active?'Deactivate':'Activate'}</button>
+      </div></td>
+    </tr>`}).join("")||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">No assignments found.</td></tr>';
+  }
+
+  function renderAnalytics(){
+    const tf=$("anaTeacherF").value,sf=$("anaSemesterF").value,ss=$("anaSectionF").value,st=$("anaStatusF").value,cf=($("anaCourseF").value||"").toLowerCase();
+    let filtered=feedbacks;
+    if(tf)filtered=filtered.filter(f=>f.teacher_directory_id===parseInt(tf));if(sf)filtered=filtered.filter(f=>f.semester===sf);if(ss)filtered=filtered.filter(f=>f.section===ss);if(st)filtered=filtered.filter(f=>f.status===st);if(cf)filtered=filtered.filter(f=>(f.course_code||"").toLowerCase().includes(cf)||(f.course_title||"").toLowerCase().includes(cf));
+    $("anaTotal").textContent=filtered.length;
+    const avg=filtered.length?filtered.reduce((s,f)=>s+(f.responses?.overall_satisfaction||0),0)/filtered.length:0;
+    $("anaAvg").textContent=avg.toFixed(2);
+    $("anaComments").textContent=filtered.filter(f=>f.status!=="hidden").length;
+    $("analyticsBody").innerHTML=filtered.slice(0,100).map(f=>{const t=f.teacher_directory_id||{};return`<tr>
+      <td>${t.name||"—"}</td><td>${f.course_code||""}</td><td>${f.semester||""}/${f.section||""}</td>
+      <td>${f.responses?.overall_satisfaction||"—"}/5</td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.comment||"—"}</td>
+      <td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</td>
+      <td><span class="${f.status==='hidden'?'pill-red':'pill-green'}">${f.status||"—"}</span></td>
+      <td><button class="btn btn-sm ${f.status==='hidden'?'btn-success':'btn-danger'}" onclick="toggleFeedback('${f.id}','${f.status==='hidden'?'submitted':'hidden'}')">${f.status==='hidden'?'Show':'Hide'}</button></td>
+    </tr>`}).join("")||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:2rem">No feedback records.</td></tr>';
+  }
+
+  // ── Settings ──
+  $("saveSettings").addEventListener("click",async()=>{
+    const rw=$("reviewWindow").checked,an=$("anonymousToggle").checked,at=$("activeTerm").value.trim();
+    const{error}=await sup.from("feedback_settings").upsert({id:1,review_window_open:rw,allow_anonymous_feedback:an,active_term:at||"Current Session",updated_at:new Date().toISOString()});
+    if(error){show("Failed to save settings.","error");return}
+    show("Settings saved!","success");setTimeout(()=>$("alertBox").className="alert",2000);
+  });
+
+  // ── Teacher CRUD ──
+  $("openTeacherModal").addEventListener("click",()=>{document.getElementById("tForm").reset();$("tId").value="";$("tModalTitle").textContent="Add Teacher";$("tStatus").value="active";showM("teacherModal")});
+  $("closeTeacherModal").addEventListener("click",()=>hideM("teacherModal"));$("cancelTeacher").addEventListener("click",()=>hideM("teacherModal"));
+  function editTeacher(id){const t=teachers.find(x=>x.id===id);if(!t)return;$("tId").value=t.id;$("tName").value=t.name||"";$("tCode").value=t.short_code||"";$("tDesignation").value=t.designation||"";$("tDept").value=t.department||"";$("tEmail").value=t.email||"";$("tPhone").value=t.phone||"";$("tOffice").value=t.office_room||"";$("tAvatar").value=t.avatar_url||"";$("tBio").value=t.bio||"";$("tStatus").value=t.status||"active";$("tEmailPublic").checked=t.is_email_public||false;$("tModalTitle").textContent="Edit Teacher";showM("teacherModal")}
+  $("saveTeacher").addEventListener("click",async()=>{
+    const id=$("tId").value,payload={name:$("tName").value.trim(),short_code:$("tCode").value.trim()||null,designation:$("tDesignation").value.trim()||null,department:$("tDept").value.trim(),email:$("tEmail").value.trim()||null,phone:$("tPhone").value.trim()||null,office_room:$("tOffice").value.trim()||null,avatar_url:$("tAvatar").value.trim()||null,bio:$("tBio").value.trim()||null,status:$("tStatus").value,is_email_public:$("tEmailPublic").checked,updated_at:new Date().toISOString()};
+    if(!payload.name){show("Name is required.","error");return}
+    let err;if(id)err=(await sup.from("teachers_directory").update(payload).eq("id",id)).error;else err=(await sup.from("teachers_directory").insert(payload)).error;
+    if(err){show(err.message,"error");return}
+    hideM("teacherModal");await loadAll();show("Teacher saved!","success");
+  });
+  async function toggleTeacherStatus(id,newStatus){const{error}=await sup.from("teachers_directory").update({status:newStatus}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
+
+  // ── Assignment CRUD ──
+  $("openAssignmentModal").addEventListener("click",()=>{document.getElementById("aForm").reset();$("aId").value="";showM("assignmentModal")});
+  $("closeAssignmentModal").addEventListener("click",()=>hideM("assignmentModal"));$("cancelAssignment").addEventListener("click",()=>hideM("assignmentModal"));
+  function editAssignment(id){const a=assignments.find(x=>x.id===id);if(!a)return;$("aId").value=a.id;$("aTeacher").value=a.teacher_directory_id;$("aCourseCode").value=a.course_code||"";$("aCourseTitle").value=a.course_title||"";$("aSemester").value=a.semester||"";$("aSection").value=a.section||"";$("aTerm").value=a.academic_term||"";$("aActive").checked=a.is_active;showM("assignmentModal")}
+  $("saveAssignment").addEventListener("click",async()=>{
+    const id=$("aId").value,payload={teacher_directory_id:parseInt($("aTeacher").value),course_code:$("aCourseCode").value.trim(),course_title:$("aCourseTitle").value.trim(),semester:$("aSemester").value,section:$("aSection").value,academic_term:$("aTerm").value.trim(),is_active:$("aActive").checked,updated_at:new Date().toISOString()};
+    if(!payload.teacher_directory_id||!payload.course_code||!payload.course_title||!payload.semester||!payload.section){$("aAlert").textContent="All fields required.";$("aAlert").className="alert alert-error";return}
+    let err;if(id)err=(await sup.from("teacher_assignments").update(payload).eq("id",id)).error;else err=(await sup.from("teacher_assignments").insert(payload)).error;
+    if(err){$("aAlert").textContent=err.message;$("aAlert").className="alert alert-error";return}
+    hideM("assignmentModal");await loadAll();show("Assignment saved!","success");
+  });
+  async function toggleAssignment(id,active){const{error}=await sup.from("teacher_assignments").update({is_active:active}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
+
+  // ── Feedback moderation ──
+  async function toggleFeedback(id,newStatus){const{error}=await sup.from("feedbacks").update({status:newStatus}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
+
+  // ── Filters ──
+  ["teacherSearch","teacherStatusFilter"].forEach(id=>$(id).addEventListener("input",renderTeachers));
+  ["assSemesterF","assSectionF","assTeacherF","assCourseF"].forEach(id=>$(id).addEventListener("input",renderAssignments));
+  ["anaTeacherF","anaSemesterF","anaSectionF","anaStatusF","anaCourseF"].forEach(id=>$(id).addEventListener("input",renderAnalytics));
+  // Export
+  $("exportCSV").addEventListener("click",()=>{if(!feedbacks.length)return;const h="Teacher,Course,Semester,Section,Overall,Comment,Status,Submitted\n";const csv=h+feedbacks.map(f=>[f.teacher_directory_id?.name||"",f.course_code||"",f.semester||"",f.section||"",f.responses?.overall_satisfaction||"",(f.comment||"").replace(/"/g,'""'),f.status||"",f.submitted_at||""].map(v=>`"${v}"`).join(",")).join("\n");const b=new Blob([csv],{type:"text/csv"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="sfrs-feedback-export.csv";a.click()});
+
+  // ── Logout ──
+  $("logoutLink").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
+  $("sbLogout").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
+  // Assignments modal - populate selects
+  (()=>{["aSemester"].forEach(id=>$(id).innerHTML=SEM.map(v=>`<option>${v}</option>`).join(""));["aSection"].forEach(id=>$(id).innerHTML=SEC.map(v=>`<option>${v}</option>`).join(""));})();
+</script>
 </body>
 </html>
