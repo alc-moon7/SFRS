@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin Dashboard - SFRS</title>
-  <meta name="description" content="SFRS Admin Panel - Manage teachers, assignments, feedback, and analytics.">
+  <meta name="description" content="SFRS Admin Panel">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
@@ -23,41 +23,32 @@
     .app-sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:1.25rem 1rem;position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto}
     .sidebar-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-light);margin-bottom:1rem;padding:0 .5rem}
     .sidebar-link{display:block;padding:.5rem .75rem;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--muted);transition:.15s;margin-bottom:.1rem}
-    .sidebar-link:hover,.sidebar-link.active{background:#faf5ed;color:var(--accent)}
-    .sidebar-link.danger{color:var(--danger)}
+    .sidebar-link:hover,.sidebar-link.active{background:#faf5ed;color:var(--accent)}.sidebar-link.danger{color:var(--danger)}
     .app-content{flex:1;padding:1.5rem;min-width:0}
-    .topbar{margin-bottom:1.5rem}
-    .topbar-kicker{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
-    .topbar h1{font-size:1.4rem;font-weight:700;color:var(--primary);margin-bottom:.25rem}
-    .topbar p{font-size:.9rem;color:var(--muted)}
+    .topbar{margin-bottom:1.5rem}.topbar-kicker{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
+    .topbar h1{font-size:1.4rem;font-weight:700;color:var(--primary);margin-bottom:.25rem}.topbar p{font-size:.9rem;color:var(--muted)}
     .badge-pill{display:inline-flex;gap:.35rem;padding:.3rem .8rem;border-radius:100px;font-size:.75rem;font-weight:600;background:#faf5ed;color:var(--primary);border:1px solid var(--border)}
-    .badge-red{background:#fee2e2;color:#b91c1c;border:1px solid #fecaca}
     .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
     .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;transition:.2s}
     .stat-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(12,42,66,.08)}
-    .stat-label{font-size:.78rem;color:var(--muted);margin-bottom:.25rem}
-    .stat-value{font-size:1.8rem;font-weight:800;color:var(--primary);line-height:1.1}
+    .stat-label{font-size:.78rem;color:var(--muted);margin-bottom:.25rem}.stat-value{font-size:1.8rem;font-weight:800;color:var(--primary);line-height:1.1}
     .panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:1.25rem}
     .panel-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
-    .panel-body{padding:1.5rem}
-    .panel-title{font-size:1.05rem;font-weight:700;color:var(--primary)}
+    .panel-body{padding:1.5rem}.panel-title{font-size:1.05rem;font-weight:700;color:var(--primary)}
     .panel-kicker{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:.15rem}
     .toolbar{display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1rem}
-    .toolbar-field{display:flex;flex-direction:column;gap:.2rem;min-width:140px}
-    .toolbar-field.flex{flex:1;min-width:180px}
+    .toolbar-field{display:flex;flex-direction:column;gap:.2rem;min-width:140px}.toolbar-field.flex{flex:1;min-width:180px}
     .field-label{font-size:.75rem;font-weight:600;color:var(--muted)}
     .field-input,.field-select{width:100%;padding:.6rem .85rem;border:2px solid var(--border);border-radius:10px;font-size:.88rem;font-family:inherit;background:#faf8f2;transition:.15s;color:var(--text)}
     .field-input:focus,.field-select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,70,44,.1);background:#fff}
     .field-select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6255' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .85rem center;padding-right:2.2rem}
     .table-wrap{overflow-x:auto}.table{width:100%;border-collapse:collapse;font-size:.88rem}
     .table th{text-align:left;padding:.75rem .85rem;background:#faf7f0;font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--border)}
-    .table td{padding:.75rem .85rem;border-bottom:1px solid var(--border-light);vertical-align:middle}
-    .table tr:hover td{background:#fdfaf5}
+    .table td{padding:.75rem .85rem;border-bottom:1px solid var(--border-light);vertical-align:middle}.table tr:hover td{background:#fdfaf5}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.6rem 1.15rem;border-radius:10px;font-weight:600;font-size:.88rem;border:none;cursor:pointer;transition:.15s;font-family:inherit;white-space:nowrap}
     .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,70,44,.22)}
     .btn-outline{background:var(--surface);color:var(--primary);border:2px solid var(--border)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
-    .btn-sm{padding:.4rem .8rem;font-size:.78rem}.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{opacity:.9}
-    .btn-success{background:var(--success);color:#fff}
+    .btn-sm{padding:.4rem .8rem;font-size:.78rem}.btn-danger{background:var(--danger);color:#fff}.btn-success{background:var(--success);color:#fff}
     .alert{padding:.75rem 1rem;border-radius:10px;font-size:.85rem;margin-bottom:1rem;display:none;font-weight:500}
     .alert-error{background:#fef2f2;color:var(--danger);border:1px solid #fecaca;display:block}
     .alert-success{background:#f0fdf4;color:var(--success);border:1px solid #bbf7d0;display:block}
@@ -66,17 +57,14 @@
     .switch-track{position:absolute;inset:0;background:var(--border);border-radius:12px;cursor:pointer;transition:.2s}.switch input:checked+.switch-track{background:var(--accent)}
     .switch-track::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s}.switch input:checked+.switch-track::after{transform:translateX(20px)}
     .analytics-pill{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;text-align:center}
-    .analytics-pill strong{display:block;font-size:1.6rem;color:var(--primary);font-weight:800}
-    .analytics-pill span{font-size:.8rem;color:var(--muted)}
+    .analytics-pill strong{display:block;font-size:1.6rem;color:var(--primary);font-weight:800}.analytics-pill span{font-size:.8rem;color:var(--muted)}
     .modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(12,42,66,.4);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:1rem}
     .modal-overlay.open{display:flex}
     .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;width:100%;max-width:650px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 70px rgba(12,42,66,.18)}
     .modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
-    .modal-title{font-size:1.1rem;font-weight:700;color:var(--primary)}
-    .modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)}
+    .modal-title{font-size:1.1rem;font-weight:700;color:var(--primary)}.modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)}
     .modal-body{padding:1.5rem}.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.5rem}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
-    .form-group{margin-bottom:1rem}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}.form-group{margin-bottom:1rem}
     .info-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem}
     .footer{text-align:center;padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted-light)}
     .pill-green{color:var(--success);font-weight:600}.pill-red{color:var(--danger);font-weight:600}
@@ -86,185 +74,99 @@
 </head>
 <body>
 <nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><div class="nav-links"><a class="nav-link active" href="admin-dashboard.html">Dashboard</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
-
 <div class="app-shell">
-  <aside class="app-sidebar"><div class="sidebar-title">Admin Workspace</div>
-    <a class="sidebar-link active" href="#overview">Dashboard</a><a class="sidebar-link" href="#teachers">Teachers</a><a class="sidebar-link" href="#assignments">Assignments</a><a class="sidebar-link" href="#analytics">Analytics</a><a class="sidebar-link" href="#settings">Settings</a><a class="sidebar-link danger" href="#" id="sbLogout">Logout</a>
-  </aside>
+  <aside class="app-sidebar"><div class="sidebar-title">Admin Workspace</div><a class="sidebar-link active" href="#overview">Dashboard</a><a class="sidebar-link" href="#teachers">Teachers</a><a class="sidebar-link" href="#assignments">Assignments</a><a class="sidebar-link" href="#analytics">Analytics</a><a class="sidebar-link" href="#settings">Settings</a><a class="sidebar-link danger" href="#" id="sbLogout">Logout</a></aside>
   <div class="app-content">
     <div class="topbar"><div class="topbar-kicker">Admin Panel</div><h1>Feedback Review Management</h1><p>Manage users, teacher profiles, assignments, review windows, analytics, and moderation.</p></div>
     <div class="alert" id="alertBox"></div>
-
     <div id="overview" class="stats-grid">
       <div class="stat-card"><div class="stat-label">Total Students</div><div class="stat-value" id="sStudents">0</div></div>
       <div class="stat-card"><div class="stat-label">Total Teachers</div><div class="stat-value" id="sTeachers">0</div></div>
       <div class="stat-card"><div class="stat-label">Total Feedback</div><div class="stat-value" id="sFeedback">0</div></div>
       <div class="stat-card"><div class="stat-label">Active Users</div><div class="stat-value" id="sActive">0</div></div>
     </div>
-
-    <section id="settings" class="panel"><div class="panel-header"><div><div class="panel-kicker">Settings</div><div class="panel-title">Feedback Window Settings</div></div></div>
-      <div class="panel-body">
-        <div class="form-row">
-          <div class="form-group"><label class="field-label">Active Term</label><input type="text" class="field-input" id="activeTerm" placeholder="Spring 2026"></div>
-          <div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="reviewWindow"><span class="switch-track"></span></label><span class="field-label">Allow student submissions</span></div></div>
-        </div>
-        <div class="switch-row" style="margin-bottom:1rem"><label class="switch"><input type="checkbox" id="anonymousToggle"><span class="switch-track"></span></label><span class="field-label">Allow anonymous toggle for students</span></div>
-        <button class="btn btn-primary" id="saveSettings">Save Settings</button>
-      </div>
-    </section>
-
-    <section id="teachers" class="panel"><div class="panel-header"><div><div class="panel-kicker">Teachers</div><div class="panel-title">Teacher Management</div></div><button class="btn btn-primary btn-sm" id="openTeacherModal">Add Teacher</button></div>
-      <div class="panel-body"><div class="toolbar"><div class="toolbar-field flex"><label class="field-label">Search</label><input type="search" class="field-input" id="teacherSearch" placeholder="Name, code, or email"></div><div class="toolbar-field"><label class="field-label">Status</label><select class="field-select" id="teacherStatusFilter"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option></select></div></div>
-      <div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Contact</th><th>Status</th><th>Assignments</th><th>Actions</th></tr></thead><tbody id="teacherBody"></tbody></table></div></div>
-    </section>
-
-    <section id="assignments" class="panel"><div class="panel-header"><div><div class="panel-kicker">Departments</div><div class="panel-title">Assignment Management</div></div><button class="btn btn-primary btn-sm" id="openAssignmentModal">Add Assignment</button></div>
-      <div class="panel-body"><div class="toolbar"><div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="assSemesterF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="assSectionF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="assTeacherF"><option value="">All</option></select></div><div class="toolbar-field flex"><label class="field-label">Course Code</label><input type="search" class="field-input" id="assCourseF" placeholder="Search course code"></div></div>
-      <div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Course</th><th>Semester/Section</th><th>Term</th><th>Status</th><th>Actions</th></tr></thead><tbody id="assignmentBody"></tbody></table></div></div>
-    </section>
-
-    <section id="analytics" class="panel"><div class="panel-header"><div><div class="panel-kicker">Analytics</div><div class="panel-title">Feedback Analytics</div></div><button class="btn btn-outline btn-sm" id="exportCSV">Export CSV</button></div>
-      <div class="panel-body"><div class="toolbar"><div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="anaTeacherF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="anaSemesterF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="anaSectionF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Status</label><select class="field-select" id="anaStatusF"><option value="">All</option><option value="submitted">Visible</option><option value="hidden">Hidden</option></select></div><div class="toolbar-field flex"><label class="field-label">Course</label><input type="search" class="field-input" id="anaCourseF" placeholder="Course code/title"></div></div>
-      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
-        <div class="analytics-pill"><span>Filtered Reviews</span><strong id="anaTotal">0</strong></div>
-        <div class="analytics-pill"><span>Avg Rating</span><strong id="anaAvg">0.00</strong></div>
-        <div class="analytics-pill"><span>Visible Comments</span><strong id="anaComments">0</strong></div>
-      </div>
-      <div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Course</th><th>Sem/Sec</th><th>Overall</th><th>Comment</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody id="analyticsBody"></tbody></table></div></div>
-    </section>
+    <section id="settings" class="panel"><div class="panel-header"><div><div class="panel-kicker">Settings</div><div class="panel-title">Feedback Window Settings</div></div></div><div class="panel-body"><div class="form-row"><div class="form-group"><label class="field-label">Active Term</label><input type="text" class="field-input" id="activeTerm" placeholder="Spring 2026"></div><div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="reviewWindow"><span class="switch-track"></span></label><span class="field-label">Allow student submissions</span></div></div></div><div class="switch-row" style="margin-bottom:1rem"><label class="switch"><input type="checkbox" id="anonymousToggle"><span class="switch-track"></span></label><span class="field-label">Allow anonymous toggle for students</span></div><button class="btn btn-primary" id="saveSettings">Save Settings</button></div></section>
+    <section id="teachers" class="panel"><div class="panel-header"><div><div class="panel-kicker">Teachers</div><div class="panel-title">Teacher Management</div></div><button class="btn btn-primary btn-sm" id="openTeacherModal">Add Teacher</button></div><div class="panel-body"><div class="toolbar"><div class="toolbar-field flex"><label class="field-label">Search</label><input type="search" class="field-input" id="teacherSearch" placeholder="Name, code, or email"></div><div class="toolbar-field"><label class="field-label">Status</label><select class="field-select" id="teacherStatusFilter"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option></select></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Contact</th><th>Status</th><th>Assignments</th><th>Actions</th></tr></thead><tbody id="teacherBody"></tbody></table></div></div></section>
+    <section id="assignments" class="panel"><div class="panel-header"><div><div class="panel-kicker">Departments</div><div class="panel-title">Assignment Management</div></div><button class="btn btn-primary btn-sm" id="openAssignmentModal">Add Assignment</button></div><div class="panel-body"><div class="toolbar"><div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="assSemesterF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="assSectionF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="assTeacherF"><option value="">All</option></select></div><div class="toolbar-field flex"><label class="field-label">Course Code</label><input type="search" class="field-input" id="assCourseF" placeholder="Search course code"></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Course</th><th>Semester/Section</th><th>Term</th><th>Status</th><th>Actions</th></tr></thead><tbody id="assignmentBody"></tbody></table></div></div></section>
+    <section id="analytics" class="panel"><div class="panel-header"><div><div class="panel-kicker">Analytics</div><div class="panel-title">Feedback Analytics</div></div><button class="btn btn-outline btn-sm" id="exportCSV">Export CSV</button></div><div class="panel-body"><div class="toolbar"><div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="anaTeacherF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="anaSemesterF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="anaSectionF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Status</label><select class="field-select" id="anaStatusF"><option value="">All</option><option value="submitted">Visible</option><option value="hidden">Hidden</option></select></div><div class="toolbar-field flex"><label class="field-label">Course</label><input type="search" class="field-input" id="anaCourseF" placeholder="Course code/title"></div></div><div class="stats-grid" style="grid-template-columns:repeat(3,1fr)"><div class="analytics-pill"><span>Filtered Reviews</span><strong id="anaTotal">0</strong></div><div class="analytics-pill"><span>Avg Rating</span><strong id="anaAvg">0.00</strong></div><div class="analytics-pill"><span>Visible Comments</span><strong id="anaComments">0</strong></div></div><div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Course</th><th>Sem/Sec</th><th>Overall</th><th>Comment</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody id="analyticsBody"></tbody></table></div></div></section>
   </div>
 </div>
 <div class="footer">&copy; 2026 SFRS - Admin Dashboard</div>
-
-<div class="modal-overlay" id="teacherModal"><div class="modal-box"><div class="modal-header"><div class="modal-title" id="tModalTitle">Teacher Profile</div><button class="modal-close" id="closeTeacherModal">&times;</button></div>
-<div class="modal-body"><div class="alert" id="tAlert"></div><form id="tForm"><input type="hidden" id="tId">
-<div class="form-row"><div class="form-group"><label class="field-label">Full Name</label><input class="field-input" id="tName" required></div><div class="form-group"><label class="field-label">Short Code</label><input class="field-input" id="tCode" placeholder="CSE-T-001"></div></div>
-<div class="form-row"><div class="form-group"><label class="field-label">Designation</label><input class="field-input" id="tDesignation" placeholder="Lecturer"></div><div class="form-group"><label class="field-label">Department</label><input class="field-input" id="tDept" value="Computer Science and Engineering"></div></div>
-<div class="form-row"><div class="form-group"><label class="field-label">Email</label><input type="email" class="field-input" id="tEmail"></div><div class="form-group"><label class="field-label">Phone</label><input class="field-input" id="tPhone"></div></div>
-<div class="form-row"><div class="form-group"><label class="field-label">Office Room</label><input class="field-input" id="tOffice"></div><div class="form-group"><label class="field-label">Avatar URL</label><input class="field-input" id="tAvatar" placeholder="https://..."></div></div>
-<div class="form-row"><div class="form-group"><label class="field-label">Status</label><select class="field-select" id="tStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select></div><div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="tEmailPublic"><span class="switch-track"></span></label><span class="field-label">Public Email</span></div></div></div>
-<div class="form-group"><label class="field-label">Bio</label><textarea class="field-input" id="tBio" rows="3" style="width:100%;resize:vertical" placeholder="Brief description"></textarea></div>
-</form></div>
-<div class="modal-footer"><button class="btn btn-outline" id="cancelTeacher">Cancel</button><button class="btn btn-primary" id="saveTeacher">Save Teacher</button></div></div></div>
-
-<div class="modal-overlay" id="assignmentModal"><div class="modal-box"><div class="modal-header"><div class="modal-title">Teacher Assignment</div><button class="modal-close" id="closeAssignmentModal">&times;</button></div>
-<div class="modal-body"><div class="alert" id="aAlert"></div><form id="aForm"><input type="hidden" id="aId">
-<div class="form-row"><div class="form-group"><label class="field-label">Teacher</label><select class="field-select" id="aTeacher" required></select></div><div class="form-group"><label class="field-label">Course Code</label><input class="field-input" id="aCourseCode" placeholder="CSE 423" required></div></div>
-<div class="form-row"><div class="form-group"><label class="field-label">Course Title</label><input class="field-input" id="aCourseTitle" placeholder="Course title" required></div></div>
-<div class="form-row"><div class="form-group"><label class="field-label">Semester</label><select class="field-select" id="aSemester" required></select></div><div class="form-group"><label class="field-label">Section</label><select class="field-select" id="aSection" required></select></div></div>
-<div class="form-row"><div class="form-group"><label class="field-label">Academic Term</label><input class="field-input" id="aTerm" placeholder="Spring 2026"></div><div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="aActive" checked><span class="switch-track"></span></label><span class="field-label">Active</span></div></div></div>
-</form></div>
-<div class="modal-footer"><button class="btn btn-outline" id="cancelAssignment">Cancel</button><button class="btn btn-primary" id="saveAssignment">Save Assignment</button></div></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/ai-chat-widget.js"></script>
 <script>
   const sup=window.supabase.createClient("https://mstotzwqfbcvpcdgrnxy.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw");
-  const SEM=["1st Semester","2nd Semester","3rd Semester","4th Semester","5th Semester","6th Semester","7th Semester","8th Semester","9th Semester"];
+  const SEM=["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"].map(n=>n+" Semester");
   const SEC=["A","B","C","General"];
+  let teachers=[],assignments=[],feedbacks=[],settings={},tMap={};
   function $(id){return document.getElementById(id)}
   function show(m,t){const a=$("alertBox");a.textContent=m;a.className="alert alert-"+(t==="error"?"error":"success")}
   function showM(id){document.getElementById(id).classList.add("open")}
   function hideM(id){document.getElementById(id).classList.remove("open")}
+  function tName(f){const t=tMap[f.teacher_directory_id];return t?t.name:"—"}
 
-  let teachers=[],assignments=[],feedbacks=[],settings={};
-
-  // Auth: wait for session via onAuthStateChange (handles post-redirect timing)
-  (function(){let loaded=false;
-    sup.auth.onAuthStateChange(async(event,session)=>{
-      if(session&&!loaded){
-        const{data:p}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
-        if(p&&p.role==="admin"){loaded=true;await loadAll()}
-        else{await sup.auth.signOut();location.href="/admin/"}
-      }else if(event==="SIGNED_OUT"){location.href="/admin/"}
-    });
-    // Also poll immediately in case session already exists
-    (async()=>{
-      for(let i=0;i<20;i++){
-        const{data}=await sup.auth.getSession();
-        if(data.session&&!loaded){
-          const{data:p}=await sup.from("profiles").select("role").eq("id",data.session.user.id).maybeSingle();
-          if(p&&p.role==="admin"){loaded=true;await loadAll();break}
-        }
-        await new Promise(r=>setTimeout(r,400));
+  // Auth
+  (async function initAuth(){
+    for(let i=0;i<15;i++){
+      const{data}=await sup.auth.getSession();
+      if(data.session){
+        const{data:p}=await sup.from("profiles").select("role").eq("id",data.session.user.id).maybeSingle();
+        if(p&&p.role==="admin"){await loadAll();return}
       }
-      if(!loaded)location.href="/admin/";
-    })();
+      await new Promise(r=>setTimeout(r,500));
+    }
+    location.href="/admin/";
   })();
 
   async function loadAll(){
-    const[tRes,aRes,fRes,sRes]=await Promise.all([
+    const[tR,aR,fR,sR]=await Promise.all([
       sup.from("teachers_directory").select("*").order("name"),
-      sup.from("teacher_assignments").select("*,teacher_directory_id(id,name,short_code)").order("course_code"),
-      sup.from("feedbacks").select("*,teacher_directory_id(id,name,short_code)").order("submitted_at",{ascending:false}),
+      sup.from("teacher_assignments").select("*").order("course_code"),
+      sup.from("feedbacks").select("*").order("submitted_at",{ascending:false}),
       sup.from("feedback_settings").select("*").eq("id",1).maybeSingle()
     ]);
-    teachers=tRes.data||[];assignments=aRes.data||[];feedbacks=fRes.data||[];
-    console.log("Feedback records loaded:",feedbacks.length,{error:fRes.error});
-    if(sRes.data)settings=sRes.data;
-    const{count:sC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","student");
-    const{count:tC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","teacher");
+    teachers=tR.data||[];assignments=aR.data||[];feedbacks=fR.data||[];if(sR.data)settings=sR.data;
+    tMap={};teachers.forEach(t=>{tMap[t.id]=t});
+    // Stats
+    const{sC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","student");
+    const{tC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","teacher");
     $("sStudents").textContent=sC||0;$("sTeachers").textContent=tC||0;$("sFeedback").textContent=feedbacks.length;$("sActive").textContent=(sC||0)+(tC||0);
     if(settings.review_window_open!==undefined)$("reviewWindow").checked=settings.review_window_open;
     if(settings.allow_anonymous_feedback!==undefined)$("anonymousToggle").checked=settings.allow_anonymous_feedback;
     $("activeTerm").value=settings.active_term||"";
     renderTeachers();renderAssignments();renderAnalytics();
-    popSelect("assSemesterF",SEM);popSelect("assSectionF",SEC);popSelect("anaSemesterF",SEM);popSelect("anaSectionF",SEC);
-    const tOpts=teachers.map(t=>`<option value="${t.id}">${t.name}</option>`).join("");
-    ["assTeacherF","anaTeacherF","aTeacher"].forEach(id=>{const s=$(id);if(s){s.innerHTML='<option value="">All</option>'+tOpts;if(id==="assTeacherF"||id==="anaTeacherF")s.firstElementChild.textContent="All"}});
+    pop(SEM,"assSemesterF");pop(SEM,"anaSemesterF");pop(SEC,"assSectionF");pop(SEC,"anaSectionF");
+    const to=teachers.map(t=>`<option value="${t.id}">${t.name}</option>`).join("");
+    ["assTeacherF","anaTeacherF","aTeacher"].forEach(id=>{const s=$(id);if(s)s.innerHTML='<option value="">All</option>'+to});
   }
-
-  function popSelect(id,arr){const s=$(id);if(s)s.innerHTML='<option value="">All</option>'+arr.map(v=>`<option>${v}</option>`).join("")}
+  function pop(arr,id){const s=$(id);if(s)s.innerHTML='<option value="">All</option>'+arr.map(v=>`<option>${v}</option>`).join("")}
 
   function renderTeachers(){
     const q=($("teacherSearch").value||"").toLowerCase(),sf=$("teacherStatusFilter").value;
-    let filtered=teachers;
-    if(q)filtered=filtered.filter(t=>(t.name||"").toLowerCase().includes(q)||(t.short_code||"").toLowerCase().includes(q)||(t.email||"").toLowerCase().includes(q));
-    if(sf)filtered=filtered.filter(t=>t.status===sf);
-    const ac=assignments.reduce((m,a)=>{const k=typeof a.teacher_directory_id==="object"?a.teacher_directory_id?.id:a.teacher_directory_id;if(!m[k])m[k]=0;m[k]++;return m},{});
-    $("teacherBody").innerHTML=filtered.map(t=>`<tr>
-      <td><strong>${t.name||"-"}</strong><br><span style="font-size:.75rem;color:var(--muted)">${t.designation||""}${t.short_code?" - "+t.short_code:""}</span></td>
-      <td style="font-size:.82rem">${t.email||"-"}<br>${t.phone||""}</td>
-      <td><span class="${t.status==='active'?'pill-green':'pill-red'}">${t.status||"-"}</span></td>
-      <td>${ac[t.id]||0}</td>
-      <td><div style="display:flex;gap:.35rem;flex-wrap:wrap">
-        <button class="btn btn-outline btn-sm" onclick="editTeacher(${t.id})">Edit</button>
-        <button class="btn btn-sm ${t.status==='active'?'btn-danger':'btn-success'}" onclick="toggleTeacherStatus(${t.id},'${t.status==='active'?'inactive':'active'}')">${t.status==='active'?'Deactivate':'Activate'}</button>
-      </div></td>
-    </tr>`).join("")||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No teachers found.</td></tr>';
+    let fl=teachers;
+    if(q)fl=fl.filter(t=>(t.name||"").toLowerCase().includes(q)||(t.short_code||"").toLowerCase().includes(q)||(t.email||"").toLowerCase().includes(q));
+    if(sf)fl=fl.filter(t=>t.status===sf);
+    const ac={};assignments.forEach(a=>{const k=a.teacher_directory_id;ac[k]=(ac[k]||0)+1});
+    $("teacherBody").innerHTML=fl.map(t=>`<tr><td><strong>${t.name||"—"}</strong><br><span style="font-size:.75rem;color:var(--muted)">${t.designation||""}${t.short_code?" · "+t.short_code:""}</span></td><td style="font-size:.82rem">${t.email||"—"}<br>${t.phone||""}</td><td><span class="${t.status==='active'?'pill-green':'pill-red'}">${t.status||"—"}</span></td><td>${ac[t.id]||0}</td><td><div style="display:flex;gap:.35rem;flex-wrap:wrap"><button class="btn btn-outline btn-sm" onclick="editTeacher(${t.id})">Edit</button><button class="btn btn-sm ${t.status==='active'?'btn-danger':'btn-success'}" onclick="toggleTS(${t.id},'${t.status==='active'?'inactive':'active'}')">${t.status==='active'?'Deactivate':'Activate'}</button></div></td></tr>`).join("")||'<tr><td colspan="5" style="text-align:center;padding:2rem">No teachers found.</td></tr>';
   }
 
   function renderAssignments(){
     const sf=$("assSemesterF").value,ss=$("assSectionF").value,tf=$("assTeacherF").value,cf=($("assCourseF").value||"").toLowerCase();
-    let filtered=assignments;
-    if(sf)filtered=filtered.filter(a=>a.semester===sf);if(ss)filtered=filtered.filter(a=>a.section===ss);if(tf)filtered=filtered.filter(a=>(typeof a.teacher_directory_id==="object"?a.teacher_directory_id?.id:a.teacher_directory_id)===parseInt(tf));if(cf)filtered=filtered.filter(a=>(a.course_code||"").toLowerCase().includes(cf));
-    $("assignmentBody").innerHTML=filtered.map(a=>{const t=a.teacher_directory_id||{};return`<tr>
-      <td><strong>${t.name||"-"}</strong></td><td>${a.course_code||""} - ${a.course_title||""}</td>
-      <td>${a.semester||""}/${a.section||""}</td><td>${a.academic_term||"-"}</td>
-      <td><span class="${a.is_active?'pill-green':'pill-red'}">${a.is_active?'Active':'Inactive'}</span></td>
-      <td><div style="display:flex;gap:.35rem">
-        <button class="btn btn-outline btn-sm" onclick="editAssignment(${a.id})">Edit</button>
-        <button class="btn btn-sm ${a.is_active?'btn-danger':'btn-success'}" onclick="toggleAssignment(${a.id},${!a.is_active})">${a.is_active?'Deactivate':'Activate'}</button>
-      </div></td>
-    </tr>`}).join("")||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">No assignments found.</td></tr>';
+    let fl=assignments;
+    if(sf)fl=fl.filter(a=>a.semester===sf);if(ss)fl=fl.filter(a=>a.section===ss);if(tf)fl=fl.filter(a=>a.teacher_directory_id===parseInt(tf));if(cf)fl=fl.filter(a=>(a.course_code||"").toLowerCase().includes(cf));
+    $("assignmentBody").innerHTML=fl.map(a=>`<tr><td><strong>${tName(a)}</strong></td><td>${a.course_code||""} - ${a.course_title||""}</td><td>${a.semester||""}/${a.section||""}</td><td>${a.academic_term||"—"}</td><td><span class="${a.is_active?'pill-green':'pill-red'}">${a.is_active?'Active':'Inactive'}</span></td><td><div style="display:flex;gap:.35rem"><button class="btn btn-outline btn-sm" onclick="editA(${a.id})">Edit</button><button class="btn btn-sm ${a.is_active?'btn-danger':'btn-success'}" onclick="toggleA(${a.id},${!a.is_active})">${a.is_active?'Deactivate':'Activate'}</button></div></td></tr>`).join("")||'<tr><td colspan="6" style="text-align:center;padding:2rem">No assignments found.</td></tr>';
   }
 
   function renderAnalytics(){
     const tf=$("anaTeacherF").value,sf=$("anaSemesterF").value,ss=$("anaSectionF").value,st=$("anaStatusF").value,cf=($("anaCourseF").value||"").toLowerCase();
-    let filtered=feedbacks;
-    if(tf)filtered=filtered.filter(f=>(typeof f.teacher_directory_id==="object"?f.teacher_directory_id?.id:f.teacher_directory_id)===parseInt(tf));if(sf)filtered=filtered.filter(f=>f.semester===sf);if(ss)filtered=filtered.filter(f=>f.section===ss);if(st)filtered=filtered.filter(f=>f.status===st);if(cf)filtered=filtered.filter(f=>(f.course_code||"").toLowerCase().includes(cf)||(f.course_title||"").toLowerCase().includes(cf));
-    $("anaTotal").textContent=filtered.length;
-    const avg=filtered.length?filtered.reduce((s,f)=>s+(f.responses?.overall_satisfaction||0),0)/filtered.length:0;
+    let fl=feedbacks;
+    if(tf)fl=fl.filter(f=>f.teacher_directory_id===parseInt(tf));if(sf)fl=fl.filter(f=>f.semester===sf);if(ss)fl=fl.filter(f=>f.section===ss);if(st)fl=fl.filter(f=>f.status===st);if(cf)fl=fl.filter(f=>(f.course_code||"").toLowerCase().includes(cf)||(f.course_title||"").toLowerCase().includes(cf));
+    $("anaTotal").textContent=fl.length;
+    const avg=fl.length?fl.reduce((s,f)=>s+(f.responses?.overall_satisfaction||0),0)/fl.length:0;
     $("anaAvg").textContent=avg.toFixed(2);
-    $("anaComments").textContent=filtered.filter(f=>f.status!=="hidden").length;
-    $("analyticsBody").innerHTML=filtered.slice(0,100).map(f=>{const t=f.teacher_directory_id||{};return`<tr>
-      <td>${t.name||"-"}</td><td>${f.course_code||""}</td><td>${f.semester||""}/${f.section||""}</td>
-      <td>${f.responses?.overall_satisfaction||"-"}/5</td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.comment||"-"}</td>
-      <td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"-"}</td>
-      <td><span class="${f.status==='hidden'?'pill-red':'pill-green'}">${f.status||"-"}</span></td>
-      <td><button class="btn btn-sm ${f.status==='hidden'?'btn-success':'btn-danger'}" onclick="toggleFeedback('${f.id}','${f.status==='hidden'?'submitted':'hidden'}')">${f.status==='hidden'?'Show':'Hide'}</button></td>
-    </tr>`}).join("")||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:2rem">No feedback records.</td></tr>';
+    $("anaComments").textContent=fl.filter(f=>f.status!=="hidden").length;
+    $("analyticsBody").innerHTML=fl.slice(0,100).map(f=>`<tr><td>${tName(f)}</td><td>${f.course_code||""}</td><td>${f.semester||""}/${f.section||""}</td><td>${f.responses?.overall_satisfaction||"—"}/5</td><td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.comment||"—"}</td><td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</td><td><span class="${f.status==='hidden'?'pill-red':'pill-green'}">${f.status||"—"}</span></td><td><button class="btn btn-sm ${f.status==='hidden'?'btn-success':'btn-danger'}" onclick="toggleF('${f.id}','${f.status==='hidden'?'submitted':'hidden'}')">${f.status==='hidden'?'Show':'Hide'}</button></td></tr>`).join("")||'<tr><td colspan="8" style="text-align:center;padding:2rem">No feedback records.</td></tr>';
   }
 
   $("saveSettings").addEventListener("click",async()=>{
@@ -274,21 +176,22 @@
     show("Settings saved!","success");setTimeout(()=>$("alertBox").className="alert",2000);
   });
 
-  $("openTeacherModal").addEventListener("click",()=>{document.getElementById("tForm").reset();$("tId").value="";$("tModalTitle").textContent="Add Teacher";$("tStatus").value="active";showM("teacherModal")});
+  // Teacher CRUD
+  $("openTeacherModal").addEventListener("click",()=>{document.getElementById("tForm").reset();$("tId").value="";$("tModalTitle").textContent="Add Teacher";showM("teacherModal")});
   $("closeTeacherModal").addEventListener("click",()=>hideM("teacherModal"));$("cancelTeacher").addEventListener("click",()=>hideM("teacherModal"));
-  function editTeacher(id){const t=teachers.find(x=>x.id===id);if(!t)return;$("tId").value=t.id;$("tName").value=t.name||"";$("tCode").value=t.short_code||"";$("tDesignation").value=t.designation||"";$("tDept").value=t.department||"";$("tEmail").value=t.email||"";$("tPhone").value=t.phone||"";$("tOffice").value=t.office_room||"";$("tAvatar").value=t.avatar_url||"";$("tBio").value=t.bio||"";$("tStatus").value=t.status||"active";$("tEmailPublic").checked=t.is_email_public||false;$("tModalTitle").textContent="Edit Teacher";showM("teacherModal")}
+  window.editTeacher=function(id){const t=teachers.find(x=>x.id===id);if(!t)return;$("tId").value=t.id;$("tName").value=t.name||"";$("tCode").value=t.short_code||"";$("tDesignation").value=t.designation||"";$("tDept").value=t.department||"";$("tEmail").value=t.email||"";$("tPhone").value=t.phone||"";$("tOffice").value=t.office_room||"";$("tAvatar").value=t.avatar_url||"";$("tBio").value=t.bio||"";$("tStatus").value=t.status||"active";$("tEmailPublic").checked=t.is_email_public||false;$("tModalTitle").textContent="Edit Teacher";showM("teacherModal")};
   $("saveTeacher").addEventListener("click",async()=>{
     const id=$("tId").value,payload={name:$("tName").value.trim(),short_code:$("tCode").value.trim()||null,designation:$("tDesignation").value.trim()||null,department:$("tDept").value.trim(),email:$("tEmail").value.trim()||null,phone:$("tPhone").value.trim()||null,office_room:$("tOffice").value.trim()||null,avatar_url:$("tAvatar").value.trim()||null,bio:$("tBio").value.trim()||null,status:$("tStatus").value,is_email_public:$("tEmailPublic").checked,updated_at:new Date().toISOString()};
     if(!payload.name){show("Name is required.","error");return}
     let err;if(id)err=(await sup.from("teachers_directory").update(payload).eq("id",id)).error;else err=(await sup.from("teachers_directory").insert(payload)).error;
-    if(err){show(err.message,"error");return}
-    hideM("teacherModal");await loadAll();show("Teacher saved!","success");
+    if(err){show(err.message,"error");return}hideM("teacherModal");await loadAll();show("Teacher saved!","success");
   });
-  async function toggleTeacherStatus(id,newStatus){const{error}=await sup.from("teachers_directory").update({status:newStatus}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
+  window.toggleTS=async function(id,s){await sup.from("teachers_directory").update({status:s}).eq("id",id);await loadAll()};
 
+  // Assignment CRUD
   $("openAssignmentModal").addEventListener("click",()=>{document.getElementById("aForm").reset();$("aId").value="";showM("assignmentModal")});
   $("closeAssignmentModal").addEventListener("click",()=>hideM("assignmentModal"));$("cancelAssignment").addEventListener("click",()=>hideM("assignmentModal"));
-  function editAssignment(id){const a=assignments.find(x=>x.id===id);if(!a)return;$("aId").value=a.id;$("aTeacher").value=a.teacher_directory_id;$("aCourseCode").value=a.course_code||"";$("aCourseTitle").value=a.course_title||"";$("aSemester").value=a.semester||"";$("aSection").value=a.section||"";$("aTerm").value=a.academic_term||"";$("aActive").checked=a.is_active;showM("assignmentModal")}
+  window.editA=function(id){const a=assignments.find(x=>x.id===id);if(!a)return;$("aId").value=a.id;$("aTeacher").value=a.teacher_directory_id;$("aCourseCode").value=a.course_code||"";$("aCourseTitle").value=a.course_title||"";$("aSemester").value=a.semester||"";$("aSection").value=a.section||"";$("aTerm").value=a.academic_term||"";$("aActive").checked=a.is_active;showM("assignmentModal")};
   $("saveAssignment").addEventListener("click",async()=>{
     const id=$("aId").value,payload={teacher_directory_id:parseInt($("aTeacher").value),course_code:$("aCourseCode").value.trim(),course_title:$("aCourseTitle").value.trim(),semester:$("aSemester").value,section:$("aSection").value,academic_term:$("aTerm").value.trim(),is_active:$("aActive").checked,updated_at:new Date().toISOString()};
     if(!payload.teacher_directory_id||!payload.course_code||!payload.course_title||!payload.semester||!payload.section){$("aAlert").textContent="All fields required.";$("aAlert").className="alert alert-error";return}
@@ -296,17 +199,20 @@
     if(err){$("aAlert").textContent=err.message;$("aAlert").className="alert alert-error";return}
     hideM("assignmentModal");await loadAll();show("Assignment saved!","success");
   });
-  async function toggleAssignment(id,active){const{error}=await sup.from("teacher_assignments").update({is_active:active}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
+  window.toggleA=async function(id,active){await sup.from("teacher_assignments").update({is_active:active}).eq("id",id);await loadAll()};
 
-  async function toggleFeedback(id,newStatus){const{error}=await sup.from("feedbacks").update({status:newStatus}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
+  // Feedback moderation
+  window.toggleF=async function(id,ns){await sup.from("feedbacks").update({status:ns}).eq("id",id);await loadAll()};
 
+  // Filter events
   ["teacherSearch","teacherStatusFilter"].forEach(id=>$(id).addEventListener("input",renderTeachers));
   ["assSemesterF","assSectionF","assTeacherF","assCourseF"].forEach(id=>$(id).addEventListener("input",renderAssignments));
   ["anaTeacherF","anaSemesterF","anaSectionF","anaStatusF","anaCourseF"].forEach(id=>$(id).addEventListener("input",renderAnalytics));
-  $("exportCSV").addEventListener("click",()=>{if(!feedbacks.length)return;const h="Teacher,Course,Semester,Section,Overall,Comment,Status,Submitted\n";const csv=h+feedbacks.map(f=>[f.teacher_directory_id?.name||"",f.course_code||"",f.semester||"",f.section||"",f.responses?.overall_satisfaction||"",(f.comment||"").replace(/"/g,'""'),f.status||"",f.submitted_at||""].map(v=>`"${v}"`).join(",")).join("\n");const b=new Blob([csv],{type:"text/csv"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="sfrs-feedback-export.csv";a.click()});
 
-  $("logoutLink").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
-  $("sbLogout").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
+  $("exportCSV").addEventListener("click",()=>{if(!feedbacks.length)return;const h="Teacher,Course,Semester,Section,Overall,Comment,Status,Submitted\n";const csv=h+feedbacks.map(f=>[tName(f),f.course_code||"",f.semester||"",f.section||"",f.responses?.overall_satisfaction||"",(f.comment||"").replace(/"/g,'""'),f.status||"",f.submitted_at||""].map(v=>`"${v}"`).join(",")).join("\n");const b=new Blob([csv],{type:"text/csv"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="sfrs-feedback-export.csv";a.click()});
+
+  $("logoutLink").addEventListener("click",logout);$("sbLogout").addEventListener("click",logout);
+  async function logout(){await sup.auth.signOut();location.href="/"}
   (()=>{["aSemester"].forEach(id=>$(id).innerHTML=SEM.map(v=>`<option>${v}</option>`).join(""));["aSection"].forEach(id=>$(id).innerHTML=SEC.map(v=>`<option>${v}</option>`).join(""));})();
 </script>
 </body>
