@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard â€” SFRS</title>
-  <meta name="description" content="SFRS Admin Panel â€” Manage teachers, assignments, feedback, and analytics.">
+  <title>Admin Dashboard - SFRS</title>
+  <meta name="description" content="SFRS Admin Panel - Manage teachers, assignments, feedback, and analytics.">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
@@ -102,7 +102,6 @@
       <div class="stat-card"><div class="stat-label">Active Users</div><div class="stat-value" id="sActive">0</div></div>
     </div>
 
-    <!-- Settings -->
     <section id="settings" class="panel"><div class="panel-header"><div><div class="panel-kicker">Settings</div><div class="panel-title">Feedback Window Settings</div></div></div>
       <div class="panel-body">
         <div class="form-row">
@@ -114,19 +113,16 @@
       </div>
     </section>
 
-    <!-- Teachers -->
     <section id="teachers" class="panel"><div class="panel-header"><div><div class="panel-kicker">Teachers</div><div class="panel-title">Teacher Management</div></div><button class="btn btn-primary btn-sm" id="openTeacherModal">Add Teacher</button></div>
       <div class="panel-body"><div class="toolbar"><div class="toolbar-field flex"><label class="field-label">Search</label><input type="search" class="field-input" id="teacherSearch" placeholder="Name, code, or email"></div><div class="toolbar-field"><label class="field-label">Status</label><select class="field-select" id="teacherStatusFilter"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option></select></div></div>
       <div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Contact</th><th>Status</th><th>Assignments</th><th>Actions</th></tr></thead><tbody id="teacherBody"></tbody></table></div></div>
     </section>
 
-    <!-- Assignments -->
     <section id="assignments" class="panel"><div class="panel-header"><div><div class="panel-kicker">Departments</div><div class="panel-title">Assignment Management</div></div><button class="btn btn-primary btn-sm" id="openAssignmentModal">Add Assignment</button></div>
       <div class="panel-body"><div class="toolbar"><div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="assSemesterF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="assSectionF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="assTeacherF"><option value="">All</option></select></div><div class="toolbar-field flex"><label class="field-label">Course Code</label><input type="search" class="field-input" id="assCourseF" placeholder="Search course code"></div></div>
       <div class="table-wrap"><table class="table"><thead><tr><th>Teacher</th><th>Course</th><th>Semester/Section</th><th>Term</th><th>Status</th><th>Actions</th></tr></thead><tbody id="assignmentBody"></tbody></table></div></div>
     </section>
 
-    <!-- Analytics -->
     <section id="analytics" class="panel"><div class="panel-header"><div><div class="panel-kicker">Analytics</div><div class="panel-title">Feedback Analytics</div></div><button class="btn btn-outline btn-sm" id="exportCSV">Export CSV</button></div>
       <div class="panel-body"><div class="toolbar"><div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="anaTeacherF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="anaSemesterF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="anaSectionF"><option value="">All</option></select></div><div class="toolbar-field"><label class="field-label">Status</label><select class="field-select" id="anaStatusF"><option value="">All</option><option value="submitted">Visible</option><option value="hidden">Hidden</option></select></div><div class="toolbar-field flex"><label class="field-label">Course</label><input type="search" class="field-input" id="anaCourseF" placeholder="Course code/title"></div></div>
       <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
@@ -138,9 +134,8 @@
     </section>
   </div>
 </div>
-<div class="footer">&copy; 2026 SFRS â€” Admin Dashboard</div>
+<div class="footer">&copy; 2026 SFRS - Admin Dashboard</div>
 
-<!-- Teacher Modal -->
 <div class="modal-overlay" id="teacherModal"><div class="modal-box"><div class="modal-header"><div class="modal-title" id="tModalTitle">Teacher Profile</div><button class="modal-close" id="closeTeacherModal">&times;</button></div>
 <div class="modal-body"><div class="alert" id="tAlert"></div><form id="tForm"><input type="hidden" id="tId">
 <div class="form-row"><div class="form-group"><label class="field-label">Full Name</label><input class="field-input" id="tName" required></div><div class="form-group"><label class="field-label">Short Code</label><input class="field-input" id="tCode" placeholder="CSE-T-001"></div></div>
@@ -152,7 +147,6 @@
 </form></div>
 <div class="modal-footer"><button class="btn btn-outline" id="cancelTeacher">Cancel</button><button class="btn btn-primary" id="saveTeacher">Save Teacher</button></div></div></div>
 
-<!-- Assignment Modal -->
 <div class="modal-overlay" id="assignmentModal"><div class="modal-box"><div class="modal-header"><div class="modal-title">Teacher Assignment</div><button class="modal-close" id="closeAssignmentModal">&times;</button></div>
 <div class="modal-body"><div class="alert" id="aAlert"></div><form id="aForm"><input type="hidden" id="aId">
 <div class="form-row"><div class="form-group"><label class="field-label">Teacher</label><select class="field-select" id="aTeacher" required></select></div><div class="form-group"><label class="field-label">Course Code</label><input class="field-input" id="aCourseCode" placeholder="CSE 423" required></div></div>
@@ -174,8 +168,20 @@
 
   let teachers=[],assignments=[],feedbacks=[],settings={};
 
-  // â”€â”€ Auth â”€â”€
-  (function(){const unsub=sup.auth.onAuthStateChange(async(event,session)=>{if(session){const{data:p}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();if(p&&p.role==="admin"){unsub.data.subscription.unsubscribe();await loadAll()}else{await sup.auth.signOut();location.href="/admin/"}}else if(event==="SIGNED_OUT"){location.href="/admin/"}});setTimeout(async()=>{const{data:{session}}=await sup.auth.getSession();if(!session){unsub.data.subscription.unsubscribe();location.href="/admin/"}},6000)})();
+  // Auth: simple polling for session
+  (async function initAuth(){
+    let session=null;
+    for(let i=0;i<12;i++){
+      const{data}=await sup.auth.getSession();
+      if(data.session){session=data.session;break}
+      await new Promise(r=>setTimeout(r,500));
+    }
+    if(!session){location.href="/admin/";return}
+    const{data:p}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();
+    if(!p||p.role!=="admin"){await sup.auth.signOut();location.href="/admin/";return}
+    await loadAll();
+    sup.auth.onAuthStateChange((event,s)=>{if(event==="SIGNED_OUT")location.href="/admin/"});
+  })();
 
   async function loadAll(){
     const[tRes,aRes,fRes,sRes]=await Promise.all([
@@ -186,16 +192,13 @@
     ]);
     teachers=tRes.data||[];assignments=aRes.data||[];feedbacks=fRes.data||[];
     if(sRes.data)settings=sRes.data;
-    // Stats
     const{count:sC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","student");
     const{count:tC}=await sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","teacher");
     $("sStudents").textContent=sC||0;$("sTeachers").textContent=tC||0;$("sFeedback").textContent=feedbacks.length;$("sActive").textContent=(sC||0)+(tC||0);
-    // Settings
     if(settings.review_window_open!==undefined)$("reviewWindow").checked=settings.review_window_open;
     if(settings.allow_anonymous_feedback!==undefined)$("anonymousToggle").checked=settings.allow_anonymous_feedback;
     $("activeTerm").value=settings.active_term||"";
     renderTeachers();renderAssignments();renderAnalytics();
-    // Populate filters
     popSelect("assSemesterF",SEM);popSelect("assSectionF",SEC);popSelect("anaSemesterF",SEM);popSelect("anaSectionF",SEC);
     const tOpts=teachers.map(t=>`<option value="${t.id}">${t.name}</option>`).join("");
     ["assTeacherF","anaTeacherF","aTeacher"].forEach(id=>{const s=$(id);if(s){s.innerHTML='<option value="">All</option>'+tOpts;if(id==="assTeacherF"||id==="anaTeacherF")s.firstElementChild.textContent="All"}});
@@ -210,9 +213,9 @@
     if(sf)filtered=filtered.filter(t=>t.status===sf);
     const ac=assignments.reduce((m,a)=>{const k=a.teacher_directory_id;if(!m[k])m[k]=0;m[k]++;return m},{});
     $("teacherBody").innerHTML=filtered.map(t=>`<tr>
-      <td><strong>${t.name||"â€”"}</strong><br><span style="font-size:.75rem;color:var(--muted)">${t.designation||""}${t.short_code?" Â· "+t.short_code:""}</span></td>
-      <td style="font-size:.82rem">${t.email||"â€”"}<br>${t.phone||""}</td>
-      <td><span class="${t.status==='active'?'pill-green':'pill-red'}">${t.status||"â€”"}</span></td>
+      <td><strong>${t.name||"-"}</strong><br><span style="font-size:.75rem;color:var(--muted)">${t.designation||""}${t.short_code?" - "+t.short_code:""}</span></td>
+      <td style="font-size:.82rem">${t.email||"-"}<br>${t.phone||""}</td>
+      <td><span class="${t.status==='active'?'pill-green':'pill-red'}">${t.status||"-"}</span></td>
       <td>${ac[t.id]||0}</td>
       <td><div style="display:flex;gap:.35rem;flex-wrap:wrap">
         <button class="btn btn-outline btn-sm" onclick="editTeacher(${t.id})">Edit</button>
@@ -226,8 +229,8 @@
     let filtered=assignments;
     if(sf)filtered=filtered.filter(a=>a.semester===sf);if(ss)filtered=filtered.filter(a=>a.section===ss);if(tf)filtered=filtered.filter(a=>a.teacher_directory_id===parseInt(tf));if(cf)filtered=filtered.filter(a=>(a.course_code||"").toLowerCase().includes(cf));
     $("assignmentBody").innerHTML=filtered.map(a=>{const t=a.teacher_directory_id||{};return`<tr>
-      <td><strong>${t.name||"â€”"}</strong></td><td>${a.course_code||""} - ${a.course_title||""}</td>
-      <td>${a.semester||""}/${a.section||""}</td><td>${a.academic_term||"â€”"}</td>
+      <td><strong>${t.name||"-"}</strong></td><td>${a.course_code||""} - ${a.course_title||""}</td>
+      <td>${a.semester||""}/${a.section||""}</td><td>${a.academic_term||"-"}</td>
       <td><span class="${a.is_active?'pill-green':'pill-red'}">${a.is_active?'Active':'Inactive'}</span></td>
       <td><div style="display:flex;gap:.35rem">
         <button class="btn btn-outline btn-sm" onclick="editAssignment(${a.id})">Edit</button>
@@ -245,16 +248,15 @@
     $("anaAvg").textContent=avg.toFixed(2);
     $("anaComments").textContent=filtered.filter(f=>f.status!=="hidden").length;
     $("analyticsBody").innerHTML=filtered.slice(0,100).map(f=>{const t=f.teacher_directory_id||{};return`<tr>
-      <td>${t.name||"â€”"}</td><td>${f.course_code||""}</td><td>${f.semester||""}/${f.section||""}</td>
-      <td>${f.responses?.overall_satisfaction||"â€”"}/5</td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.comment||"â€”"}</td>
-      <td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"â€”"}</td>
-      <td><span class="${f.status==='hidden'?'pill-red':'pill-green'}">${f.status||"â€”"}</span></td>
+      <td>${t.name||"-"}</td><td>${f.course_code||""}</td><td>${f.semester||""}/${f.section||""}</td>
+      <td>${f.responses?.overall_satisfaction||"-"}/5</td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.comment||"-"}</td>
+      <td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"-"}</td>
+      <td><span class="${f.status==='hidden'?'pill-red':'pill-green'}">${f.status||"-"}</span></td>
       <td><button class="btn btn-sm ${f.status==='hidden'?'btn-success':'btn-danger'}" onclick="toggleFeedback('${f.id}','${f.status==='hidden'?'submitted':'hidden'}')">${f.status==='hidden'?'Show':'Hide'}</button></td>
     </tr>`}).join("")||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:2rem">No feedback records.</td></tr>';
   }
 
-  // â”€â”€ Settings â”€â”€
   $("saveSettings").addEventListener("click",async()=>{
     const rw=$("reviewWindow").checked,an=$("anonymousToggle").checked,at=$("activeTerm").value.trim();
     const{error}=await sup.from("feedback_settings").upsert({id:1,review_window_open:rw,allow_anonymous_feedback:an,active_term:at||"Current Session",updated_at:new Date().toISOString()});
@@ -262,7 +264,6 @@
     show("Settings saved!","success");setTimeout(()=>$("alertBox").className="alert",2000);
   });
 
-  // â”€â”€ Teacher CRUD â”€â”€
   $("openTeacherModal").addEventListener("click",()=>{document.getElementById("tForm").reset();$("tId").value="";$("tModalTitle").textContent="Add Teacher";$("tStatus").value="active";showM("teacherModal")});
   $("closeTeacherModal").addEventListener("click",()=>hideM("teacherModal"));$("cancelTeacher").addEventListener("click",()=>hideM("teacherModal"));
   function editTeacher(id){const t=teachers.find(x=>x.id===id);if(!t)return;$("tId").value=t.id;$("tName").value=t.name||"";$("tCode").value=t.short_code||"";$("tDesignation").value=t.designation||"";$("tDept").value=t.department||"";$("tEmail").value=t.email||"";$("tPhone").value=t.phone||"";$("tOffice").value=t.office_room||"";$("tAvatar").value=t.avatar_url||"";$("tBio").value=t.bio||"";$("tStatus").value=t.status||"active";$("tEmailPublic").checked=t.is_email_public||false;$("tModalTitle").textContent="Edit Teacher";showM("teacherModal")}
@@ -275,7 +276,6 @@
   });
   async function toggleTeacherStatus(id,newStatus){const{error}=await sup.from("teachers_directory").update({status:newStatus}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
 
-  // â”€â”€ Assignment CRUD â”€â”€
   $("openAssignmentModal").addEventListener("click",()=>{document.getElementById("aForm").reset();$("aId").value="";showM("assignmentModal")});
   $("closeAssignmentModal").addEventListener("click",()=>hideM("assignmentModal"));$("cancelAssignment").addEventListener("click",()=>hideM("assignmentModal"));
   function editAssignment(id){const a=assignments.find(x=>x.id===id);if(!a)return;$("aId").value=a.id;$("aTeacher").value=a.teacher_directory_id;$("aCourseCode").value=a.course_code||"";$("aCourseTitle").value=a.course_title||"";$("aSemester").value=a.semester||"";$("aSection").value=a.section||"";$("aTerm").value=a.academic_term||"";$("aActive").checked=a.is_active;showM("assignmentModal")}
@@ -288,20 +288,15 @@
   });
   async function toggleAssignment(id,active){const{error}=await sup.from("teacher_assignments").update({is_active:active}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
 
-  // â”€â”€ Feedback moderation â”€â”€
   async function toggleFeedback(id,newStatus){const{error}=await sup.from("feedbacks").update({status:newStatus}).eq("id",id);if(error){show(error.message,"error");return}await loadAll()}
 
-  // â”€â”€ Filters â”€â”€
   ["teacherSearch","teacherStatusFilter"].forEach(id=>$(id).addEventListener("input",renderTeachers));
   ["assSemesterF","assSectionF","assTeacherF","assCourseF"].forEach(id=>$(id).addEventListener("input",renderAssignments));
   ["anaTeacherF","anaSemesterF","anaSectionF","anaStatusF","anaCourseF"].forEach(id=>$(id).addEventListener("input",renderAnalytics));
-  // Export
   $("exportCSV").addEventListener("click",()=>{if(!feedbacks.length)return;const h="Teacher,Course,Semester,Section,Overall,Comment,Status,Submitted\n";const csv=h+feedbacks.map(f=>[f.teacher_directory_id?.name||"",f.course_code||"",f.semester||"",f.section||"",f.responses?.overall_satisfaction||"",(f.comment||"").replace(/"/g,'""'),f.status||"",f.submitted_at||""].map(v=>`"${v}"`).join(",")).join("\n");const b=new Blob([csv],{type:"text/csv"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="sfrs-feedback-export.csv";a.click()});
 
-  // â”€â”€ Logout â”€â”€
   $("logoutLink").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
   $("sbLogout").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
-  // Assignments modal - populate selects
   (()=>{["aSemester"].forEach(id=>$(id).innerHTML=SEM.map(v=>`<option>${v}</option>`).join(""));["aSection"].forEach(id=>$(id).innerHTML=SEC.map(v=>`<option>${v}</option>`).join(""));})();
 </script>
 </body>
