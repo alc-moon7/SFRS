@@ -221,7 +221,7 @@
     let filtered=teachers;
     if(q)filtered=filtered.filter(t=>(t.name||"").toLowerCase().includes(q)||(t.short_code||"").toLowerCase().includes(q)||(t.email||"").toLowerCase().includes(q));
     if(sf)filtered=filtered.filter(t=>t.status===sf);
-    const ac=assignments.reduce((m,a)=>{const k=a.teacher_directory_id;if(!m[k])m[k]=0;m[k]++;return m},{});
+    const ac=assignments.reduce((m,a)=>{const k=typeof a.teacher_directory_id==="object"?a.teacher_directory_id?.id:a.teacher_directory_id;if(!m[k])m[k]=0;m[k]++;return m},{});
     $("teacherBody").innerHTML=filtered.map(t=>`<tr>
       <td><strong>${t.name||"-"}</strong><br><span style="font-size:.75rem;color:var(--muted)">${t.designation||""}${t.short_code?" - "+t.short_code:""}</span></td>
       <td style="font-size:.82rem">${t.email||"-"}<br>${t.phone||""}</td>
@@ -237,7 +237,7 @@
   function renderAssignments(){
     const sf=$("assSemesterF").value,ss=$("assSectionF").value,tf=$("assTeacherF").value,cf=($("assCourseF").value||"").toLowerCase();
     let filtered=assignments;
-    if(sf)filtered=filtered.filter(a=>a.semester===sf);if(ss)filtered=filtered.filter(a=>a.section===ss);if(tf)filtered=filtered.filter(a=>a.teacher_directory_id===parseInt(tf));if(cf)filtered=filtered.filter(a=>(a.course_code||"").toLowerCase().includes(cf));
+    if(sf)filtered=filtered.filter(a=>a.semester===sf);if(ss)filtered=filtered.filter(a=>a.section===ss);if(tf)filtered=filtered.filter(a=>(typeof a.teacher_directory_id==="object"?a.teacher_directory_id?.id:a.teacher_directory_id)===parseInt(tf));if(cf)filtered=filtered.filter(a=>(a.course_code||"").toLowerCase().includes(cf));
     $("assignmentBody").innerHTML=filtered.map(a=>{const t=a.teacher_directory_id||{};return`<tr>
       <td><strong>${t.name||"-"}</strong></td><td>${a.course_code||""} - ${a.course_title||""}</td>
       <td>${a.semester||""}/${a.section||""}</td><td>${a.academic_term||"-"}</td>
@@ -252,7 +252,7 @@
   function renderAnalytics(){
     const tf=$("anaTeacherF").value,sf=$("anaSemesterF").value,ss=$("anaSectionF").value,st=$("anaStatusF").value,cf=($("anaCourseF").value||"").toLowerCase();
     let filtered=feedbacks;
-    if(tf)filtered=filtered.filter(f=>f.teacher_directory_id===parseInt(tf));if(sf)filtered=filtered.filter(f=>f.semester===sf);if(ss)filtered=filtered.filter(f=>f.section===ss);if(st)filtered=filtered.filter(f=>f.status===st);if(cf)filtered=filtered.filter(f=>(f.course_code||"").toLowerCase().includes(cf)||(f.course_title||"").toLowerCase().includes(cf));
+    if(tf)filtered=filtered.filter(f=>(typeof f.teacher_directory_id==="object"?f.teacher_directory_id?.id:f.teacher_directory_id)===parseInt(tf));if(sf)filtered=filtered.filter(f=>f.semester===sf);if(ss)filtered=filtered.filter(f=>f.section===ss);if(st)filtered=filtered.filter(f=>f.status===st);if(cf)filtered=filtered.filter(f=>(f.course_code||"").toLowerCase().includes(cf)||(f.course_title||"").toLowerCase().includes(cf));
     $("anaTotal").textContent=filtered.length;
     const avg=filtered.length?filtered.reduce((s,f)=>s+(f.responses?.overall_satisfaction||0),0)/filtered.length:0;
     $("anaAvg").textContent=avg.toFixed(2);
