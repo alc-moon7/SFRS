@@ -3,141 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teacher Profile - SFRS</title>
+  <title>Teacher Profile — SFRS</title>
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/dashboard-theme.css">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+    :root{--primary:#0c2a42;--accent:#c9462c;--accent-hover:#a53d21;--bg:#f2efe6;--surface:#fff;--border:#e5dece;--border-light:#f0eadb;--text:#16232c;--muted:#6b6255;--muted-light:#a89b86;--success:#0f8b5f;--nav-h:68px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;padding-top:var(--nav-h)}
+    a{color:inherit;text-decoration:none}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);height:var(--nav-h);display:flex;align-items:center;padding:0 1.5rem}
+    .nav-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:1.1rem;color:var(--primary)}
+    .nav-brand img{height:34px;width:auto}
+    .nav-links{display:flex;align-items:center;gap:.25rem}
+    .nav-link{padding:.45rem .85rem;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--muted);transition:.15s}
+    .nav-link:hover{color:var(--accent);background:#faf5ed}
+    .container{max-width:1000px;margin:0 auto;padding:2rem 1.5rem}
+    .back-link{display:inline-flex;align-items:center;gap:.35rem;font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;font-weight:500}
+    .back-link:hover{color:var(--accent)}
+    .profile-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1.5rem}
+    .profile-info{display:flex;align-items:center;gap:1.25rem}
+    .avatar-big{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,#0c2a42,#163a56);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.6rem}
+    .profile-name{font-weight:700;font-size:1.3rem;color:var(--primary);margin-bottom:.15rem}
+    .profile-designation{font-size:.9rem;color:var(--muted)}
+    .profile-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem}
+    .chip{font-size:.75rem;padding:.25rem .65rem;background:#faf7f0;border:1px solid var(--border);border-radius:100px;color:var(--muted)}
+    .profile-scores{display:flex;gap:2.5rem}
+    .score-item{text-align:center}.score-val{font-size:2rem;font-weight:800;color:var(--primary)}
+    .score-lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .section{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:1.25rem}
+    .section-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-light);display:flex;gap:.15rem;flex-direction:column}
+    .section-kicker{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+    .section-title{font-size:1.05rem;font-weight:700;color:var(--primary)}
+    .section-body{padding:1.5rem}
+    .rating-bar{margin-bottom:.6rem}.rating-bar-label{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem}
+    .rating-bar-track{height:8px;background:var(--border);border-radius:4px;overflow:hidden}.rating-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#10b981,#0f8b5f)}
+    .detail-list{display:flex;flex-direction:column;gap:.6rem;font-size:.88rem}.detail-list dt{font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}.detail-list dd{color:var(--text);margin:0}
+    .comment-card{background:#faf7f0;border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:.75rem}
+    .comment-card-meta{font-size:.75rem;color:var(--muted-light);margin-bottom:.3rem}
+    .comment-card-text{font-size:.88rem;color:var(--text);line-height:1.6}
+    .footer{text-align:center;padding:1rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted-light)}
+    .alert{padding:.75rem 1rem;border-radius:10px;font-size:.85rem;margin-bottom:1rem;font-weight:500}
+    .alert-error{background:#fef2f2;color:var(--danger);border:1px solid #fecaca}
+    @media(max-width:768px){.profile-header{flex-direction:column}.profile-scores{width:100%;justify-content:space-around}}
+  </style>
 </head>
-<body data-page="teacher-profile">
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" aria-label="Primary">
-    <div class="container">
-      <a class="navbar-brand" href="/feedback/">
-        <span class="logo-mark" aria-hidden="true"></span>
-        <span class="brand-text">
-          <span class="brand-title">SFRS</span>
-          <span class="brand-subtitle">Teacher Profile</span>
-        </span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-lg-auto">
-          <li class="nav-item"><a class="nav-link" href="/feedback/">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="teacher-profile.html">Teacher Profile</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-teacher-profile-back>Back</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-logout>Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<body>
+<nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><div class="nav-links"><a class="nav-link" href="/">Home</a><a class="nav-link" href="teacher-dashboard.html">My Dashboard</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
 
-  <main class="app-shell">
-    <aside class="app-sidebar" aria-label="Teacher profile navigation">
-      <div class="app-sidebar-title">Profile View</div>
-      <nav class="sidebar-nav">
-        <a class="sidebar-link active" href="#profileOverview">Overview</a>
-        <a class="sidebar-link" href="#aboutTeacher">About</a>
-        <a class="sidebar-link" href="#profileRatings">Ratings</a>
-        <a class="sidebar-link" href="#profileComments">Comments</a>
-        <a class="sidebar-link" href="#" data-teacher-profile-back>Back</a>
-        <a class="sidebar-link danger" href="#" data-logout>Logout</a>
-      </nav>
-    </aside>
+<div class="container">
+  <a class="back-link" href="javascript:history.back()">← Back</a>
+  <div class="alert alert-error" id="alertBox" style="display:none"></div>
 
-    <div class="app-content">
-      <div class="app-topbar">
-        <div>
-          <div class="section-eyebrow">Teacher Profile</div>
-          <h1 class="h3 section-title mb-1">Faculty Feedback Profile</h1>
-          <p class="section-lead mb-0">Anonymized ratings, assignments, public contact details, and recent comments.</p>
-        </div>
-        <button class="btn btn-outline-secondary" type="button" data-teacher-profile-back>Back</button>
-      </div>
+  <div class="profile-header">
+    <div class="profile-info"><div class="avatar-big" id="avatarBig">T</div><div><div class="profile-name" id="profileName">Loading…</div><div class="profile-designation"><span id="profileDesig">—</span> · <span id="profileDept">—</span></div><div class="profile-chips"><span class="chip" id="chipCode">—</span><span class="chip" id="chipStatus">—</span></div></div></div>
+    <div class="profile-scores"><div class="score-item"><div class="score-val" id="scoreAvg">0.00</div><div class="score-lbl">Avg Rating</div></div><div class="score-item"><div class="score-val" id="scoreTotal">0</div><div class="score-lbl">Reviews</div></div></div>
+  </div>
 
-      <div id="teacherProfileAlert"></div>
+  <div class="section"><div class="section-header"><div class="section-kicker">About</div><div class="section-title">Profile Details</div></div><div class="section-body"><p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem" id="profileBio">—</p><dl class="detail-list"><dt>Email</dt><dd id="detEmail">—</dd><dt>Phone</dt><dd id="detPhone">—</dd><dt>Office</dt><dd id="detOffice">—</dd></dl></div></div>
 
-      <section id="profileOverview" class="profile-header-card mb-4">
-        <div class="profile-identity">
-          <div class="avatar-pill" data-profile-avatar aria-hidden="true"></div>
-          <div>
-            <span class="badge-role mb-2">Faculty</span>
-            <h2 class="profile-name mb-1" data-profile-name>Teacher Profile</h2>
-            <div class="text-muted mb-2">
-              <span data-profile-designation>Lecturer</span>
-              <span class="mx-2">|</span>
-              <span data-profile-department>Computer Science and Engineering</span>
-            </div>
-            <div class="profile-chip-row">
-              <span class="chip" data-profile-short-code>Teacher Profile</span>
-              <span class="chip" data-profile-status>Active</span>
-            </div>
-          </div>
-        </div>
-        <div class="profile-scoreboard">
-          <div>
-            <div class="score-label">Average Rating</div>
-            <div class="score-value" data-profile-average>0.00</div>
-          </div>
-          <div>
-            <div class="score-label">Total Reviews</div>
-            <div class="score-value" data-profile-review-count>0</div>
-          </div>
-        </div>
-      </section>
+  <div class="section"><div class="section-header"><div class="section-kicker">Ratings</div><div class="section-title">Category Breakdown</div></div><div class="section-body" id="ratingBreakdown"></div></div>
 
-      <div class="row g-4">
-        <div class="col-lg-5">
-          <section id="aboutTeacher" class="card h-100">
-            <div class="card-body">
-              <div class="section-eyebrow">About</div>
-              <h2 class="h5 section-title">Profile Details</h2>
-              <p class="text-muted" data-profile-bio>No teacher bio added yet.</p>
-              <div class="profile-detail-list">
-                <div><span class="fw-semibold">Email:</span> <span data-profile-email>Not shared</span></div>
-                <div><span class="fw-semibold">Phone:</span> <span data-profile-phone>Not listed</span></div>
-                <div><span class="fw-semibold">Office Room:</span> <span data-profile-office>Not listed</span></div>
-              </div>
-              <hr>
-              <h3 class="h6 section-title mb-3">Assigned Courses</h3>
-              <div class="chip-stack" data-profile-assignment-list></div>
-            </div>
-          </section>
-        </div>
+  <div class="section"><div class="section-header"><div class="section-kicker">Comments</div><div class="section-title">Recent Comments</div></div><div class="section-body" id="commentList"></div></div>
+</div>
+<div class="footer">&copy; 2026 SFRS — Teacher Profile</div>
 
-        <div class="col-lg-7">
-          <section id="profileRatings" class="card mb-4">
-            <div class="card-body">
-              <div class="section-eyebrow">Ratings</div>
-              <h2 class="h5 section-title">Rating Breakdown</h2>
-              <div data-profile-rating-breakdown class="rating-breakdown-list mt-3"></div>
-            </div>
-          </section>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const sup=window.supabase.createClient("https://mstotzwqfbcvpcdgrnxy.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw");
+  const CAT=[{k:"teaching_quality",l:"Teaching Quality"},{k:"communication",l:"Communication"},{k:"course_organization",l:"Course Organization"},{k:"supportiveness",l:"Helpfulness/Supportiveness"},{k:"punctuality",l:"Punctuality"},{k:"overall_satisfaction",l:"Overall Satisfaction"}];
+  const params=new URLSearchParams(window.location.search);
+  let tdirId=null;
 
-          <section id="profileComments" class="card">
-            <div class="card-body">
-              <div class="section-eyebrow">Comments</div>
-              <h2 class="h5 section-title">Recent Comments</h2>
-              <div class="comment-stack mt-3" data-profile-comment-list></div>
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
-  </main>
+  (async function init(){
+    const{session}=await sup.auth.getSession();if(!session){location.href="teacher-login.html";return}
+    const{data:p}=await sup.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
+    if(!p||(p.role!=="teacher"&&p.role!=="admin")){await sup.auth.signOut();location.href="teacher-login.html";return}
+    // Use teacher_directory_id from profile or URL param
+    tdirId=params.get("id")||p.teacher_directory_id;
+    if(!tdirId){document.getElementById("alertBox").style.display="block";document.getElementById("alertBox").textContent="No teacher profile specified.";return}
+    const{data:td}=await sup.from("teachers_directory").select("*").eq("id",tdirId).maybeSingle();
+    if(!td){document.getElementById("alertBox").style.display="block";document.getElementById("alertBox").textContent="Teacher not found.";return}
+    document.getElementById("profileName").textContent=td.name||"—";
+    document.getElementById("profileDesig").textContent=td.designation||"—";
+    document.getElementById("profileDept").textContent=td.department||"—";
+    document.getElementById("chipCode").textContent=td.short_code||"—";
+    document.getElementById("chipStatus").textContent=td.status||"active";
+    document.getElementById("profileBio").textContent=td.bio||"No bio available.";
+    document.getElementById("detEmail").textContent=td.is_email_public?td.email||"—":"Not public";
+    document.getElementById("detPhone").textContent=td.phone||"—";
+    document.getElementById("detOffice").textContent=td.office_room||"—";
+    if(td.name)document.getElementById("avatarBig").textContent=td.name.charAt(0).toUpperCase();
 
-  <footer>
-    <div class="container">
-      <div class="footer-note">SFRS - Teacher profile view. Comments and ratings are anonymized and filtered by role access rules.</div>
-    </div>
-  </footer>
+    const{data:fb}=await sup.from("feedbacks").select("*").eq("teacher_directory_id",tdirId).neq("status","hidden").order("submitted_at",{ascending:false});
+    const vis=(fb||[]).filter(f=>f.status!=="hidden");
+    const avg=vis.length?vis.reduce((s,f)=>s+(f.responses?.overall_satisfaction||0),0)/vis.length:0;
+    document.getElementById("scoreAvg").textContent=avg.toFixed(2);
+    document.getElementById("scoreTotal").textContent=vis.length;
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/js/supabase-config.js"></script>
-  <script src="assets/js/questions.js"></script>
-  <script src="assets/js/review-data.js"></script>
-  <script src="assets/js/app.js"></script>
+    let rb="";
+    CAT.forEach(c=>{const vals=vis.map(f=>f.responses?.[c.k]||0).filter(v=>v>0);const ca=vals.length?vals.reduce((s,v)=>s+v,0)/vals.length:0;rb+=`<div class="rating-bar"><div class="rating-bar-label"><span>${c.l}</span><span>${ca.toFixed(2)}/5</span></div><div class="rating-bar-track"><div class="rating-bar-fill" style="width:${(ca/5)*100}%"></div></div></div>`});
+    document.getElementById("ratingBreakdown").innerHTML=rb||"<p style='color:var(--muted)'>No ratings yet.</p>";
+
+    const comments=vis.filter(f=>f.comment).slice(0,5);
+    document.getElementById("commentList").innerHTML=comments.length?comments.map(f=>`<div class="comment-card"><div class="comment-card-meta">${f.course_code||""} · ${f.semester||""}/${f.section||""} · ${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</div><div class="comment-card-text">"${f.comment}"</div></div>`).join(""):"<p style='color:var(--muted)'>No comments yet.</p>";
+  })();
+
+  document.getElementById("logoutLink").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});
+</script>
 </body>
 </html>
