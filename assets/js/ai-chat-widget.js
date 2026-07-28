@@ -177,14 +177,8 @@
         "Content-Type": "application/json",
         apikey: SUPABASE_KEY,
       };
-      // Try to get auth token for authenticated requests
-      try {
-        const sup = (await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2")).createClient(SUPABASE_URL, SUPABASE_KEY);
-        const { data } = await sup.auth.getSession();
-        if (data?.session?.access_token) {
-          headers["Authorization"] = `Bearer ${data.session.access_token}`;
-        }
-      } catch (e) {}
+      // Always send the anon key as Authorization header
+      headers["Authorization"] = `Bearer ${SUPABASE_KEY}`;
 
       const resp = await fetch(`${SUPABASE_URL}/functions/v1/ai-assistant`, {
         method: "POST",
