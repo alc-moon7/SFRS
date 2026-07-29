@@ -1,0 +1,73 @@
+-- Add 8th Semester assignments for CSE Department (all sections A, B, C, General)
+-- These are the actual 8th Semester courses at Varendra University
+
+do $$
+declare
+  v_teachers text[] := array['12','18','22','24','28','29','32','35','43','58']; -- teacher directory IDs
+  v_courses jsonb[] := array[
+    '{"semester": "8th Semester", "courses": [
+      {"code": "CSE 423", "title": "Artificial Intelligence"},
+      {"code": "CSE 424", "title": "Artificial Intelligence Lab"},
+      {"code": "CSE 431", "title": "Digital Image Processing"},
+      {"code": "CSE 432", "title": "Digital Image Processing Lab"},
+      {"code": "CSE 433", "title": "E-commerce and Web Programming"},
+      {"code": "CSE 434", "title": "E-commerce and Web Programming Project Lab"},
+      {"code": "CSE 435", "title": "Microcontroller, Computer Peripherals and Interfacing"},
+      {"code": "CSE 436", "title": "Microcontroller, Computer Peripherals and Interfacing Lab"},
+      {"code": "IPE 4401", "title": "Industrial Management and Accountancy"},
+      {"code": "GED 4103", "title": "Engineering Ethics and Environmental Protection"}
+    ]}'::jsonb
+  ];
+  v_sections text[] := array['A','B','C','General'];
+  v_course_list jsonb;
+  v_semester text;
+  v_course jsonb;
+  v_exists boolean;
+  v_count int := 0;
+begin
+  foreach v_course_list in array v_courses loop
+    v_semester := v_course_list->>'semester';
+    for v_course in select * from jsonb_array_elements(v_course_list->'courses') loop
+      for i in 1..array_length(v_sections, 1) loop
+        -- Check if already exists
+        select exists(
+          select 1 from public.teacher_assignments
+          where course_code = (v_course->>'code')
+          and section = v_sections[i]
+          and semester = v_semester
+        ) into v_exists;
+        
+        if not v_exists then
+          -- Assign to teachers based on course
+          insert into public.teacher_assignments (teacher_directory_id, course_code, course_title, semester, section, is_active)
+          values (
+            case 
+              when v_course->>'code' = 'CSE 423' and v_sections[i] = 'B' then 29  -- Fatin Ilham
+              when v_course->>'code' = 'CSE 423' and v_sections[i] = 'C' then 29
+              when v_course->>'code' = 'CSE 423' then 12  -- Toufikul Islam for other sections
+              when v_course->>'code' = 'CSE 424' and v_sections[i] = 'B' then 29
+              when v_course->>'code' = 'CSE 424' and v_sections[i] = 'C' then 29
+              when v_course->>'code' = 'CSE 424' then 24  -- Ahmed-Al-Azmain for A, General
+              when v_course->>'code' = 'CSE 431' then 32  -- Sushmit Jahan Rose
+              when v_course->>'code' = 'CSE 432' then 43  -- Sumaya Hannan Shova
+              when v_course->>'code' = 'CSE 433' then 28  -- Shahid Ahammed Shakil
+              when v_course->>'code' = 'CSE 434' then 24  -- Ahmed-Al-Azmain
+              when v_course->>'code' = 'CSE 435' then 12  -- Toufikul Islam
+              when v_course->>'code' = 'CSE 436' then 58  -- Khalid Sakib
+              when v_course->>'code' = 'IPE 4401' then 35  -- Asadujjaman
+              when v_course->>'code' = 'GED 4103' then 22  -- Faisal Al-Naser
+            end,
+            v_course->>'code',
+            v_course->>'title',
+            v_semester,
+            v_sections[i],
+            true
+          );
+          v_count := v_count + 1;
+        end if;
+      end loop;
+    end loop;
+  end loop;
+  raise notice 'Inserted % assignments', v_count;
+end;
+$$;
