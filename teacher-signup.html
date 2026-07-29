@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teacher Registration — SFRS</title>
+  <title>Teacher Registration â€” SFRS</title>
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
@@ -23,7 +23,7 @@
     .auth-brand p{color:rgba(255,255,255,.65);font-size:.95rem;line-height:1.7;max-width:380px;position:relative;z-index:1}
     .auth-brand-features{position:relative;z-index:1;display:flex;flex-direction:column;gap:.75rem}
     .auth-brand-feature{display:flex;align-items:center;gap:.75rem;font-size:.88rem;color:rgba(255,255,255,.55);padding:.6rem 0}
-    .auth-brand-feature::before{content:"✓";display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(16,185,129,.2);color:#34d399;font-weight:700;font-size:.75rem;flex-shrink:0}
+    .auth-brand-feature::before{content:"âœ“";display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:rgba(16,185,129,.2);color:#34d399;font-weight:700;font-size:.75rem;flex-shrink:0}
     .auth-form{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
     .auth-form-inner{width:100%;max-width:480px}
     .auth-form-header{text-align:center;margin-bottom:1.5rem}
@@ -58,7 +58,7 @@
   <div class="auth-brand">
     <div class="auth-brand-top">
       <div class="auth-brand-logo"><img src="assets/images/sfrs.png" alt="SFRS"></div>
-      <div class="auth-brand-badge">👨‍🏫 Teacher Registration</div>
+      <div class="auth-brand-badge">ðŸ‘¨â€ðŸ« Teacher Registration</div>
       <h1>Join the faculty feedback network.</h1>
       <p>Select your profile from the directory and start receiving structured student feedback for your courses.</p>
     </div>
@@ -118,7 +118,7 @@
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase-client.min.js"></script>
 <script>
   const sup=window.supabase.createClient("https://mstotzwqfbcvpcdgrnxy.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw");
   const ts=document.getElementById("teacherSelect"),fn=document.getElementById("fullName"),ds=document.getElementById("designationInput"),em=document.getElementById("emailInput"),ab=document.getElementById("alertBox"),sb=document.getElementById("submitBtn");
@@ -127,7 +127,7 @@
   function hide(){ab.className="alert";ab.textContent=""}
   function ld(v){if(v){sb.classList.add("btn-loading");sb.disabled=true}else{sb.classList.remove("btn-loading");sb.disabled=false}}
 
-  (async()=>{const{data,e}=await sup.from("teachers_directory").select("*").order("name");if(!e&&data){td=data;data.forEach(t=>{const o=document.createElement("option");o.value=t.id;o.textContent=`${t.name}${t.designation?" ("+t.designation+")":""}`;ts.appendChild(o)})}})();
+  (async()=>{const{data,error}=await sup.from("teachers_directory").select("*").order("name");if(!error&&data){td=data;data.forEach(t=>{const o=document.createElement("option");o.value=t.id;o.textContent=`${t.name}${t.designation?" ("+t.designation+")":""}`;ts.appendChild(o)})}})();
 
   ts.addEventListener("change",()=>{const t=td.find(x=>String(x.id)===ts.value);if(t){fn.value=t.name||"";ds.value=t.designation||"";em.value=t.email||""}else{fn.value=ds.value=em.value=""}});
 
