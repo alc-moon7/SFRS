@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Login — SFRS</title>
+  <title>Admin Login - SFRS</title>
   <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
@@ -60,7 +60,7 @@
   async function doLogin(){
     hide();
     var login=ei.value.trim(),pw=pi.value;
-    if(!login||!pw){show("Please enter both email/username and password.","error");return}
+    if(!login||!pw){show("Enter email/username and password.","error");return}
     ld(true);
     try{
       var email=login;
