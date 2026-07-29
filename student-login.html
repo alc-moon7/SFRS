@@ -119,7 +119,7 @@
     function hide(){alertBox.className="alert";alertBox.textContent=""}
     function loading(v){if(v){loginBtn.classList.add("btn-loading");loginBtn.disabled=true}else{loginBtn.classList.remove("btn-loading");loginBtn.disabled=false}}
 
-    (async()=>{const{session}=await sup.auth.getSession();if(session){const{data}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();if(data&&data.role==="student")window.location.href="student-dashboard.html";else await sup.auth.signOut()}})();
+    (async()=>{const{data:{session}}=await sup.auth.getSession();if(session){const{data}=await sup.from("profiles").select("role").eq("id",session.user.id).maybeSingle();if(data&&data.role==="student")window.location.href="student-dashboard.html";else await sup.auth.signOut()}})();
 
     document.getElementById("loginForm").addEventListener("submit",async e=>{
       e.preventDefault();hide();
@@ -129,12 +129,12 @@
       try{
         let email=login;
         if(!login.includes("@")){const{data:p}=await sup.from("profiles").select("email").or("username.eq."+login.toLowerCase()).maybeSingle();if(p&&p.email)email=p.email}
-        const{data,error}=await sup.auth.signInWithPassword({email,pw});
-        if(error)throw error;
-        const{data:profile}=await sup.from("profiles").select("role").eq("id",data.user.id).maybeSingle();
+        const result=await sup.auth.signInWithPassword({email,password:pw});
+        if(result.error)throw result.error;
+        const{data:profile}=await sup.from("profiles").select("role").eq("id",result.data.user.id).maybeSingle();
         if(!profile||profile.role!=="student"){await sup.auth.signOut();show("Access denied. Student account required.","error");return}
         window.location.href="student-dashboard.html";
-      }catch(err){show(err.message||"Login failed.","error")}
+      }catch(err){show(err.message||"Login failed.","error");console.error("Login error:",err)}
       finally{loading(false)}
     });
   </script>
