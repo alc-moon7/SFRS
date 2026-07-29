@@ -33,9 +33,23 @@
   <hr>
   <div id="result"></div>
 
+  <div id="jsCheck" style="margin-top:15px;padding:12px;background:#ddd;border-radius:8px;font-size:14px;text-align:center">
+    ⏳ JavaScript is loading...
+  </div>
+
   <script>
-    const SUPABASE_URL = "https://mstotzwqfbcvpcdgrnxy.supabase.co";
-    const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw";
+    // IMMEDIATE test: does JavaScript even run?
+    (function(){
+      var el = document.getElementById("jsCheck");
+      if (!el) return;
+      el.textContent = "✅ JavaScript IS running in your browser! (Brave Shields may be OK)";
+      el.style.background = "#d1fae5";
+      el.style.color = "#047857";
+      el.style.fontWeight = "700";
+    })();
+
+    var SUPABASE_URL = "https://mstotzwqfbcvpcdgrnxy.supabase.co";
+    var ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw";
 
     var resultEl = document.getElementById("result");
 
@@ -44,63 +58,46 @@
       resultEl.className = cls || "info";
     }
 
-    // Quick network test — checks if Supabase is reachable
     async function quickTest() {
-      show("Testing network connectivity to Supabase...", "info");
+      show("Testing Supabase...", "info");
       try {
         var t0 = Date.now();
-        var resp = await fetch(SUPABASE_URL + "/auth/v1/health", {
-          method: "HEAD",
-          headers: { "apikey": ANON_KEY }
-        });
+        var resp = await fetch(SUPABASE_URL + "/auth/v1/health", { method: "HEAD", headers: { "apikey": ANON_KEY } });
         var ms = Date.now() - t0;
         if (resp.ok) {
-          show("✅ Network OK! Supabase reachable in " + ms + "ms.\nStatus: " + resp.status + "\n\nNow try the green Test Login button.", "ok");
+          show("✅ Supabase reachable in " + ms + "ms.\n\nNow try the green Test Login button.", "ok");
         } else {
-          show("⚠️ Network reachable but got status: " + resp.status, "err");
+          show("⚠️ Network OK but status: " + resp.status, "err");
         }
       } catch(e) {
-        show("❌ NETWORK ERROR: " + e.message + "\n\nSupabase is NOT reachable from your browser!", "err");
+        show("❌ NETWORK ERROR: " + e.message, "err");
       }
     }
 
-    // The actual login test
     async function testLogin() {
       var email = document.getElementById("email").value.trim();
       var password = document.getElementById("password").value;
-
-      if (!email || !password) {
-        show("Please enter both email and password.", "err");
-        return;
-      }
-
-      show("🔄 Sending login request to Supabase...\n\nEmail: " + email + "\nPassword length: " + password.length, "info");
-
+      if (!email || !password) { show("Please enter email and password.", "err"); return; }
+      show("🔄 Logging in...", "info");
       try {
         var resp = await fetch(SUPABASE_URL + "/auth/v1/token?grant_type=password", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": ANON_KEY
-          },
+          headers: { "Content-Type": "application/json", "apikey": ANON_KEY },
           body: JSON.stringify({ email: email, password: password })
         });
-
         var data = await resp.json();
-
         if (data.access_token) {
-          show("✅✅✅ LOGIN SUCCESSFUL! ✅✅✅\n\nUser: " + data.user.email + "\nUser ID: " + data.user.id + "\n\nLogin works! The problem is in the regular login page — NOT your credentials.", "ok");
-        } else if (data.error_code === "invalid_credentials" || data.msg === "Invalid login credentials") {
-          show("❌ INVALID CREDENTIALS\n\nEmail: " + email + "\nAPI says the password is wrong.\nPossible causes:\n- Password was changed\n- Account doesn't exist\n- Password was never set for this user", "err");
+          show("✅✅✅ LOGIN SUCCESSFUL!\n\nUser: " + data.user.email, "ok");
+        } else if (data.msg === "Invalid login credentials") {
+          show("❌ INVALID CREDENTIALS — wrong password or account doesn't exist.", "err");
         } else {
-          show("⚠️ UNEXPECTED RESPONSE\n\n" + JSON.stringify(data, null, 2), "err");
+          show("⚠️ " + JSON.stringify(data).slice(0,300), "err");
         }
       } catch(e) {
-        show("❌ FETCH ERROR: " + e.message + "\n\nPossible causes:\n- Network issue\n- CORS blocked (check Brave Shields)\n- Supabase project down", "err");
+        show("❌ FETCH ERROR: " + e.message, "err");
       }
     }
 
-    // Auto-run quick test
     setTimeout(quickTest, 500);
   </script>
 </body>
