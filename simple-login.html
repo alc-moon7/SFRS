@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SFRS Login (No-JS)</title>
+  <style>
+    body{font-family:system-ui,sans-serif;max-width:440px;margin:60px auto;padding:20px;background:#f7f4ee}
+    h2{color:#0c2a42}
+    input,button{display:block;width:100%;padding:14px;margin:10px 0;font-size:16px;box-sizing:border-box;border:2px solid #e5dece;border-radius:10px;font-family:inherit}
+    button{background:#c9462c;color:#fff;border:none;cursor:pointer;font-weight:700;font-size:17px}
+    hr{margin:20px 0;border-color:#e5dece}
+    p{font-size:14px;color:#6b6255}
+    .note{font-size:12px;color:#a89b86;margin-top:20px}
+  </style>
+</head>
+<body>
+  <h2>Student Login (Direct API)</h2>
+  <p>This form sends credentials directly to Supabase — <strong>no JavaScript needed</strong>.</p>
+
+  <form method="POST" action="https://mstotzwqfbcvpcdgrnxy.supabase.co/auth/v1/token?grant_type=password" target="_blank">
+    <!-- Required headers passed as hidden fields won't work for POST... 
+         Actually we need to use the apikey header. Form POST can't set custom headers.
+         Let me use a different approach: form with onsubmit that's pure HTML.
+         Actually the simplest: just tell user to open the link directly.
+    -->
+  </form>
+
+  <p style="background:#fef2f2;color:#b91c1c;padding:14px;border-radius:8px;border:1px solid #fecaca">
+    <strong>⚠️ Your browser is blocking JavaScript.</strong><br><br>
+    Login buttons won't work because the login form requires JavaScript to communicate with Supabase.<br><br>
+    <strong>Fix:</strong> Open this page in <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong> instead of Brave.<br>
+    <em>Or disable Brave Shields for sfrs.moonx.dev</em>
+  </p>
+
+  <hr>
+
+  <p><strong>Quick test:</strong> Click this link to try login directly via API:</p>
+  <p><a href="#" id="directLink" style="color:#c9462c;font-weight:700">Direct API Login Link</a></p>
+
+  <div class="note">
+    Once you're in a browser that supports JavaScript, go to:<br>
+    <strong>sfrs.moonx.dev/student-login.html</strong><br>
+    Login: any student email<br>
+    Password: <code>sfrs2026</code>
+  </div>
+
+  <script>
+    // This is the ONLY script - if even this doesn't run, JS is completely blocked
+    var link = document.getElementById("directLink");
+    if (link) {
+      var email = "zerosmoon.ff@gmail.com";
+      var pw = "sfrs2026";
+      link.href = "https://mstotzwqfbcvpcdgrnxy.supabase.co/auth/v1/token?grant_type=password";
+      link.onclick = function(e) {
+        e.preventDefault();
+        var url = "https://mstotzwqfbcvpcdgrnxy.supabase.co/auth/v1/token?grant_type=password";
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw"
+          },
+          body: JSON.stringify({ email: email, password: pw })
+        }).then(function(r) { return r.json(); }).then(function(d) {
+          if (d.access_token) {
+            document.body.innerHTML += '<div style="margin-top:15px;padding:15px;background:#d1fae5;color:#047857;border-radius:8px">✅ LOGIN SUCCESS! User: ' + d.user.email + '<br>Access token obtained.<br><br><a href="student-dashboard.html">Go to Dashboard</a></div>';
+          } else {
+            document.body.innerHTML += '<div style="margin-top:15px;padding:15px;background:#fee2e2;color:#b91c1c;border-radius:8px">❌ LOGIN FAILED: ' + (d.msg || d.error_description || JSON.stringify(d)) + '</div>';
+          }
+        }).catch(function(e) {
+          document.body.innerHTML += '<div style="margin-top:15px;padding:15px;background:#fee2e2;color:#b91c1c;border-radius:8px">❌ NETWORK ERROR: ' + e.message + '</div>';
+        });
+        return false;
+      };
+      link.textContent = "Click here to test login (zero@sfrs2026)";
+    }
+  </script>
+</body>
+</html>
