@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Student Login — SFRS</title>
-  <meta name="description" content="SFRS Student Portal">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
@@ -12,14 +11,11 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:"Inter",system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1.5rem}
     .wrapper{width:100%;max-width:440px}
-    .header{text-align:center;margin-bottom:2rem}
-    .header img{height:44px;width:auto;margin-bottom:.75rem}
+    .header{text-align:center;margin-bottom:2rem}.header img{height:44px;width:auto;margin-bottom:.75rem}
     .badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(59,130,246,.15);color:#3b82f6;font-size:.78rem;font-weight:700;padding:.3rem .9rem;border-radius:100px;margin-bottom:.75rem}
-    .header h1{font-size:1.4rem;font-weight:700;color:var(--primary)}
-    .header p{font-size:.88rem;color:var(--muted);margin-top:.25rem}
+    .header h1{font-size:1.4rem;font-weight:700;color:var(--primary)}.header p{font-size:.88rem;color:var(--muted);margin-top:.25rem}
     .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;box-shadow:0 20px 50px rgba(12,42,66,.1)}
-    .form-group{margin-bottom:1.25rem}
-    .form-label{display:block;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:.35rem}
+    .form-group{margin-bottom:1.25rem}.form-label{display:block;font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:.35rem}
     .form-input{width:100%;padding:.85rem 1rem;border:2px solid var(--border);border-radius:12px;font-size:.95rem;font-family:inherit;background:#faf8f2;transition:.2s;color:var(--text)}
     .form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(201,70,44,.1);background:#fff}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.9rem 1.5rem;border-radius:12px;font-weight:600;font-size:1rem;border:none;cursor:pointer;transition:.2s;font-family:inherit}
@@ -45,55 +41,103 @@
     <div class="form-group"><label class="form-label" for="emailInput">Email or Username</label><input type="text" class="form-input" id="emailInput" placeholder="student@example.com" autocomplete="username" autofocus></div>
     <div class="form-group"><label class="form-label" for="passwordInput">Password</label><input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" autocomplete="current-password"></div>
     <div class="link-row"><span></span><a href="password-reset.html">Forgot password?</a></div>
-    <button class="btn btn-primary" id="loginBtn"><span class="btn-text">Sign In</span><span class="spinner"></span></button>
+    <button class="btn btn-primary" id="loginBtn" onclick="doLogin()"><span class="btn-text" id="btnText">Sign In</span><span class="spinner" id="btnSpinner"></span></button>
   </div>
   <div class="footer-link">New student? <a href="student-signup.html">Create an account</a></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-  const supabase = window.supabase.createClient(
-    "https://mstotzwqfbcvpcdgrnxy.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw"
-  );
-  const ab=document.getElementById("alertBox"),lb=document.getElementById("loginBtn");
-  const ei=document.getElementById("emailInput"),pi=document.getElementById("passwordInput");
-  function show(m,t){ab.textContent=m;ab.className="alert";ab.classList.add(t==="error"?"alert-error":"alert-success")}
-  function ld(v){if(v){lb.classList.add("btn-loading");lb.disabled=true}else{lb.classList.remove("btn-loading");lb.disabled=false}}
+  // ── NO external dependencies ── uses only fetch() ──
+  var SUPABASE_URL = "https://mstotzwqfbcvpcdgrnxy.supabase.co";
+  var ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdG90endxZmJjdnBjZGdybnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0ODEzNTAsImV4cCI6MjA4MjA1NzM1MH0.JbIf3inEy0Ks5JPVGQfFycBXenIGDGtqUBjYB1JeAcw";
 
-  // Auto-redirect if already logged in as student
-  (async()=>{
-    const{data}=await supabase.auth.getSession();
-    if(data?.session){
-      const{data:p}=await supabase.from("profiles").select("role").eq("id",data.session.user.id).maybeSingle();
-      if(p&&p.role==="student")location.href="student-dashboard.html";
-      else await supabase.auth.signOut();
-    }
-  })();
+  var alertBox = document.getElementById("alertBox");
+  var loginBtn = document.getElementById("loginBtn");
+  var btnText  = document.getElementById("btnText");
+  var btnSpinner = document.getElementById("btnSpinner");
 
-  async function doLogin(){
-    ab.className="alert";ab.textContent="";
-    const login=ei.value.trim(),pw=pi.value;
-    if(!login||!pw){show("Enter both email and password.","error");return}
-    ld(true);
-    try{
-      let email=login;
-      if(!login.includes("@")){
-        const{data:p}=await supabase.from("profiles").select("email").or("username.eq."+login.toLowerCase()).maybeSingle();
-        if(p&&p.email)email=p.email;
-      }
-      // Explicitly pass credentials as an object
-      const credentials={email:email,password:pw};
-      const result=await supabase.auth.signInWithPassword(credentials);
-      if(result.error)throw result.error;
-      const{data:profile}=await supabase.from("profiles").select("role").eq("id",result.data.user.id).maybeSingle();
-      if(!profile||profile.role!=="student"){await supabase.auth.signOut();show("Access denied. Student account required.","error");return}
-      location.href="student-dashboard.html";
-    }catch(err){show(err.message||"Login failed.","error")}
-    finally{ld(false)}
+  function show(msg, t) {
+    alertBox.textContent = msg;
+    alertBox.className = "alert";
+    alertBox.classList.add(t === "error" ? "alert-error" : "alert-success");
+  }
+  function hideAlert() { alertBox.className = "alert"; alertBox.textContent = ""; }
+  function loading(v) {
+    if (v) { loginBtn.classList.add("btn-loading"); loginBtn.disabled = true; }
+    else   { loginBtn.classList.remove("btn-loading"); loginBtn.disabled = false; }
   }
 
-  lb.addEventListener("click",doLogin);
-  [ei,pi].forEach(el=>el.addEventListener("keydown",e=>{if(e.key==="Enter")doLogin()}));
+  // ── Main login function (called by onclick) ──
+  async function doLogin() {
+    hideAlert();
+    var login = document.getElementById("emailInput").value.trim();
+    var pw    = document.getElementById("passwordInput").value;
+
+    if (!login || !pw) { show("Please enter both email and password.", "error"); return; }
+
+    loading(true);
+    try {
+      var email = login;
+      // Username resolution: query public.profiles via REST
+      if (!login.includes("@")) {
+        var userResp = await fetch(
+          SUPABASE_URL + "/rest/v1/profiles?select=email&or=(username.eq." + encodeURIComponent(login.toLowerCase()) + ")",
+          { headers: { apikey: ANON_KEY, Authorization: "Bearer " + ANON_KEY } }
+        );
+        var users = await userResp.json();
+        if (users && users.length > 0) email = users[0].email;
+      }
+
+      // ── Sign in with password via REST ──
+      var tokenResp = await fetch(SUPABASE_URL + "/auth/v1/token?grant_type=password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: ANON_KEY },
+        body: JSON.stringify({ email: email, password: pw })
+      });
+      var tokenData = await tokenResp.json();
+
+      if (!tokenData.access_token) {
+        show(tokenData.msg || "Invalid login credentials.", "error");
+        return;
+      }
+
+      // ── Check role via REST ──
+      var profileResp = await fetch(
+        SUPABASE_URL + "/rest/v1/profiles?select=role&id=eq." + tokenData.user.id,
+        { headers: { apikey: ANON_KEY, Authorization: "Bearer " + tokenData.access_token } }
+      );
+      var profiles = await profileResp.json();
+
+      if (!profiles || profiles.length === 0 || profiles[0].role !== "student") {
+        show("Access denied. Student account required.", "error");
+        return;
+      }
+
+      // ── Save session to localStorage so dashboard can use it ──
+      localStorage.setItem("sb-" + SUPABASE_URL.split("//")[1] + "-auth-token", JSON.stringify({
+        access_token: tokenData.access_token,
+        refresh_token: tokenData.refresh_token,
+        expires_at: Date.now() + tokenData.expires_in * 1000,
+        user: tokenData.user
+      }));
+
+      show("Login successful! Redirecting...", "success");
+      setTimeout(function() { location.href = "student-dashboard.html"; }, 800);
+
+    } catch (err) {
+      show("Login failed: " + (err.message || "Network error"), "error");
+    } finally {
+      loading(false);
+    }
+  }
+
+  // Enter key support
+  document.getElementById("emailInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") doLogin();
+  });
+  document.getElementById("passwordInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") doLogin();
+  });
 </script>
 </body>
 </html>
