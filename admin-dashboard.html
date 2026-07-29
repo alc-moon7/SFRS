@@ -93,6 +93,23 @@
 </div>
 <div class="footer">&copy; 2026 SFRS - Admin Dashboard</div>
 
+<div class="modal-overlay" id="teacherModal"><div class="modal-box"><div class="modal-header"><div class="modal-title" id="tModalTitle">Teacher Profile</div><button class="modal-close" onclick="hideM('teacherModal')">&times;</button></div>
+<div class="modal-body"><div class="alert" id="tAlert"></div><div class="form-row"><div class="form-group"><label class="field-label">Full Name</label><input class="field-input" id="tName" required></div><div class="form-group"><label class="field-label">Short Code</label><input class="field-input" id="tCode"></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Designation</label><input class="field-input" id="tDesignation"></div><div class="form-group"><label class="field-label">Department</label><input class="field-input" id="tDept" value="Computer Science and Engineering"></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Email</label><input type="email" class="field-input" id="tEmail"></div><div class="form-group"><label class="field-label">Phone</label><input class="field-input" id="tPhone"></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Office Room</label><input class="field-input" id="tOffice"></div><div class="form-group"><label class="field-label">Avatar URL</label><input class="field-input" id="tAvatar"></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Status</label><select class="field-select" id="tStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select></div><div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="tEmailPublic"><span class="switch-track"></span></label><span class="field-label">Public Email</span></div></div></div>
+<div class="form-group"><label class="field-label">Bio</label><textarea class="field-input" id="tBio" rows="3" style="width:100%;resize:vertical"></textarea></div>
+</div><div class="modal-footer"><button class="btn btn-outline" onclick="hideM('teacherModal')">Cancel</button><button class="btn btn-primary" id="saveTeacher">Save Teacher</button></div></div></div>
+
+<div class="modal-overlay" id="assignmentModal"><div class="modal-box"><div class="modal-header"><div class="modal-title">Teacher Assignment</div><button class="modal-close" onclick="hideM('assignmentModal')">&times;</button></div>
+<div class="modal-body"><div class="alert" id="aAlert"></div><input type="hidden" id="aId">
+<div class="form-row"><div class="form-group"><label class="field-label">Teacher</label><select class="field-select" id="aTeacher" required></select></div><div class="form-group"><label class="field-label">Course Code</label><input class="field-input" id="aCourseCode" required></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Course Title</label><input class="field-input" id="aCourseTitle" required></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Semester</label><select class="field-select" id="aSemester" required></select></div><div class="form-group"><label class="field-label">Section</label><select class="field-select" id="aSection" required></select></div></div>
+<div class="form-row"><div class="form-group"><label class="field-label">Academic Term</label><input class="field-input" id="aTerm"></div><div class="form-group"><div class="switch-row" style="margin-top:1.5rem"><label class="switch"><input type="checkbox" id="aActive" checked><span class="switch-track"></span></label><span class="field-label">Active</span></div></div></div>
+</div><div class="modal-footer"><button class="btn btn-outline" onclick="hideM('assignmentModal')">Cancel</button><button class="btn btn-primary" id="saveAssignment">Save Assignment</button></div></div></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/ai-chat-widget.js"></script>
 <script>
