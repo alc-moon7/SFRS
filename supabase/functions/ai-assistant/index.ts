@@ -392,7 +392,8 @@ async function loadTeacherAggregateProfile(
 
 async function loadTeacherContext(
   supabase: SupabaseContextClient | null,
-  message: string
+  message: string,
+  restrictToTeacherId?: number | null
 ) {
   if (!supabase) {
     return "Server-side teacher rating reader is not configured. Set SUPABASE_SERVICE_ROLE_KEY for the ai-assistant Edge Function.";
@@ -409,6 +410,17 @@ async function loadTeacherContext(
   }
 
   const teachers = data as TeacherRecord[];
+  // If teacher is logged in, ONLY show their own data
+  if (restrictToTeacherId) {
+    const self = teachers.find(t => t.id === restrictToTeacherId);
+    if (self) {
+      const aggregateProfile = await loadTeacherAggregateProfile(supabase, self);
+      return aggregateProfile || `Teacher directory found but ratings not available.`;
+    }
+    return `Your teacher profile (ID ${restrictToTeacherId}) was not found in the directory.`;
+  }
+
+  // Admin/guest: match by name
   const matches = teachers
     .map((teacher) => ({ teacher, score: scoreTeacherMatch(message, teacher) }))
     .filter((item) => item.score > 0)
@@ -440,10 +452,13 @@ async function loadTeacherContext(
 async function buildLiveContext(req: Request, body: Record<string, unknown>, message: string) {
   const viewerClient = createSupabaseContextClient(req);
   const dataClient = createSupabaseDataClient();
+  const teacherDirectoryId = body.teacher_directory_id as number || null;
+  const userRole = body.role as string || "";
+
   const [viewer, snapshot, teacherContext] = await Promise.all([
     loadViewerProfile(viewerClient),
     loadSiteSnapshot(dataClient),
-    loadTeacherContext(dataClient, message)
+    loadTeacherContext(dataClient, message, userRole === "teacher" ? teacherDirectoryId : null)
   ]);
   const pageContext = compactText(body.context, 1200);
 

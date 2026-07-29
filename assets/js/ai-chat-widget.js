@@ -77,15 +77,17 @@
     }
   }
 
-  // ── Role detect ──
+  // ── Role detect (also capture teacher_directory_id) ──
+  let teacherId = null;
   (async () => {
     if (!sup) return;
     try {
       const { data } = await sup.auth.getSession();
       if (data?.session) {
-        const { data: p } = await sup.from("profiles").select("role").eq("id", data.session.user.id).maybeSingle();
+        const { data: p } = await sup.from("profiles").select("role,teacher_directory_id").eq("id", data.session.user.id).maybeSingle();
         if (p?.role) {
           role = p.role;
+          if (p.role === "teacher" && p.teacher_directory_id) teacherId = p.teacher_directory_id;
           document.getElementById("aiwbadge").textContent = p.role;
           if (p.role === "admin") { fab.classList.add("adm"); document.getElementById("aiwh").classList.add("adm"); }
           if (p.role === "teacher") { fab.classList.add("tch"); document.getElementById("aiwh").classList.add("tch"); }
@@ -124,7 +126,9 @@
         } catch (e) {}
       }
       const hdrs = { "Content-Type": "application/json", apikey: KEY, Authorization: `Bearer ${authToken}` };
-      const resp = await fetch(EDGE, { method: "POST", headers: hdrs, body: JSON.stringify({ type: "chat", message: msg, history: history.slice(-6), context: location.pathname }) });
+      var payload = { type: "chat", message: msg, history: history.slice(-6), context: location.pathname, role: role };
+      if (teacherId) { payload.teacher_directory_id = teacherId; }
+      const resp = await fetch(EDGE, { method: "POST", headers: hdrs, body: JSON.stringify(payload) });
       if (!resp.ok) throw new Error("Status " + resp.status);
       const data = await resp.json();
       if (data.error) throw new Error(data.error);
