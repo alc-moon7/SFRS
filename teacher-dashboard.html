@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teacher Dashboard â€” SFRS</title>
+  <title>Teacher Dashboard — SFRS</title>
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
@@ -82,7 +82,7 @@
     <div class="alert" id="alertBox"></div>
 
     <div class="profile-header">
-      <div class="profile-info"><div class="profile-avatar" id="avatarInit">T</div><div><div class="profile-name" id="profileName">â€”</div><div class="profile-meta"><span id="profileDesignation">â€”</span> Â· <span id="profileDept">â€”</span></div><div class="chip-stack"><span class="chip" id="chipEmail">â€”</span><span class="chip" id="chipCode">â€”</span></div></div></div>
+      <div class="profile-info"><div class="profile-avatar" id="avatarInit">T</div><div><div class="profile-name" id="profileName">—</div><div class="profile-meta"><span id="profileDesignation">—</span> · <span id="profileDept">—</span></div><div class="chip-stack"><span class="chip" id="chipEmail">—</span><span class="chip" id="chipCode">—</span></div></div></div>
       <div class="profile-scores"><div class="score-item"><div class="score-val" id="scoreAvg">0.00</div><div class="score-lbl">Avg Rating</div></div><div class="score-item"><div class="score-val" id="scoreTotal">0</div><div class="score-lbl">Reviews</div></div></div>
     </div>
 
@@ -102,7 +102,7 @@
     <section id="records" class="panel"><div class="panel-header"><div><div class="panel-kicker">Records</div><div class="panel-title">Recent Feedback</div></div></div><div class="panel-body"><div class="table-wrap"><table class="table"><thead><tr><th>Course</th><th>Semester</th><th>Overall</th><th>Submitted</th><th>Action</th></tr></thead><tbody id="recordsBody"></tbody></table></div></div></section>
   </div>
 </div>
-<div class="footer">&copy; 2026 SFRS â€” Teacher Dashboard</div>
+<div class="footer">&copy; 2026 SFRS — Teacher Dashboard</div>
 
 <div class="modal-overlay" id="reviewModal"><div class="modal-box"><div class="modal-header"><div class="modal-title" id="reviewTitle">Review</div><button class="modal-close" id="closeReview">&times;</button></div><div class="modal-body"><div id="reviewMeta" style="font-size:.85rem;color:var(--muted);margin-bottom:1rem"></div><div id="reviewBody"></div></div><div class="modal-footer"><button class="btn btn-outline" id="closeReviewBtn">Close</button></div></div></div>
 
@@ -118,8 +118,8 @@
   function showModal(){document.getElementById("reviewModal").classList.add("open")}
   function hideModal(){document.getElementById("reviewModal").classList.remove("open")}
 
-  // â”€â”€ Auth â”€â”€
-  (function(){const unsub=sup.auth.onAuthStateChange(async(event,session)=>{if(session){const{data:p}=await sup.from("profiles").select("*").eq("id",session.user.id).maybeSingle();if(p&&p.role==="teacher"){unsub.data.subscription.unsubscribe();user=p;tdirId=p.teacher_directory_id;if(!tdirId){showAlert("No teacher directory profile linked.","error");return}const{data:td}=await sup.from("teachers_directory").select("*").eq("id",tdirId).maybeSingle();if(!td){showAlert("Teacher directory record not found.","error");return}teacher=td;$("profileName").textContent=td.name||"â€”";$("profileDesignation").textContent=td.designation||"â€”";$("profileDept").textContent=td.department||"â€”";$("chipEmail").textContent=td.email||"â€”";$("chipCode").textContent=td.short_code||"â€”";if(td.name)$("avatarInit").textContent=td.name.charAt(0).toUpperCase();await loadData()}else{await sup.auth.signOut();location.href="teacher-login.html"}}else if(event==="SIGNED_OUT"){location.href="teacher-login.html"}});setTimeout(async()=>{const{data:{session}}=await sup.auth.getSession();if(!session&&!user){unsub.data.subscription.unsubscribe();location.href="teacher-login.html"}},7000)})();
+  // ── Auth ──
+  (function(){const unsub=sup.auth.onAuthStateChange(async(event,session)=>{if(session){const{data:p}=await sup.from("profiles").select("*").eq("id",session.user.id).maybeSingle();if(p&&p.role==="teacher"){unsub.data.subscription.unsubscribe();user=p;tdirId=p.teacher_directory_id;if(!tdirId){showAlert("No teacher directory profile linked.","error");return}const{data:td}=await sup.from("teachers_directory").select("*").eq("id",tdirId).maybeSingle();if(!td){showAlert("Teacher directory record not found.","error");return}teacher=td;$("profileName").textContent=td.name||"—";$("profileDesignation").textContent=td.designation||"—";$("profileDept").textContent=td.department||"—";$("chipEmail").textContent=td.email||"—";$("chipCode").textContent=td.short_code||"—";if(td.name)$("avatarInit").textContent=td.name.charAt(0).toUpperCase();await loadData()}else{await sup.auth.signOut();location.href="teacher-login.html"}}else if(event==="SIGNED_OUT"){location.href="teacher-login.html"}});setTimeout(async()=>{const{data:{session}}=await sup.auth.getSession();if(!session&&!user){unsub.data.subscription.unsubscribe();location.href="teacher-login.html"}},7000)})();
 
   async function loadData(){
     const[fbRes,assRes]=await Promise.all([
@@ -147,19 +147,19 @@
     $("categoryBreakdown").innerHTML=html||"<p style='color:var(--muted)'>No ratings yet.</p>";
     // Comments
     const comments=vis.filter(f=>f.comment).slice(0,5);
-    $("commentList").innerHTML=comments.length?comments.map(f=>`<div class="comment-card"><div class="comment-card-meta">${f.course_code||""} Â· ${f.semester||""}/${f.section||""} Â· ${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"â€”"}</div><div class="comment-card-text">"${f.comment}"</div></div>`).join(""):"<p style='color:var(--muted)'>No comments yet.</p>";
+    $("commentList").innerHTML=comments.length?comments.map(f=>`<div class="comment-card"><div class="comment-card-meta">${f.course_code||""} · ${f.semester||""}/${f.section||""} · ${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</div><div class="comment-card-text">"${f.comment}"</div></div>`).join(""):"<p style='color:var(--muted)'>No comments yet.</p>";
     // Records
     const tb=$("recordsBody");
     if(!vis.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No feedback records yet.</td></tr>';return}
-    tb.innerHTML=vis.map(f=>`<tr><td>${f.course_code||""} - ${f.course_title||""}</td><td>${f.semester||""}/${f.section||""}</td><td>${f.responses?.overall_satisfaction||"â€”"}/5</td><td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"â€”"}</td><td><button class="btn btn-outline btn-sm" onclick="viewReview('${f.id}')">View</button></td></tr>`).join("");
+    tb.innerHTML=vis.map(f=>`<tr><td>${f.course_code||""} - ${f.course_title||""}</td><td>${f.semester||""}/${f.section||""}</td><td>${f.responses?.overall_satisfaction||"—"}/5</td><td>${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</td><td><button class="btn btn-outline btn-sm" onclick="viewReview('${f.id}')">View</button></td></tr>`).join("");
   }
 
   function viewReview(fid){
     const f=fb.find(x=>x.id==fid);if(!f)return;
-    $("reviewTitle").textContent=(f.course_code||"")+" â€” "+(f.course_title||"");
-    $("reviewMeta").innerHTML=`${f.semester||""}/${f.section||""} Â· ${f.submitted_at?new Date(f.submitted_at).toLocaleString():"â€”"} Â· ${f.is_anonymous!==false?"Anonymous":"Identified"}`;
+    $("reviewTitle").textContent=(f.course_code||"")+" — "+(f.course_title||"");
+    $("reviewMeta").innerHTML=`${f.semester||""}/${f.section||""} · ${f.submitted_at?new Date(f.submitted_at).toLocaleString():"—"} · ${f.is_anonymous!==false?"Anonymous":"Identified"}`;
     let body="<table style='width:100%;border-collapse:collapse'>";
-    CAT.forEach(c=>{const v=f.responses?.[c.k]||0;body+=`<tr><td style='padding:.35rem 0;font-weight:500'>${c.l}</td><td style='text-align:right'>${"â­".repeat(v)}${v?` (${v}/5)`:"â€”"}</td></tr>`});
+    CAT.forEach(c=>{const v=f.responses?.[c.k]||0;body+=`<tr><td style='padding:.35rem 0;font-weight:500'>${c.l}</td><td style='text-align:right'>${"⭐".repeat(v)}${v?` (${v}/5)`:"—"}</td></tr>`});
     body+="</table>";
     if(f.comment)body+=`<div style="margin-top:.75rem;padding:.75rem;background:#faf7f0;border-radius:8px;font-size:.85rem">"${f.comment}"</div>`;
     $("reviewBody").innerHTML=body;showModal();

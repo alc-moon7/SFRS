@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teacher Profile â€” SFRS</title>
+  <title>Teacher Profile — SFRS</title>
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
@@ -52,21 +52,21 @@
 <nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><div class="nav-links"><a class="nav-link" href="/">Home</a><a class="nav-link" href="teacher-dashboard.html">My Dashboard</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
 
 <div class="container">
-  <a class="back-link" href="javascript:history.back()">â† Back</a>
+  <a class="back-link" href="javascript:history.back()">← Back</a>
   <div class="alert alert-error" id="alertBox" style="display:none"></div>
 
   <div class="profile-header">
-    <div class="profile-info"><div class="avatar-big" id="avatarBig">T</div><div><div class="profile-name" id="profileName">Loadingâ€¦</div><div class="profile-designation"><span id="profileDesig">â€”</span> Â· <span id="profileDept">â€”</span></div><div class="profile-chips"><span class="chip" id="chipCode">â€”</span><span class="chip" id="chipStatus">â€”</span></div></div></div>
+    <div class="profile-info"><div class="avatar-big" id="avatarBig">T</div><div><div class="profile-name" id="profileName">Loading…</div><div class="profile-designation"><span id="profileDesig">—</span> · <span id="profileDept">—</span></div><div class="profile-chips"><span class="chip" id="chipCode">—</span><span class="chip" id="chipStatus">—</span></div></div></div>
     <div class="profile-scores"><div class="score-item"><div class="score-val" id="scoreAvg">0.00</div><div class="score-lbl">Avg Rating</div></div><div class="score-item"><div class="score-val" id="scoreTotal">0</div><div class="score-lbl">Reviews</div></div></div>
   </div>
 
-  <div class="section"><div class="section-header"><div class="section-kicker">About</div><div class="section-title">Profile Details</div></div><div class="section-body"><p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem" id="profileBio">â€”</p><dl class="detail-list"><dt>Email</dt><dd id="detEmail">â€”</dd><dt>Phone</dt><dd id="detPhone">â€”</dd><dt>Office</dt><dd id="detOffice">â€”</dd></dl></div></div>
+  <div class="section"><div class="section-header"><div class="section-kicker">About</div><div class="section-title">Profile Details</div></div><div class="section-body"><p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem" id="profileBio">—</p><dl class="detail-list"><dt>Email</dt><dd id="detEmail">—</dd><dt>Phone</dt><dd id="detPhone">—</dd><dt>Office</dt><dd id="detOffice">—</dd></dl></div></div>
 
   <div class="section"><div class="section-header"><div class="section-kicker">Ratings</div><div class="section-title">Category Breakdown</div></div><div class="section-body" id="ratingBreakdown"></div></div>
 
   <div class="section"><div class="section-header"><div class="section-kicker">Comments</div><div class="section-title">Recent Comments</div></div><div class="section-body" id="commentList"></div></div>
 </div>
-<div class="footer">&copy; 2026 SFRS â€” Teacher Profile</div>
+<div class="footer">&copy; 2026 SFRS — Teacher Profile</div>
 
 <script src="assets/js/supabase-client.min.js"></script>
 <script>
@@ -84,15 +84,15 @@
     if(!tdirId){document.getElementById("alertBox").style.display="block";document.getElementById("alertBox").textContent="No teacher profile specified.";return}
     const{data:td}=await sup.from("teachers_directory").select("*").eq("id",tdirId).maybeSingle();
     if(!td){document.getElementById("alertBox").style.display="block";document.getElementById("alertBox").textContent="Teacher not found.";return}
-    document.getElementById("profileName").textContent=td.name||"â€”";
-    document.getElementById("profileDesig").textContent=td.designation||"â€”";
-    document.getElementById("profileDept").textContent=td.department||"â€”";
-    document.getElementById("chipCode").textContent=td.short_code||"â€”";
+    document.getElementById("profileName").textContent=td.name||"—";
+    document.getElementById("profileDesig").textContent=td.designation||"—";
+    document.getElementById("profileDept").textContent=td.department||"—";
+    document.getElementById("chipCode").textContent=td.short_code||"—";
     document.getElementById("chipStatus").textContent=td.status||"active";
     document.getElementById("profileBio").textContent=td.bio||"No bio available.";
-    document.getElementById("detEmail").textContent=td.is_email_public?td.email||"â€”":"Not public";
-    document.getElementById("detPhone").textContent=td.phone||"â€”";
-    document.getElementById("detOffice").textContent=td.office_room||"â€”";
+    document.getElementById("detEmail").textContent=td.is_email_public?td.email||"—":"Not public";
+    document.getElementById("detPhone").textContent=td.phone||"—";
+    document.getElementById("detOffice").textContent=td.office_room||"—";
     if(td.name)document.getElementById("avatarBig").textContent=td.name.charAt(0).toUpperCase();
 
     const{data:fb}=await sup.from("feedbacks").select("*").eq("teacher_directory_id",tdirId).neq("status","hidden").order("submitted_at",{ascending:false});
@@ -106,7 +106,7 @@
     document.getElementById("ratingBreakdown").innerHTML=rb||"<p style='color:var(--muted)'>No ratings yet.</p>";
 
     const comments=vis.filter(f=>f.comment).slice(0,5);
-    document.getElementById("commentList").innerHTML=comments.length?comments.map(f=>`<div class="comment-card"><div class="comment-card-meta">${f.course_code||""} Â· ${f.semester||""}/${f.section||""} Â· ${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"â€”"}</div><div class="comment-card-text">"${f.comment}"</div></div>`).join(""):"<p style='color:var(--muted)'>No comments yet.</p>";
+    document.getElementById("commentList").innerHTML=comments.length?comments.map(f=>`<div class="comment-card"><div class="comment-card-meta">${f.course_code||""} · ${f.semester||""}/${f.section||""} · ${f.submitted_at?new Date(f.submitted_at).toLocaleDateString():"—"}</div><div class="comment-card-text">"${f.comment}"</div></div>`).join(""):"<p style='color:var(--muted)'>No comments yet.</p>";
   })();
 
   document.getElementById("logoutLink").addEventListener("click",async()=>{await sup.auth.signOut();location.href="/"});

@@ -63,10 +63,10 @@
   <div class="alert" id="alertBox"></div>
 
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Students</div><div class="stat-value" id="sStudents">â€”</div></div>
-    <div class="stat-card"><div class="stat-label">Teachers</div><div class="stat-value" id="sTeachers">â€”</div></div>
-    <div class="stat-card"><div class="stat-label">Feedback</div><div class="stat-value" id="sFeedback">â€”</div></div>
-    <div class="stat-card"><div class="stat-label">Users</div><div class="stat-value" id="sActive">â€”</div></div>
+    <div class="stat-card"><div class="stat-label">Students</div><div class="stat-value" id="sStudents">—</div></div>
+    <div class="stat-card"><div class="stat-label">Teachers</div><div class="stat-value" id="sTeachers">—</div></div>
+    <div class="stat-card"><div class="stat-label">Feedback</div><div class="stat-value" id="sFeedback">—</div></div>
+    <div class="stat-card"><div class="stat-label">Users</div><div class="stat-value" id="sActive">—</div></div>
   </div>
 
   <!-- Analytics Table -->
@@ -134,7 +134,7 @@
     render();
   }
 
-  function tn(f){const t=tMap[f.teacher_directory_id];return t?t.name:"â€”"}
+  function tn(f){const t=tMap[f.teacher_directory_id];return t?t.name:"—"}
 
   function render(){
     const tf=$("fTeacher").value,sf=$("fSemester").value,sc=$("fSection").value,st=$("fStatus").value;
@@ -145,7 +145,7 @@
     if(st)fl=fl.filter(f=>f.status===st);
     if(!fl.length){$("anaBody").innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">No feedback found.</td></tr>';return}
     $("anaBody").innerHTML=fl.slice(0,100).map(function(f){
-      return'<tr><td>'+tn(f)+'</td><td>'+(f.course_code||"")+' - '+(f.course_title||"")+'</td><td>'+(f.semester||"")+'/'+(f.section||"")+'</td><td>'+(f.responses?.overall_satisfaction||"â€”")+'/5</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(f.comment||"â€”")+'</td><td><span class="'+(f.status==="hidden"?"pill-red":"pill-green")+'">'+(f.status||"â€”")+'</span></td><td><button class="btn btn-sm '+(f.status==="hidden"?"btn-success":"btn-danger")+'" data-action="toggle" data-id="'+f.id+'" data-status="'+(f.status==="hidden"?"submitted":"hidden")+'">'+(f.status==="hidden"?"Show":"Hide")+'</button></td></tr>';
+      return'<tr><td>'+tn(f)+'</td><td>'+(f.course_code||"")+' - '+(f.course_title||"")+'</td><td>'+(f.semester||"")+'/'+(f.section||"")+'</td><td>'+(f.responses?.overall_satisfaction||"—")+'/5</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(f.comment||"—")+'</td><td><span class="'+(f.status==="hidden"?"pill-red":"pill-green")+'">'+(f.status||"—")+'</span></td><td><button class="btn btn-sm '+(f.status==="hidden"?"btn-success":"btn-danger")+'" data-action="toggle" data-id="'+f.id+'" data-status="'+(f.status==="hidden"?"submitted":"hidden")+'">'+(f.status==="hidden"?"Show":"Hide")+'</button></td></tr>';
     }).join("");
     // Attach event listeners to toggle buttons
     document.querySelectorAll('[data-action="toggle"]').forEach(function(btn){
