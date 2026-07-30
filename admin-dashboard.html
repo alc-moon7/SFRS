@@ -59,18 +59,24 @@
 <nav class="nav"><div class="nav-inner"><a class="nav-brand" href="/"><img src="assets/images/sfrs.png" alt="SFRS">SFRS</a><div style="display:flex;gap:.25rem"><a class="nav-link active" href="admin-dashboard.html">Dashboard</a><a class="nav-link" href="#" id="logoutLink">Logout</a></div></div></nav>
 
 <div class="container">
-  <div class="topbar"><div class="topbar-kicker">Admin Panel</div><h1>Feedback Review Management</h1><p>Teachers, assignments, analytics and moderation.</p></div>
+  <div class="topbar"><div class="topbar-kicker">Admin Panel</div><h1>Management Dashboard</h1><p>Teachers, assignments, analytics and moderation.</p></div>
   <div class="alert" id="alertBox"></div>
 
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-label">Students</div><div class="stat-value" id="sStudents">—</div></div>
     <div class="stat-card"><div class="stat-label">Teachers</div><div class="stat-value" id="sTeachers">—</div></div>
+    <div class="stat-card"><div class="stat-label">Assignments</div><div class="stat-value" id="sAssignments">—</div></div>
     <div class="stat-card"><div class="stat-label">Feedback</div><div class="stat-value" id="sFeedback">—</div></div>
-    <div class="stat-card"><div class="stat-label">Users</div><div class="stat-value" id="sActive">—</div></div>
   </div>
 
-  <!-- Analytics Table -->
-  <section class="panel"><div class="panel-header"><div><div class="panel-kicker">Analytics</div><div class="panel-title">All Feedback</div></div></div>
+  <!-- Tabs -->
+  <div style="display:flex;gap:.5rem;margin-bottom:1.25rem">
+    <button class="btn btn-primary" id="tabFeedback" onclick="switchTab('feedback')" style="width:auto">Feedback Review</button>
+    <button class="btn btn-outline" id="tabAssignments" onclick="switchTab('assignments')" style="width:auto">Assignment Matrix</button>
+  </div>
+
+  <!-- Feedback Panel -->
+  <section class="panel" id="panelFeedback"><div class="panel-header"><div><div class="panel-kicker">Analytics</div><div class="panel-title">All Feedback</div></div></div>
     <div class="panel-body">
       <div class="toolbar">
         <div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="fTeacher"><option value="">All</option></select></div>
@@ -84,6 +90,40 @@
       </div>
     </div>
   </section>
+
+  <!-- Assignment Matrix Panel -->
+  <section class="panel" id="panelAssignments" style="display:none"><div class="panel-header"><div><div class="panel-kicker">Directory</div><div class="panel-title">Assignment Matrix</div></div><button class="btn btn-primary btn-sm" onclick="openAddAssign()">+ New Assignment</button></div>
+    <div class="panel-body">
+      <div class="toolbar">
+        <div class="toolbar-field"><label class="field-label">Teacher</label><select class="field-select" id="afTeacher"><option value="">All</option></select></div>
+        <div class="toolbar-field"><label class="field-label">Semester</label><select class="field-select" id="afSemester"><option value="">All</option></select></div>
+        <div class="toolbar-field"><label class="field-label">Section</label><select class="field-select" id="afSection"><option value="">All</option></select></div>
+        <div class="toolbar-field"><label class="field-label">Course</label><input type="search" class="field-input" id="afCourse" placeholder="Search course..."></div>
+      </div>
+      <div class="table-wrap">
+        <table class="table"><thead><tr><th>Teacher</th><th>Course Code</th><th>Course Title</th><th>Semester</th><th>Section</th><th>Active</th><th>Actions</th></tr></thead>
+        <tbody id="assignBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">Loading...</td></tr></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add/Edit Assignment Modal -->
+  <div class="modal-overlay" id="assignModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:2000;align-items:center;justify-content:center">
+    <div class="modal-box" style="background:var(--surface);border-radius:16px;padding:2rem;max-width:500px;width:90%;max-height:90vh;overflow-y:auto">
+      <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+        <div class="modal-title" style="font-size:1.1rem;font-weight:700" id="assignModalTitle">New Assignment</div>
+        <button style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted)" onclick="closeAssignModal()">&times;</button>
+      </div>
+      <input type="hidden" id="assignEditId">
+      <div class="form-group" style="margin-bottom:1rem"><label class="field-label">Teacher</label><select class="field-select" id="amTeacher" style="width:100%"><option value="">Select teacher...</option></select></div>
+      <div class="form-group" style="margin-bottom:1rem"><label class="field-label">Course Code</label><input class="field-input" id="amCode" placeholder="e.g. CSE 423" style="width:100%"></div>
+      <div class="form-group" style="margin-bottom:1rem"><label class="field-label">Course Title</label><input class="field-input" id="amTitle" placeholder="e.g. Artificial Intelligence" style="width:100%"></div>
+      <div class="form-group" style="margin-bottom:1rem"><label class="field-label">Semester</label><select class="field-select" id="amSemester" style="width:100%"><option value="">Select...</option></select></div>
+      <div class="form-group" style="margin-bottom:1rem"><label class="field-label">Section</label><select class="field-select" id="amSection" style="width:100%"><option value="">Select...</option></select></div>
+      <div class="form-group" style="margin-bottom:1.5rem"><label class="switch-row"><div class="switch"><input type="checkbox" id="amActive" checked><span class="switch-track"></span></div>Active</label></div>
+      <div style="display:flex;gap:.75rem"><button class="btn btn-primary" onclick="saveAssignment()">Save</button><button class="btn btn-outline" onclick="closeAssignModal()">Cancel</button></div>
+    </div>
+  </div>
 </div>
 <div class="footer">&copy; 2026 SFRS - Admin Dashboard</div>
 
@@ -165,6 +205,107 @@
   document.getElementById("logoutLink").addEventListener("click",async function(){
     await sup.auth.signOut();location.href="/";
   });
+
+  // ===== ASSIGNMENT MATRIX =====
+  let assignments=[],af={};
+
+  function switchTab(tab){
+    if(tab==='feedback'){
+      $("panelFeedback").style.display='';
+      $("panelAssignments").style.display='none';
+      $("tabFeedback").className='btn btn-primary';
+      $("tabAssignments").className='btn btn-outline';
+    }else{
+      $("panelFeedback").style.display='none';
+      $("panelAssignments").style.display='';
+      $("tabFeedback").className='btn btn-outline';
+      $("tabAssignments").className='btn btn-primary';
+      loadAssignments();
+    }
+  }
+
+  function loadAssignments(){
+    sup.from("teacher_assignments").select("*,teacher_directory_id(id,name)").order("semester").then(({data,error})=>{
+      if(error){show("Failed to load assignments: "+error.message,"error");return}
+      assignments=data||[];
+      // Populate assignment filters
+      af={};assignments.forEach(a=>{const t=(a.teacher_directory_id||{});af[t.name||'?']=t.id});
+      const top=Object.entries(af).sort((a,b)=>a[0].localeCompare(b[0]));
+      $("afTeacher").innerHTML='<option value="">All</option>'+top.map(([n,id])=>`<option value="${id}">${n}</option>`).join("");
+      S.forEach(s=>{$("afSemester").innerHTML+=`<option>${s}</option>`});
+      C.forEach(c=>{$("afSection").innerHTML+=`<option>${c}</option>`});
+      $("sAssignments").textContent=assignments.length;
+      $("amTeacher").innerHTML='<option value="">Select teacher...</option>'+teachers.map(t=>`<option value="${t.id}">${t.name}</option>`).join("");
+      S.forEach(s=>{$("amSemester").innerHTML+=`<option>${s}</option>`});
+      C.forEach(c=>{$("amSection").innerHTML+=`<option>${c}</option>`});
+      renderAssignments();
+    });
+  }
+
+  function renderAssignments(){
+    const tf=$("afTeacher").value,sf=$("afSemester").value,sc=$("afSection").value,q=($("afCourse").value||"").toLowerCase();
+    let fl=assignments;
+    if(tf)fl=fl.filter(a=>a.teacher_directory_id&&a.teacher_directory_id.id===parseInt(tf));
+    if(sf)fl=fl.filter(a=>a.semester===sf);
+    if(sc)fl=fl.filter(a=>a.section===sc);
+    if(q)fl=fl.filter(a=>(a.course_code||"").toLowerCase().includes(q)||(a.course_title||"").toLowerCase().includes(q));
+    if(!fl.length){$("assignBody").innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">No assignments found.</td></tr>';return}
+    $("assignBody").innerHTML=fl.slice(0,200).map(a=>`<tr><td>${(a.teacher_directory_id||{}).name||"?"}</td><td>${a.course_code||""}</td><td>${a.course_title||""}</td><td>${a.semester||""}</td><td>${a.section||""}</td><td>${a.is_active!==false?"✅ Active":"❌ Inactive"}</td><td><button class="btn btn-outline btn-sm" onclick="editAssign(${a.id})">Edit</button> <button class="btn btn-danger btn-sm" onclick="deleteAssign(${a.id})">Del</button></td></tr>`).join("");
+  }
+
+  ["afTeacher","afSemester","afSection"].forEach(id=>$(id).addEventListener("input",renderAssignments));
+  $("afCourse").addEventListener("input",renderAssignments);
+
+  function openAddAssign(){
+    $("assignEditId").value="";
+    $("assignModalTitle").textContent="New Assignment";
+    $("amCode").value="";$("amTitle").value="";$("amTeacher").value="";$("amSemester").value="";$("amSection").value="";
+    $("amActive").checked=true;
+    $("assignModal").style.display="flex";
+  }
+
+  function editAssign(id){
+    const a=assignments.find(x=>x.id===id);if(!a)return;
+    $("assignEditId").value=a.id;
+    $("assignModalTitle").textContent="Edit Assignment";
+    $("amTeacher").value=(a.teacher_directory_id||{}).id||"";
+    $("amCode").value=a.course_code||"";
+    $("amTitle").value=a.course_title||"";
+    $("amSemester").value=a.semester||"";
+    $("amSection").value=a.section||"";
+    $("amActive").checked=a.is_active!==false;
+    $("assignModal").style.display="flex";
+  }
+
+  function closeAssignModal(){$("assignModal").style.display="none"}
+
+  async function saveAssignment(){
+    const editId=$("assignEditId").value;
+    const payload={
+      teacher_directory_id:parseInt($("amTeacher").value),
+      course_code:$("amCode").value.trim(),
+      course_title:$("amTitle").value.trim(),
+      semester:$("amSemester").value,
+      section:$("amSection").value,
+      is_active:$("amActive").checked
+    };
+    if(!payload.teacher_directory_id||!payload.course_code||!payload.course_title||!payload.semester||!payload.section){show("Please fill all fields.","error");return}
+    const{error}=editId
+      ?await sup.from("teacher_assignments").update(payload).eq("id",editId)
+      :await sup.from("teacher_assignments").insert(payload);
+    if(error){show("Failed: "+error.message,"error");return}
+    closeAssignModal();
+    show(editId?"Assignment updated!":"Assignment added!","success");
+    loadAssignments();
+  }
+
+  async function deleteAssign(id){
+    if(!confirm("Delete this assignment? This cannot be undone."))return;
+    const{error}=await sup.from("teacher_assignments").delete().eq("id",id);
+    if(error){show("Failed: "+error.message,"error");return}
+    show("Assignment deleted.","success");
+    loadAssignments();
+  }
 </script>
 </body>
 </html>
