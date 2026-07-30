@@ -170,7 +170,7 @@
       sup.from("profiles").select("*",{count:"exact",head:true}).eq("role","teacher")
     ]);
     $("sStudents").textContent=sC.count||0;$("sTeachers").textContent=tC.count||0;
-    $("sFeedback").textContent=feedbacks.length;$("sActive").textContent=(sC.count||0)+(tC.count||0);
+    $("sFeedback").textContent=feedbacks.length;
     render();
   }
 
